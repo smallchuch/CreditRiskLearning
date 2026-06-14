@@ -3,6 +3,7 @@
     "terminal.integrated.defaultProfile.windows": "PowerShell",
     "python.terminal.activateEnvironment": true,
     "python.analysis.extraPaths": [
-        "./Core Resources"
+        "./Core Resources",
+        "./Core Resources/Scripts"
     ]
 }
