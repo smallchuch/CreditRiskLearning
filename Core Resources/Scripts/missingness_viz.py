@@ -129,7 +129,7 @@ def plot_bar(df, dataset_name='Dataset'):
     Missingno bar chart — shows completeness of each column as a bar.
     Good first look — instantly shows which columns have missing data.
     """
-    fig, ax = plt.subplots(figsize=(12, 5))
+    fig, ax = plt.subplots(figsize=(12, max(5, len(df.columns) * 0.18)))
 
     msno.bar(
         df,
