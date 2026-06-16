@@ -177,20 +177,83 @@ palette = {
     # ── WHITE ──────────────────────────────────────────────────────────────
     'white': '#FFFFFF',   # chart backgrounds, card fills, text on dark
 
-    # ── SEMANTIC SHORTCUTS ─────────────────────────────────────────────────
-    # Convenience keys mapping credit risk concepts to colours
-    'default_colour':  '#E53935',   # = red 500   — default / loss
-    'safe_colour':     '#91C46C',   # = green 500 — performing / approve
-    'watch_colour':    '#FFD34E',   # = yellow 500 — watch / caution
-    'primary':         '#732DD9',   # = purple 500 — brand primary
-    'secondary':       '#0EEAFF',   # = cyan 500   — brand secondary
-    'tertiary':        '#FF5722',   # = orange 500 — brand tertiary
-    'text':            '#262626',   # = grey 800   — primary text
-    'subtext':         '#7F7F7F',   # = grey 500   — secondary text
-    'background':      '#F7F7F7',   # = grey 100   — backgrounds
-    'border':          '#EBEBEB',   # = grey 200   — borders/dividers
-}
+# ── SEMANTIC — DATA VISUALISATION ─────────────────────────────────────
+    # For chart elements — bars, lines, risk indicators
+    'default_colour':       '#E53935',   # red 500    — default / loss
+    'safe_colour':          '#91C46C',   # green 500  — performing / approve
+    'watch_colour':         '#FFD34E',   # yellow 500 — watch / caution
+    'chart_primary':        '#732DD9',   # purple 500 — main data series
+    'chart_secondary':      '#0EEAFF',   # cyan 500   — secondary series
+    'chart_tertiary':       '#FF5722',   # orange 500 — third series
+    'chart_fourth':         '#9D6CE4',   # purple 400 — fourth series
 
+    # ── SEMANTIC — TYPOGRAPHY ──────────────────────────────────────────────
+    # For text elements across dashboards and reports
+    'text_primary':         '#262626',   # grey 800 — headlines, body text
+    'text_secondary':       '#5C5C5C',   # grey 600 — subheadings, labels
+    'text_tertiary':        '#7F7F7F',   # grey 500 — hints, placeholders
+    'text_disabled':        '#ABABAB',   # grey 400 — disabled state text
+    'text_inverse':         '#FFFFFF',   # white    — text on dark backgrounds
+    'text_on_primary':      '#FFFFFF',   # white    — text on purple backgrounds
+    'text_on_danger':       '#FFFFFF',   # white    — text on red backgrounds
+    'text_link':            '#5E26AF',   # purple 600 — hyperlinks, clickable
+
+    # ── SEMANTIC — BACKGROUNDS ─────────────────────────────────────────────
+    # For surfaces, panels, cards, page backgrounds
+    'bg_page':              '#F7F7F7',   # grey 100  — outermost page background
+    'bg_surface':           '#FFFFFF',   # white     — cards, panels, modals
+    'bg_subtle':            '#EBEBEB',   # grey 200  — table stripes, input fills
+    'bg_primary':           '#732DD9',   # purple 500 — primary buttons, headers
+    'bg_primary_hover':     '#5E26AF',   # purple 600 — primary button hover
+    'bg_primary_light':     '#F1EAFB',   # purple 100 — light tint backgrounds
+    'bg_danger':            '#FCEBEA',   # red 100   — error/alert backgrounds
+    'bg_danger_strong':     '#E53935',   # red 500   — strong danger fills
+    'bg_safe':              '#F4F9F0',   # green 100 — success backgrounds
+    'bg_safe_strong':       '#91C46C',   # green 500 — strong safe fills
+    'bg_watch':             '#FFFAED',   # yellow 100 — warning backgrounds
+    'bg_watch_strong':      '#FFD34E',   # yellow 500 — strong watch fills
+    'bg_info':              '#E6FCFF',   # cyan 100  — info/highlight backgrounds
+    'bg_info_strong':       '#0EEAFF',   # cyan 500  — strong info fills
+
+    # ── SEMANTIC — BORDERS ─────────────────────────────────────────────────
+    # For dividers, outlines, input borders
+    'border_subtle':        '#EBEBEB',   # grey 200 — subtle dividers, table lines
+    'border_default':       '#D4D4D4',   # grey 300 — default input borders
+    'border_strong':        '#ABABAB',   # grey 400 — focused/active borders
+    'border_primary':       '#732DD9',   # purple 500 — primary accent borders
+    'border_danger':        '#E53935',   # red 500  — error state borders
+    'border_safe':          '#91C46C',   # green 500 — success state borders
+    'border_watch':         '#FFD34E',   # yellow 500 — warning state borders
+
+    # ── SEMANTIC — INTERACTIVE STATES ──────────────────────────────────────
+    # For buttons, inputs, clickable elements
+    'interactive_primary':          '#732DD9',   # purple 500 — default
+    'interactive_primary_hover':    '#5E26AF',   # purple 600 — hover
+    'interactive_primary_active':   '#491F86',   # purple 700 — pressed
+    'interactive_primary_disabled': '#C0A0ED',   # purple 300 — disabled
+    'interactive_secondary':        '#0EEAFF',   # cyan 500
+    'interactive_secondary_hover':  '#0DBDCE',   # cyan 600
+
+    # ── SEMANTIC — STATUS / BADGES ─────────────────────────────────────────
+    # For pills, tags, status indicators
+    'status_default_bg':    '#FCEBEA',   # red 100
+    'status_default_text':  '#8D2623',   # red 700
+    'status_safe_bg':       '#F4F9F0',   # green 100
+    'status_safe_text':     '#5B7944',   # green 700
+    'status_watch_bg':      '#FFFAED',   # yellow 100
+    'status_watch_text':    '#9D8232',   # yellow 700
+    'status_info_bg':       '#E6FCFF',   # cyan 100
+    'status_info_text':     '#0C909D',   # cyan 700
+    'status_neutral_bg':    '#EBEBEB',   # grey 200
+    'status_neutral_text':  '#3D3D3D',   # grey 700
+
+    # ── SEMANTIC — SHADOWS / OVERLAYS ──────────────────────────────────────
+    'overlay':              'rgba(0, 0, 0, 0.4)',   # modal backdrops
+    'shadow_sm':            '0 1px 3px rgba(0,0,0,0.08)',
+    'shadow_md':            '0 4px 12px rgba(0,0,0,0.10)',
+    'shadow_lg':            '0 8px 24px rgba(0,0,0,0.12)',
+
+}
 
 # ── SHORTHAND HELPERS ─────────────────────────────────────────────────────────
 
@@ -474,6 +537,54 @@ def show_fonts():
     plt.show()
 
 
+def style_df(df, gradient_cols=None, highlight_nulls=False):
+    """
+    Apply clean consistent styling to any DataFrame output.
+    """
+    styled = df.style.set_properties(**{
+        'font-family': 'DM Sans, Arial, sans-serif',
+        'font-size':   '12px',
+        'border':      '1px solid #EBEBEB',
+        'padding':     '6px 12px',
+    }).set_table_styles([
+        # Header row
+        {'selector': 'thead tr th', 'props': [
+            ('background-color', '#1F4E79'),
+            ('color',            'white'),
+            ('font-weight',      'bold'),
+            ('font-size',        '12px'),
+            ('padding',          '8px 12px'),
+            ('text-align',       'left'),
+        ]},
+        # Alternating rows
+        {'selector': 'tbody tr:nth-child(even)', 'props': [
+            ('background-color', '#DEEAF1'),
+        ]},
+        {'selector': 'tbody tr:nth-child(odd)', 'props': [
+            ('background-color', 'white'),
+        ]},
+        # Hover
+        {'selector': 'tbody tr:hover', 'props': [
+            ('background-color', '#C0A0ED'),
+        ]},
+    ])
+
+    # Gradient on specified numeric columns
+    if gradient_cols:
+        styled = styled.background_gradient(
+            subset=gradient_cols,
+            cmap='Purples'
+        )
+
+    # Highlight nulls red
+    if highlight_nulls:
+        styled = styled.highlight_null(color='#FCEBEA')
+
+    # Format floats to 2dp
+    styled = styled.format(precision=2, na_rep='—')
+
+    return styled
+
 def show_style_guide():
     """
     Render a complete style guide — palette, fonts, and example chart elements
@@ -597,6 +708,213 @@ def show_style_guide():
     plt.show()
     print("Style guide also saved as style_guide_preview.png")
 
+
+def show_tokens():
+    """
+    Visual reference card for all semantic palette tokens, grouped by category.
+    Run this whenever you need a reminder of what token to use.
+    """
+
+    groups = [
+        {
+            'label': 'Data Visualisation',
+            'desc':  'Use for chart bars, lines and risk indicators',
+            'tokens': [
+                ('default_colour',   'Default / loss / high risk'),
+                ('safe_colour',      'Performing / approve / low risk'),
+                ('watch_colour',     'Watch / caution / medium risk'),
+                ('chart_primary',    'Main data series'),
+                ('chart_secondary',  'Secondary data series'),
+                ('chart_tertiary',   'Third data series'),
+                ('chart_fourth',     'Fourth data series'),
+            ]
+        },
+        {
+            'label': 'Typography',
+            'desc':  'Use for text elements — labels, headings, hints',
+            'tokens': [
+                ('text_primary',     'Headlines, body text'),
+                ('text_secondary',   'Subheadings, axis labels'),
+                ('text_tertiary',    'Hints, placeholders, annotations'),
+                ('text_disabled',    'Disabled state text'),
+                ('text_inverse',     'Text on dark/coloured backgrounds'),
+                ('text_on_primary',  'Text on purple backgrounds'),
+                ('text_on_danger',   'Text on red backgrounds'),
+                ('text_link',        'Hyperlinks, clickable elements'),
+            ]
+        },
+        {
+            'label': 'Backgrounds',
+            'desc':  'Use for surfaces, cards, panels, alert fills',
+            'tokens': [
+                ('bg_page',          'Outermost page background'),
+                ('bg_surface',       'Cards, panels, modals'),
+                ('bg_subtle',        'Table stripes, input fills'),
+                ('bg_primary',       'Primary buttons, headers'),
+                ('bg_primary_hover', 'Primary button hover state'),
+                ('bg_primary_light', 'Light purple tint backgrounds'),
+                ('bg_danger',        'Error / alert backgrounds'),
+                ('bg_danger_strong', 'Strong danger fills'),
+                ('bg_safe',          'Success backgrounds'),
+                ('bg_safe_strong',   'Strong safe fills'),
+                ('bg_watch',         'Warning backgrounds'),
+                ('bg_watch_strong',  'Strong watch fills'),
+                ('bg_info',          'Info / highlight backgrounds'),
+                ('bg_info_strong',   'Strong info fills'),
+            ]
+        },
+        {
+            'label': 'Borders',
+            'desc':  'Use for dividers, outlines, input borders',
+            'tokens': [
+                ('border_subtle',    'Subtle dividers, table lines'),
+                ('border_default',   'Default input borders'),
+                ('border_strong',    'Focused / active borders'),
+                ('border_primary',   'Primary accent borders'),
+                ('border_danger',    'Error state borders'),
+                ('border_safe',      'Success state borders'),
+                ('border_watch',     'Warning state borders'),
+            ]
+        },
+        {
+            'label': 'Interactive States',
+            'desc':  'Use for buttons, inputs, clickable elements',
+            'tokens': [
+                ('interactive_primary',          'Primary button — default'),
+                ('interactive_primary_hover',    'Primary button — hover'),
+                ('interactive_primary_active',   'Primary button — pressed'),
+                ('interactive_primary_disabled', 'Primary button — disabled'),
+                ('interactive_secondary',        'Secondary button — default'),
+                ('interactive_secondary_hover',  'Secondary button — hover'),
+            ]
+        },
+        {
+            'label': 'Status Badges',
+            'desc':  'Pre-paired bg/text colours for pills, tags, status chips',
+            'tokens': [
+                ('status_default_bg',    'Default/danger badge background'),
+                ('status_default_text',  'Default/danger badge text'),
+                ('status_safe_bg',       'Safe badge background'),
+                ('status_safe_text',     'Safe badge text'),
+                ('status_watch_bg',      'Watch badge background'),
+                ('status_watch_text',    'Watch badge text'),
+                ('status_info_bg',       'Info badge background'),
+                ('status_info_text',     'Info badge text'),
+                ('status_neutral_bg',    'Neutral badge background'),
+                ('status_neutral_text',  'Neutral badge text'),
+            ]
+        },
+    ]
+
+    # ── Calculate total rows needed ───────────────────────────────────────────
+    total_rows = sum(len(g['tokens']) + 2 for g in groups)  # +2 = header + spacer
+    row_h      = 0.38
+    fig_h      = max(8, total_rows * row_h + 1)
+
+    fig, ax = plt.subplots(figsize=(13, fig_h))
+    fig.patch.set_facecolor('white')
+    ax.axis('off')
+    ax.set_xlim(0, 10)
+
+    total_plot_h = total_rows * row_h
+    ax.set_ylim(0, total_plot_h + 0.5)
+
+    # ── Title ─────────────────────────────────────────────────────────────────
+    ax.text(0, total_plot_h + 0.3,
+            'Semantic Token Reference',
+            fontfamily=fonts['heading'], fontsize=sizes['title'],
+            fontweight='bold', color=palette['grey'][900], va='top')
+
+    # ── Column headers ────────────────────────────────────────────────────────
+    header_y = total_plot_h - 0.1
+    for x, label in [(1.5, 'Token'), (5.2, 'Hex'), (6.4, 'Usage')]:
+        ax.text(x, header_y, label,
+                fontfamily=fonts['body'], fontsize=sizes['small'],
+                color=palette['grey'][500], va='top',
+                fontstyle='italic')
+
+    ax.axhline(header_y - 0.25,
+               color=palette['grey'][300], linewidth=0.8,
+               xmin=0, xmax=1)
+
+    # ── Render groups ─────────────────────────────────────────────────────────
+    y = header_y - 0.5
+
+    for group in groups:
+
+        # Group header band
+        ax.add_patch(plt.Rectangle(
+            (0, y - 0.05), 10, row_h * 0.85,
+            color=palette['purple'][100],
+            clip_on=False, zorder=1
+        ))
+        ax.text(0.15, y + row_h * 0.35,
+                group['label'],
+                fontfamily=fonts['heading'], fontsize=sizes['body'],
+                fontweight='bold', color=palette['purple'][700],
+                va='center', zorder=2)
+        ax.text(5.2, y + row_h * 0.35,
+                group['desc'],
+                fontfamily=fonts['body'], fontsize=sizes['small'],
+                color=palette['purple'][500],
+                va='center', fontstyle='italic', zorder=2)
+
+        y -= row_h
+
+        # Token rows
+        for i, (token, desc) in enumerate(group['tokens']):
+            hex_val = palette.get(token, None)
+            if hex_val is None or not isinstance(hex_val, str):
+                continue
+
+            # Alternating row background
+            if i % 2 == 0:
+                ax.add_patch(plt.Rectangle(
+                    (0, y - 0.04), 10, row_h * 0.88,
+                    color=palette['grey'][100],
+                    clip_on=False, zorder=1
+                ))
+
+            # Colour swatch
+            try:
+                ax.add_patch(plt.Rectangle(
+                    (0.1, y + 0.04), 1.0, row_h * 0.72,
+                    color=hex_val,
+                    clip_on=False, zorder=2,
+                    linewidth=0.5,
+                    edgecolor=palette['grey'][300]
+                ))
+            except Exception:
+                pass
+
+            # Token name
+            ax.text(1.3, y + row_h * 0.4,
+                    token,
+                    fontfamily=fonts['mono'], fontsize=sizes['mono'],
+                    color=palette['grey'][800],
+                    va='center', zorder=2)
+
+            # Hex value
+            ax.text(5.2, y + row_h * 0.4,
+                    hex_val,
+                    fontfamily=fonts['mono'], fontsize=sizes['mono'] - 0.5,
+                    color=palette['grey'][500],
+                    va='center', zorder=2)
+
+            # Usage description
+            ax.text(6.4, y + row_h * 0.4,
+                    desc,
+                    fontfamily=fonts['body'], fontsize=sizes['small'],
+                    color=palette['grey'][600],
+                    va='center', zorder=2)
+
+            y -= row_h
+
+        # Spacer between groups
+        y -= row_h * 0.4
+
+    plt.tight_layout()
+    plt.show()
 
 # ══════════════════════════════════════════════════════════════════════════════
 # QUICK REFERENCE

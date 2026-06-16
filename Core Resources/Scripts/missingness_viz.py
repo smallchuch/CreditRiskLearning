@@ -220,7 +220,7 @@ def plot_dendrogram(df, dataset_name='Dataset'):
         print("Dendrogram requires at least 2 columns with missing values. Skipping.")
         return
 
-    fig, ax = plt.subplots(figsize=(12, 5))
+    fig, ax = plt.subplots(figsize=(12, max(5, len(df.columns) * 0.18)))
 
     msno.dendrogram(
         df,
