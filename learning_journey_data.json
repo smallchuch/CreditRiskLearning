@@ -16,7 +16,8 @@
       "status": "Completed",
       "priority": "High",
       "hrs": "6-8 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "prob_basics"
     },
     {
       "id": "id_fkvy0brhnyamqlqcozg",
@@ -25,16 +26,18 @@
       "status": "Not Started",
       "priority": "High",
       "hrs": "4-6 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "hyp_testing"
     },
     {
       "id": "id_rv96q7nb6lmmqlqcozg",
       "cat": "Statistics Foundations",
       "topic": "Correlation vs causation",
-      "status": "In Progress",
+      "status": "Not Started",
       "priority": "High",
       "hrs": "2-3 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "corr_causation"
     },
     {
       "id": "id_sa3laoukl6mqlqcozg",
@@ -43,7 +46,8 @@
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "3-4 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "conf_intervals"
     },
     {
       "id": "id_fho1o9n3m8imqlqcozg",
@@ -52,7 +56,8 @@
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "3-4 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "clt"
     },
     {
       "id": "id_zusyyoxxj1mqlqcozg",
@@ -61,7 +66,8 @@
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "4-5 hrs",
-      "isNew": true
+      "isNew": true,
+      "key": "mle"
     },
     {
       "id": "id_z4e4bfghsvsmqlqcozg",
@@ -70,43 +76,48 @@
       "status": "Not Started",
       "priority": "Lower",
       "hrs": "6-8 hrs",
-      "isNew": true
+      "isNew": true,
+      "key": "linear_algebra"
     },
     {
       "id": "id_ucq5ak1cl6mmqlqcozg",
       "cat": "Data Fundamentals",
       "topic": "Types of data (continuous, categorical, ordinal)",
-      "status": "In Progress",
+      "status": "Completed",
       "priority": "High",
       "hrs": "1-2 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "data_types"
     },
     {
       "id": "id_j23qml6hbmmqlqcozg",
       "cat": "Data Fundamentals",
       "topic": "Handling missing values",
-      "status": "Not Started",
+      "status": "Completed",
       "priority": "High",
       "hrs": "3-4 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "missing_values"
     },
     {
       "id": "id_dj4u4cl5r99mqlqcozg",
       "cat": "Data Fundamentals",
       "topic": "Train/test split and data leakage",
-      "status": "In Progress",
+      "status": "Not Started",
       "priority": "High",
       "hrs": "2-3 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "train_test_split"
     },
     {
       "id": "id_bn7lodxy8mqmqlqcozg",
       "cat": "Data Fundamentals",
       "topic": "Class imbalance (very important in credit)",
-      "status": "In Progress",
+      "status": "Not Started",
       "priority": "High",
       "hrs": "3-4 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "class_imbalance"
     },
     {
       "id": "id_wwc75ul9ldrmqlqcozg",
@@ -115,7 +126,8 @@
       "status": "Not Started",
       "priority": "High",
       "hrs": "4-5 hrs",
-      "isNew": true
+      "isNew": true,
+      "key": "class_imbalance_techniques"
     },
     {
       "id": "id_jcxrjpk437mqlqcozg",
@@ -124,16 +136,18 @@
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "3-4 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "outlier_detection"
     },
     {
       "id": "id_e9rxutxqa3mqlqcozg",
       "cat": "Machine Learning Core",
       "topic": "Logistic regression deeply",
-      "status": "In Progress",
+      "status": "Not Started",
       "priority": "High",
       "hrs": "4-5 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "logreg"
     },
     {
       "id": "id_u24znnanbwcmqlqcozg",
@@ -142,16 +156,18 @@
       "status": "Not Started",
       "priority": "High",
       "hrs": "3-4 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "bias_variance"
     },
     {
       "id": "id_w15hh9genmqlqcozg",
       "cat": "Machine Learning Core",
       "topic": "Overfitting and underfitting",
-      "status": "In Progress",
+      "status": "Not Started",
       "priority": "High",
       "hrs": "2-3 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "overfitting"
     },
     {
       "id": "id_vu0uwjk558mqlqcozg",
@@ -160,7 +176,8 @@
       "status": "Not Started",
       "priority": "High",
       "hrs": "3-4 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "cross_validation"
     },
     {
       "id": "id_kbfjmz1ajcnmqlqcozg",
@@ -169,7 +186,8 @@
       "status": "Not Started",
       "priority": "High",
       "hrs": "5-7 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "feature_selection"
     },
     {
       "id": "id_zmxom7ng1akmqlqcozg",
@@ -178,7 +196,8 @@
       "status": "Not Started",
       "priority": "High",
       "hrs": "3-4 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "decision_trees"
     },
     {
       "id": "id_68i7men3c3pmqlqcozg",
@@ -187,7 +206,8 @@
       "status": "Not Started",
       "priority": "High",
       "hrs": "3-4 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "random_forests"
     },
     {
       "id": "id_i9qk3m0n6emqlqcozg",
@@ -196,7 +216,8 @@
       "status": "Not Started",
       "priority": "High",
       "hrs": "5-6 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "xgboost"
     },
     {
       "id": "id_a9wfwkmfjj9mqlqcozg",
@@ -205,7 +226,8 @@
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "3-4 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "regularisation"
     },
     {
       "id": "id_5skmsxzdk0kmqlqcozg",
@@ -214,25 +236,28 @@
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "3-4 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "model_calibration"
     },
     {
       "id": "id_dw9vczs5snlmqlqcozg",
       "cat": "Evaluation Metrics",
       "topic": "Confusion matrix",
-      "status": "In Progress",
+      "status": "Not Started",
       "priority": "High",
       "hrs": "2-3 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "confusion_matrix"
     },
     {
       "id": "id_1g5gezjpxmmmqlqcozg",
       "cat": "Evaluation Metrics",
       "topic": "Precision, recall, F1",
-      "status": "In Progress",
+      "status": "Not Started",
       "priority": "High",
       "hrs": "2-3 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "precision_recall_f1"
     },
     {
       "id": "id_mowjheos2hmqlqcozg",
@@ -241,7 +266,8 @@
       "status": "Not Started",
       "priority": "High",
       "hrs": "3-4 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "auc_roc"
     },
     {
       "id": "id_u8k5881p6h8mqlqcozg",
@@ -250,7 +276,8 @@
       "status": "Not Started",
       "priority": "High",
       "hrs": "2-3 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "gini"
     },
     {
       "id": "id_afjceey0sjdmqlqcozg",
@@ -259,7 +286,8 @@
       "status": "Not Started",
       "priority": "High",
       "hrs": "2-3 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "ks_statistic"
     },
     {
       "id": "id_k3mr8c4duqbmqlqcozg",
@@ -268,7 +296,8 @@
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "2-3 hrs",
-      "isNew": true
+      "isNew": true,
+      "key": "lift_curves"
     },
     {
       "id": "id_f12nq1bmggjmqlqcozg",
@@ -277,7 +306,8 @@
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "3-4 hrs",
-      "isNew": true
+      "isNew": true,
+      "key": "profit_cost_matrix"
     },
     {
       "id": "id_f12pkenyv5smqlqcozg",
@@ -286,7 +316,8 @@
       "status": "Not Started",
       "priority": "High",
       "hrs": "2-3 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "pd_lgd_ead"
     },
     {
       "id": "id_5vsix2rjiabmqlqcozg",
@@ -295,7 +326,8 @@
       "status": "Not Started",
       "priority": "High",
       "hrs": "3-4 hrs",
-      "isNew": true
+      "isNew": true,
+      "key": "el_ul"
     },
     {
       "id": "id_6ldl2gz7ogcmqlqcozg",
@@ -304,7 +336,8 @@
       "status": "Not Started",
       "priority": "High",
       "hrs": "6-8 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "scorecard_dev"
     },
     {
       "id": "id_ditmxhsy3omqlqcozg",
@@ -313,7 +346,8 @@
       "status": "Not Started",
       "priority": "High",
       "hrs": "4-5 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "woe_iv"
     },
     {
       "id": "id_kekwbycevkbmqlqcozg",
@@ -322,7 +356,8 @@
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "4-5 hrs",
-      "isNew": true
+      "isNew": true,
+      "key": "vintage_analysis"
     },
     {
       "id": "id_dw2chpq1rgmmqlqcozg",
@@ -331,7 +366,8 @@
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "3-4 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "champion_challenger"
     },
     {
       "id": "id_ykq39itr7qgmqlqcozg",
@@ -340,7 +376,8 @@
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "4-5 hrs",
-      "isNew": true
+      "isNew": true,
+      "key": "stress_testing"
     },
     {
       "id": "id_xz9ilt474bsmqlqcozg",
@@ -349,7 +386,8 @@
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "3-4 hrs",
-      "isNew": true
+      "isNew": true,
+      "key": "portfolio_concentration"
     },
     {
       "id": "id_x08sofeno5kmqlqcozg",
@@ -358,7 +396,8 @@
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "4-5 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "ifrs9"
     },
     {
       "id": "id_hht5wj27m1bmqlqcozg",
@@ -367,7 +406,8 @@
       "status": "Not Started",
       "priority": "Lower",
       "hrs": "3-4 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "sr11_7"
     },
     {
       "id": "id_95jnkh31rmqlqcozg",
@@ -376,16 +416,18 @@
       "status": "Not Started",
       "priority": "Lower",
       "hrs": "4-5 hrs",
-      "isNew": true
+      "isNew": true,
+      "key": "basel_apra"
     },
     {
       "id": "id_mga9iqr07wmqlqcozg",
       "cat": "Explainability",
       "topic": "Feature importance",
-      "status": "In Progress",
+      "status": "Not Started",
       "priority": "High",
       "hrs": "2-3 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "feature_importance"
     },
     {
       "id": "id_0agrf5ihgv3mqlqcozg",
@@ -394,7 +436,8 @@
       "status": "Not Started",
       "priority": "High",
       "hrs": "4-5 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "shap"
     },
     {
       "id": "id_k7nhzmg2nymqlqcozg",
@@ -403,7 +446,8 @@
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "2-3 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "pdp"
     },
     {
       "id": "id_cypn2g7v3rnmqlqcozg",
@@ -412,16 +456,18 @@
       "status": "In Progress",
       "priority": "High",
       "hrs": "8-10 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "pandas"
     },
     {
       "id": "id_bsoqa7hrgtumqlqcozg",
       "cat": "Tools",
       "topic": "Matplotlib / Seaborn",
-      "status": "In Progress",
+      "status": "Not Started",
       "priority": "High",
       "hrs": "4-5 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "matplotlib_seaborn"
     },
     {
       "id": "id_ciqp32zzqfmmqlqcozg",
@@ -430,16 +476,18 @@
       "status": "Not Started",
       "priority": "High",
       "hrs": "4-5 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "sklearn_pipelines"
     },
     {
       "id": "id_jdls7c5rlemqlqcozg",
       "cat": "Tools",
       "topic": "Git basics",
-      "status": "In Progress",
+      "status": "Not Started",
       "priority": "High",
       "hrs": "3-4 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "git_basics"
     },
     {
       "id": "id_emtq8qrj2wgmqlqcozg",
@@ -448,7 +496,8 @@
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "6-8 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "sql_basics"
     },
     {
       "id": "id_vw1cxf5nujmqlqcozg",
@@ -457,7 +506,8 @@
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "4-5 hrs",
-      "isNew": true
+      "isNew": true,
+      "key": "plotly"
     },
     {
       "id": "id_e4xehwyd2upmqlqcozg",
@@ -466,7 +516,8 @@
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "6-8 hrs",
-      "isNew": false
+      "isNew": false,
+      "key": "power_bi"
     },
     {
       "id": "id_9zv2vkhz2kmqlqcozg",
@@ -475,7 +526,8 @@
       "status": "Not Started",
       "priority": "Lower",
       "hrs": "8-10 hrs",
-      "isNew": true
+      "isNew": true,
+      "key": "cloud_basics"
     },
     {
       "id": "id_2ijmlz9fusvmqlseqnj",
@@ -645,13 +697,20 @@
       "topic": "1.1 Probability Basics",
       "total": "170",
       "score": "117",
-      "notes": ""
+      "notes": "Binomial Distributions, Bayes Theorem, Collinearity"
     },
     {
       "id": "id_k6579g7pntamqlqcozg",
       "topic": "1.2 Data Types + Missing Values",
       "total": "170",
       "score": "85",
+      "notes": "Data Leakage Pipeline Order and Explanation, OneHotEncoder/SimpleImputer/ColumnTransformer syntax, X/Y Train/Test splitting"
+    },
+    {
+      "id": "id_8sr2xykg37lmqlxxfxy",
+      "topic": "1.3 Pandas",
+      "total": 100,
+      "score": "",
       "notes": ""
     }
   ]

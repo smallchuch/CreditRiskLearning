@@ -538,51 +538,53 @@ def show_fonts():
 
 
 def style_df(df, gradient_cols=None, highlight_nulls=False):
-    """
-    Apply clean consistent styling to any DataFrame output.
-    """
+    """Apply clean consistent styling to any DataFrame output."""
+    BG_HEADER = '#1F4E79'
+    BG_EVEN   = '#DEEAF1'
+    BG_ODD    = '#FFFFFF'
+    BG_HOVER  = '#F3EDFC'   # purple 50 — your bg_primary_light
+    TXT_BODY  = '#1A1A1A'
+
     styled = df.style.set_properties(**{
         'font-family': 'DM Sans, Arial, sans-serif',
         'font-size':   '12px',
+        'color':       TXT_BODY,
         'border':      '1px solid #EBEBEB',
         'padding':     '6px 12px',
     }).set_table_styles([
         # Header row
         {'selector': 'thead tr th', 'props': [
-            ('background-color', '#1F4E79'),
-            ('color',            'white'),
-            ('font-weight',      'bold'),
-            ('font-size',        '12px'),
-            ('padding',          '8px 12px'),
-            ('text-align',       'left'),
+            ('background-color', BG_HEADER),
+            ('color', 'white'),
+            ('font-weight', 'bold'),
+            ('font-size', '12px'),
+            ('padding', '8px 12px'),
+            ('text-align', 'left'),
         ]},
-        # Alternating rows
-        {'selector': 'tbody tr:nth-child(even)', 'props': [
-            ('background-color', '#DEEAF1'),
+        # Body cells — alternating (target td so it beats inline set_properties)
+        {'selector': 'tbody tr:nth-child(even) td', 'props': [
+            ('background-color', BG_EVEN),
         ]},
-        {'selector': 'tbody tr:nth-child(odd)', 'props': [
-            ('background-color', 'white'),
+        {'selector': 'tbody tr:nth-child(odd) td', 'props': [
+            ('background-color', BG_ODD),
         ]},
-        # Hover
-        {'selector': 'tbody tr:hover', 'props': [
-            ('background-color', '#C0A0ED'),
+        # Index labels (count/mean/std...) — these are th, need their own bg + text colour
+        {'selector': 'tbody tr th', 'props': [
+            ('background-color', BG_ODD),
+            ('color', TXT_BODY),
+        ]},
+        # Hover — resolved hex, not a token string
+        {'selector': 'tbody tr:hover td', 'props': [
+            ('background-color', BG_HOVER),
         ]},
     ])
 
-    # Gradient on specified numeric columns
     if gradient_cols:
-        styled = styled.background_gradient(
-            subset=gradient_cols,
-            cmap='Purples'
-        )
-
-    # Highlight nulls red
+        styled = styled.background_gradient(subset=gradient_cols, cmap='Purples')
     if highlight_nulls:
         styled = styled.highlight_null(color='#FCEBEA')
 
-    # Format floats to 2dp
     styled = styled.format(precision=2, na_rep='—')
-
     return styled
 
 def show_style_guide():

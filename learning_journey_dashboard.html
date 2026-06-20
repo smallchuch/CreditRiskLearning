@@ -416,7 +416,16 @@
     }
 
     .col-xnarrow {
-      width: 60px;
+      width: 46px;
+    }
+
+    .col-hrs {
+      width: 96px;
+    }
+
+    .col-hrs input {
+      padding: 5px 4px;
+      font-size: 11.5px;
     }
 
     .icon-btn {
@@ -699,8 +708,8 @@
     </div>
 
     <div class="tab-content" id="tab-sequence">
-      <p class="empty-hint">This is your fixed reference roadmap from the original checklist — kept read-only so it
-        stays a stable map. Track actual progress in the Concepts tab above.</p>
+      <p class="empty-hint">This is your reference roadmap. Step order and titles are fixed, but each step's status
+        and the "you are here" marker update automatically as you change statuses in the Concepts Checklist tab.</p>
       <div id="sequenceList"></div>
     </div>
 
@@ -728,6 +737,13 @@
     const HANDLE_KEY = "dataFileHandle";
     let fileHandle = null;
     let fileWriteLock = Promise.resolve();
+    // Tracks whether state has changed since the last successful disk write.
+    // Without this, a reload triggered by something watching the file (e.g. a
+    // live-reload dev server reacting to our own write) fires "beforeunload",
+    // which would write the (unchanged) file again, triggering another reload,
+    // and so on — that's the repeated "jittering" save loop. Skipping writes
+    // when nothing changed breaks the loop after at most one bounce.
+    let fileIsDirty = false;
 
     function openDb() {
       return new Promise((resolve, reject) => {
@@ -776,8 +792,9 @@
         if (text && text.trim()) {
           const parsed = JSON.parse(text);
           if (parsed && parsed.concepts && parsed.projects && parsed.quizzes) {
-            state = parsed;
+            state = migrateState(parsed);
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            fileIsDirty = false; // freshly loaded from disk, nothing to write back yet
             renderAll();
           }
         }
@@ -786,13 +803,15 @@
       }
     }
 
-    function writeStateToFile() {
+    function writeStateToFile(force) {
       if (!fileHandle) return Promise.resolve();
+      if (!force && !fileIsDirty) return Promise.resolve();
       fileWriteLock = fileWriteLock.then(async () => {
         try {
           const writable = await fileHandle.createWritable();
           await writable.write(JSON.stringify(state, null, 2));
           await writable.close();
+          fileIsDirty = false;
         } catch (e) {
           console.warn("Could not write connected file", e);
         }
@@ -805,9 +824,21 @@
     // writing the data file on every keystroke causes the watcher to reload the whole
     // page mid-typing. Instead, the file is written when you switch away from this
     // tab/window, before closing, when first connecting, or via the manual save button.
-    window.addEventListener("blur", () => { if (fileHandle) writeStateToFile(); });
+    //
+    // "blur" and "visibilitychange" both fire almost simultaneously on a single tab
+    // switch — without coalescing, that was triggering two back-to-back physical
+    // writes per switch (each itself a multi-step temp-file-then-rename on disk),
+    // which is what made it look like it was "saving a bunch of times in a row".
+    // requestFileSave() debounces those into a single write.
+    let fileSaveDebounceTimer = null;
+    function requestFileSave() {
+      if (!fileHandle) return;
+      clearTimeout(fileSaveDebounceTimer);
+      fileSaveDebounceTimer = setTimeout(() => writeStateToFile(), 150);
+    }
+    window.addEventListener("blur", requestFileSave);
     document.addEventListener("visibilitychange", () => {
-      if (document.hidden && fileHandle) writeStateToFile();
+      if (document.hidden) requestFileSave();
     });
     window.addEventListener("beforeunload", () => { if (fileHandle) writeStateToFile(); });
 
@@ -848,7 +879,7 @@
         if (pickExisting) {
           await loadFromFileHandle();
         } else {
-          await writeStateToFile();
+          await writeStateToFile(true); // force: brand-new file needs the initial write even though nothing's "dirty" yet
         }
         updateFileStatus();
       } catch (e) {
@@ -875,64 +906,64 @@
     const DEFAULT_STATE = {
       categories: ["Statistics Foundations", "Data Fundamentals", "Machine Learning Core", "Evaluation Metrics", "Credit Risk Specific", "Explainability", "Tools"],
       concepts: [
-        { cat: "Statistics Foundations", topic: "Probability basics (distributions, conditional probability)", status: "Completed", priority: "High", hrs: "6-8 hrs", isNew: false },
-        { cat: "Statistics Foundations", topic: "Hypothesis testing and p-values", status: "Not Started", priority: "High", hrs: "4-6 hrs", isNew: false },
-        { cat: "Statistics Foundations", topic: "Correlation vs causation", status: "In Progress", priority: "High", hrs: "2-3 hrs", isNew: false },
-        { cat: "Statistics Foundations", topic: "Confidence intervals", status: "Not Started", priority: "Medium", hrs: "3-4 hrs", isNew: false },
-        { cat: "Statistics Foundations", topic: "Central limit theorem", status: "Not Started", priority: "Medium", hrs: "3-4 hrs", isNew: false },
-        { cat: "Statistics Foundations", topic: "Maximum likelihood estimation (MLE)", status: "Not Started", priority: "Medium", hrs: "4-5 hrs", isNew: true },
-        { cat: "Statistics Foundations", topic: "Linear algebra basics (matrix ops, dot products)", status: "Not Started", priority: "Lower", hrs: "6-8 hrs", isNew: true },
+        { key: "prob_basics", cat: "Statistics Foundations", topic: "Probability basics (distributions, conditional probability)", status: "Completed", priority: "High", hrs: "6-8 hrs", isNew: false },
+        { key: "hyp_testing", cat: "Statistics Foundations", topic: "Hypothesis testing and p-values", status: "Not Started", priority: "High", hrs: "4-6 hrs", isNew: false },
+        { key: "corr_causation", cat: "Statistics Foundations", topic: "Correlation vs causation", status: "In Progress", priority: "High", hrs: "2-3 hrs", isNew: false },
+        { key: "conf_intervals", cat: "Statistics Foundations", topic: "Confidence intervals", status: "Not Started", priority: "Medium", hrs: "3-4 hrs", isNew: false },
+        { key: "clt", cat: "Statistics Foundations", topic: "Central limit theorem", status: "Not Started", priority: "Medium", hrs: "3-4 hrs", isNew: false },
+        { key: "mle", cat: "Statistics Foundations", topic: "Maximum likelihood estimation (MLE)", status: "Not Started", priority: "Medium", hrs: "4-5 hrs", isNew: true },
+        { key: "linear_algebra", cat: "Statistics Foundations", topic: "Linear algebra basics (matrix ops, dot products)", status: "Not Started", priority: "Lower", hrs: "6-8 hrs", isNew: true },
 
-        { cat: "Data Fundamentals", topic: "Types of data (continuous, categorical, ordinal)", status: "In Progress", priority: "High", hrs: "1-2 hrs", isNew: false },
-        { cat: "Data Fundamentals", topic: "Handling missing values", status: "Not Started", priority: "High", hrs: "3-4 hrs", isNew: false },
-        { cat: "Data Fundamentals", topic: "Train/test split and data leakage", status: "In Progress", priority: "High", hrs: "2-3 hrs", isNew: false },
-        { cat: "Data Fundamentals", topic: "Class imbalance (very important in credit)", status: "In Progress", priority: "High", hrs: "3-4 hrs", isNew: false },
-        { cat: "Data Fundamentals", topic: "Class imbalance handling techniques (SMOTE, weights, threshold tuning)", status: "Not Started", priority: "High", hrs: "4-5 hrs", isNew: true },
-        { cat: "Data Fundamentals", topic: "Outlier detection and treatment", status: "Not Started", priority: "Medium", hrs: "3-4 hrs", isNew: false },
+        { key: "data_types", cat: "Data Fundamentals", topic: "Types of data (continuous, categorical, ordinal)", status: "In Progress", priority: "High", hrs: "1-2 hrs", isNew: false },
+        { key: "missing_values", cat: "Data Fundamentals", topic: "Handling missing values", status: "Not Started", priority: "High", hrs: "3-4 hrs", isNew: false },
+        { key: "train_test_split", cat: "Data Fundamentals", topic: "Train/test split and data leakage", status: "In Progress", priority: "High", hrs: "2-3 hrs", isNew: false },
+        { key: "class_imbalance", cat: "Data Fundamentals", topic: "Class imbalance (very important in credit)", status: "In Progress", priority: "High", hrs: "3-4 hrs", isNew: false },
+        { key: "class_imbalance_techniques", cat: "Data Fundamentals", topic: "Class imbalance handling techniques (SMOTE, weights, threshold tuning)", status: "Not Started", priority: "High", hrs: "4-5 hrs", isNew: true },
+        { key: "outlier_detection", cat: "Data Fundamentals", topic: "Outlier detection and treatment", status: "Not Started", priority: "Medium", hrs: "3-4 hrs", isNew: false },
 
-        { cat: "Machine Learning Core", topic: "Logistic regression deeply", status: "In Progress", priority: "High", hrs: "4-5 hrs", isNew: false },
-        { cat: "Machine Learning Core", topic: "Bias-variance tradeoff", status: "Not Started", priority: "High", hrs: "3-4 hrs", isNew: false },
-        { cat: "Machine Learning Core", topic: "Overfitting and underfitting", status: "In Progress", priority: "High", hrs: "2-3 hrs", isNew: false },
-        { cat: "Machine Learning Core", topic: "Cross validation", status: "Not Started", priority: "High", hrs: "3-4 hrs", isNew: false },
-        { cat: "Machine Learning Core", topic: "Feature selection and engineering", status: "Not Started", priority: "High", hrs: "5-7 hrs", isNew: false },
-        { cat: "Machine Learning Core", topic: "Decision trees", status: "Not Started", priority: "High", hrs: "3-4 hrs", isNew: false },
-        { cat: "Machine Learning Core", topic: "Random forests", status: "Not Started", priority: "High", hrs: "3-4 hrs", isNew: false },
-        { cat: "Machine Learning Core", topic: "XGBoost / LightGBM", status: "Not Started", priority: "High", hrs: "5-6 hrs", isNew: false },
-        { cat: "Machine Learning Core", topic: "Regularisation (L1/L2)", status: "Not Started", priority: "Medium", hrs: "3-4 hrs", isNew: false },
-        { cat: "Machine Learning Core", topic: "Model calibration", status: "Not Started", priority: "Medium", hrs: "3-4 hrs", isNew: false },
+        { key: "logreg", cat: "Machine Learning Core", topic: "Logistic regression deeply", status: "In Progress", priority: "High", hrs: "4-5 hrs", isNew: false },
+        { key: "bias_variance", cat: "Machine Learning Core", topic: "Bias-variance tradeoff", status: "Not Started", priority: "High", hrs: "3-4 hrs", isNew: false },
+        { key: "overfitting", cat: "Machine Learning Core", topic: "Overfitting and underfitting", status: "In Progress", priority: "High", hrs: "2-3 hrs", isNew: false },
+        { key: "cross_validation", cat: "Machine Learning Core", topic: "Cross validation", status: "Not Started", priority: "High", hrs: "3-4 hrs", isNew: false },
+        { key: "feature_selection", cat: "Machine Learning Core", topic: "Feature selection and engineering", status: "Not Started", priority: "High", hrs: "5-7 hrs", isNew: false },
+        { key: "decision_trees", cat: "Machine Learning Core", topic: "Decision trees", status: "Not Started", priority: "High", hrs: "3-4 hrs", isNew: false },
+        { key: "random_forests", cat: "Machine Learning Core", topic: "Random forests", status: "Not Started", priority: "High", hrs: "3-4 hrs", isNew: false },
+        { key: "xgboost", cat: "Machine Learning Core", topic: "XGBoost / LightGBM", status: "Not Started", priority: "High", hrs: "5-6 hrs", isNew: false },
+        { key: "regularisation", cat: "Machine Learning Core", topic: "Regularisation (L1/L2)", status: "Not Started", priority: "Medium", hrs: "3-4 hrs", isNew: false },
+        { key: "model_calibration", cat: "Machine Learning Core", topic: "Model calibration", status: "Not Started", priority: "Medium", hrs: "3-4 hrs", isNew: false },
 
-        { cat: "Evaluation Metrics", topic: "Confusion matrix", status: "In Progress", priority: "High", hrs: "2-3 hrs", isNew: false },
-        { cat: "Evaluation Metrics", topic: "Precision, recall, F1", status: "In Progress", priority: "High", hrs: "2-3 hrs", isNew: false },
-        { cat: "Evaluation Metrics", topic: "AUC-ROC", status: "Not Started", priority: "High", hrs: "3-4 hrs", isNew: false },
-        { cat: "Evaluation Metrics", topic: "Gini coefficient", status: "Not Started", priority: "High", hrs: "2-3 hrs", isNew: false },
-        { cat: "Evaluation Metrics", topic: "KS statistic", status: "Not Started", priority: "High", hrs: "2-3 hrs", isNew: false },
-        { cat: "Evaluation Metrics", topic: "Lift curves", status: "Not Started", priority: "Medium", hrs: "2-3 hrs", isNew: true },
-        { cat: "Evaluation Metrics", topic: "Profit / cost matrix", status: "Not Started", priority: "Medium", hrs: "3-4 hrs", isNew: true },
+        { key: "confusion_matrix", cat: "Evaluation Metrics", topic: "Confusion matrix", status: "In Progress", priority: "High", hrs: "2-3 hrs", isNew: false },
+        { key: "precision_recall_f1", cat: "Evaluation Metrics", topic: "Precision, recall, F1", status: "In Progress", priority: "High", hrs: "2-3 hrs", isNew: false },
+        { key: "auc_roc", cat: "Evaluation Metrics", topic: "AUC-ROC", status: "Not Started", priority: "High", hrs: "3-4 hrs", isNew: false },
+        { key: "gini", cat: "Evaluation Metrics", topic: "Gini coefficient", status: "Not Started", priority: "High", hrs: "2-3 hrs", isNew: false },
+        { key: "ks_statistic", cat: "Evaluation Metrics", topic: "KS statistic", status: "Not Started", priority: "High", hrs: "2-3 hrs", isNew: false },
+        { key: "lift_curves", cat: "Evaluation Metrics", topic: "Lift curves", status: "Not Started", priority: "Medium", hrs: "2-3 hrs", isNew: true },
+        { key: "profit_cost_matrix", cat: "Evaluation Metrics", topic: "Profit / cost matrix", status: "Not Started", priority: "Medium", hrs: "3-4 hrs", isNew: true },
 
-        { cat: "Credit Risk Specific", topic: "What PD, LGD, EAD mean", status: "Not Started", priority: "High", hrs: "2-3 hrs", isNew: false },
-        { cat: "Credit Risk Specific", topic: "Expected Loss vs Unexpected Loss (EL/UL)", status: "Not Started", priority: "High", hrs: "3-4 hrs", isNew: true },
-        { cat: "Credit Risk Specific", topic: "Scorecard development", status: "Not Started", priority: "High", hrs: "6-8 hrs", isNew: false },
-        { cat: "Credit Risk Specific", topic: "Weight of Evidence and Information Value", status: "Not Started", priority: "High", hrs: "4-5 hrs", isNew: false },
-        { cat: "Credit Risk Specific", topic: "Vintage analysis", status: "Not Started", priority: "Medium", hrs: "4-5 hrs", isNew: true },
-        { cat: "Credit Risk Specific", topic: "Champion/challenger framework", status: "Not Started", priority: "Medium", hrs: "3-4 hrs", isNew: false },
-        { cat: "Credit Risk Specific", topic: "Stress testing basics", status: "Not Started", priority: "Medium", hrs: "4-5 hrs", isNew: true },
-        { cat: "Credit Risk Specific", topic: "Portfolio concentration risk", status: "Not Started", priority: "Medium", hrs: "3-4 hrs", isNew: true },
-        { cat: "Credit Risk Specific", topic: "IFRS 9 basics", status: "Not Started", priority: "Medium", hrs: "4-5 hrs", isNew: false },
-        { cat: "Credit Risk Specific", topic: "SR 11-7 / model governance concepts", status: "Not Started", priority: "Lower", hrs: "3-4 hrs", isNew: false },
-        { cat: "Credit Risk Specific", topic: "Basel III / APRA capital framework basics", status: "Not Started", priority: "Lower", hrs: "4-5 hrs", isNew: true },
+        { key: "pd_lgd_ead", cat: "Credit Risk Specific", topic: "What PD, LGD, EAD mean", status: "Not Started", priority: "High", hrs: "2-3 hrs", isNew: false },
+        { key: "el_ul", cat: "Credit Risk Specific", topic: "Expected Loss vs Unexpected Loss (EL/UL)", status: "Not Started", priority: "High", hrs: "3-4 hrs", isNew: true },
+        { key: "scorecard_dev", cat: "Credit Risk Specific", topic: "Scorecard development", status: "Not Started", priority: "High", hrs: "6-8 hrs", isNew: false },
+        { key: "woe_iv", cat: "Credit Risk Specific", topic: "Weight of Evidence and Information Value", status: "Not Started", priority: "High", hrs: "4-5 hrs", isNew: false },
+        { key: "vintage_analysis", cat: "Credit Risk Specific", topic: "Vintage analysis", status: "Not Started", priority: "Medium", hrs: "4-5 hrs", isNew: true },
+        { key: "champion_challenger", cat: "Credit Risk Specific", topic: "Champion/challenger framework", status: "Not Started", priority: "Medium", hrs: "3-4 hrs", isNew: false },
+        { key: "stress_testing", cat: "Credit Risk Specific", topic: "Stress testing basics", status: "Not Started", priority: "Medium", hrs: "4-5 hrs", isNew: true },
+        { key: "portfolio_concentration", cat: "Credit Risk Specific", topic: "Portfolio concentration risk", status: "Not Started", priority: "Medium", hrs: "3-4 hrs", isNew: true },
+        { key: "ifrs9", cat: "Credit Risk Specific", topic: "IFRS 9 basics", status: "Not Started", priority: "Medium", hrs: "4-5 hrs", isNew: false },
+        { key: "sr11_7", cat: "Credit Risk Specific", topic: "SR 11-7 / model governance concepts", status: "Not Started", priority: "Lower", hrs: "3-4 hrs", isNew: false },
+        { key: "basel_apra", cat: "Credit Risk Specific", topic: "Basel III / APRA capital framework basics", status: "Not Started", priority: "Lower", hrs: "4-5 hrs", isNew: true },
 
-        { cat: "Explainability", topic: "Feature importance", status: "In Progress", priority: "High", hrs: "2-3 hrs", isNew: false },
-        { cat: "Explainability", topic: "SHAP values", status: "Not Started", priority: "High", hrs: "4-5 hrs", isNew: false },
-        { cat: "Explainability", topic: "Partial dependence plots", status: "Not Started", priority: "Medium", hrs: "2-3 hrs", isNew: false },
+        { key: "feature_importance", cat: "Explainability", topic: "Feature importance", status: "In Progress", priority: "High", hrs: "2-3 hrs", isNew: false },
+        { key: "shap", cat: "Explainability", topic: "SHAP values", status: "Not Started", priority: "High", hrs: "4-5 hrs", isNew: false },
+        { key: "pdp", cat: "Explainability", topic: "Partial dependence plots", status: "Not Started", priority: "Medium", hrs: "2-3 hrs", isNew: false },
 
-        { cat: "Tools", topic: "Pandas proficiently", status: "In Progress", priority: "High", hrs: "8-10 hrs", isNew: false },
-        { cat: "Tools", topic: "Matplotlib / Seaborn", status: "In Progress", priority: "High", hrs: "4-5 hrs", isNew: false },
-        { cat: "Tools", topic: "Scikit-learn pipelines", status: "Not Started", priority: "High", hrs: "4-5 hrs", isNew: false },
-        { cat: "Tools", topic: "Git basics", status: "In Progress", priority: "High", hrs: "3-4 hrs", isNew: false },
-        { cat: "Tools", topic: "SQL basics", status: "Not Started", priority: "Medium", hrs: "6-8 hrs", isNew: false },
-        { cat: "Tools", topic: "Plotly", status: "Not Started", priority: "Medium", hrs: "4-5 hrs", isNew: true },
-        { cat: "Tools", topic: "Power BI", status: "Not Started", priority: "Medium", hrs: "6-8 hrs", isNew: false },
-        { cat: "Tools", topic: "Cloud basics (AWS/Azure)", status: "Not Started", priority: "Lower", hrs: "8-10 hrs", isNew: true },
+        { key: "pandas", cat: "Tools", topic: "Pandas proficiently", status: "In Progress", priority: "High", hrs: "8-10 hrs", isNew: false },
+        { key: "matplotlib_seaborn", cat: "Tools", topic: "Matplotlib / Seaborn", status: "In Progress", priority: "High", hrs: "4-5 hrs", isNew: false },
+        { key: "sklearn_pipelines", cat: "Tools", topic: "Scikit-learn pipelines", status: "Not Started", priority: "High", hrs: "4-5 hrs", isNew: false },
+        { key: "git_basics", cat: "Tools", topic: "Git basics", status: "In Progress", priority: "High", hrs: "3-4 hrs", isNew: false },
+        { key: "sql_basics", cat: "Tools", topic: "SQL basics", status: "Not Started", priority: "Medium", hrs: "6-8 hrs", isNew: false },
+        { key: "plotly", cat: "Tools", topic: "Plotly", status: "Not Started", priority: "Medium", hrs: "4-5 hrs", isNew: true },
+        { key: "power_bi", cat: "Tools", topic: "Power BI", status: "Not Started", priority: "Medium", hrs: "6-8 hrs", isNew: false },
+        { key: "cloud_basics", cat: "Tools", topic: "Cloud basics (AWS/Azure)", status: "Not Started", priority: "Lower", hrs: "8-10 hrs", isNew: true },
       ].map(c => ({ id: uid(), ...c })),
 
       levels: ["Foundational", "Intermediate", "Advanced", "Stretch"],
@@ -967,69 +998,89 @@
     };
 
     // Read-only roadmap reference (not part of editable state)
+    // Each item's `keys` links it to one or more concept `key`s in DEFAULT_STATE.concepts
+    // above. Status (Completed / In Progress / Not Started) is computed live from the
+    // Concepts Checklist tab in renderSequence() — there is no separate "current" flag
+    // to maintain by hand anymore; it's derived as the first not-yet-completed step.
     const sequence = [
       {
         phase: "Phase 1 — Foundation (Do These First)", items: [
-          { n: 1, title: "Probability basics", why: "Everything else builds on this", hrs: "6-8 hrs" },
-          { n: 2, title: "Types of data + handling missing values", why: "First practical data skill — needed for every project", hrs: "4-6 hrs", current: true },
-          { n: 3, title: "Pandas proficiently", why: "Your primary tool — learn it while doing projects", hrs: "8-10 hrs" },
-          { n: 4, title: "Hypothesis testing and p-values", why: "Needed to understand model output and feature selection", hrs: "4-6 hrs" },
-          { n: 5, title: "Train/test split and data leakage", why: "Critical before building any model", hrs: "2-3 hrs" },
-          { n: 6, title: "Correlation vs causation", why: "Foundational for feature analysis", hrs: "2-3 hrs" },
-          { n: 7, title: "Class imbalance", why: "German Credit dataset is imbalanced — need this now", hrs: "3-4 hrs" },
-          { n: 8, title: "Logistic regression deeply + sklearn pipelines", why: "Your first model — understand it fully", hrs: "8-10 hrs" },
-          { n: 9, title: "Bias-variance tradeoff + overfitting", why: "Explains why models fail — needed before tree models", hrs: "5-7 hrs" },
-          { n: 10, title: "Confusion matrix + Precision/Recall/AUC-ROC", why: "Core evaluation — finish German Credit project", hrs: "9-12 hrs" },
+          { n: 1, title: "Probability basics", why: "Everything else builds on this", hrs: "6-8 hrs", keys: ["prob_basics"] },
+          { n: 2, title: "Types of data + handling missing values", why: "First practical data skill — needed for every project", hrs: "4-6 hrs", keys: ["data_types", "missing_values"] },
+          { n: 3, title: "Pandas proficiently", why: "Your primary tool — learn it while doing projects", hrs: "8-10 hrs", keys: ["pandas"] },
+          { n: 4, title: "Hypothesis testing and p-values", why: "Needed to understand model output and feature selection", hrs: "4-6 hrs", keys: ["hyp_testing"] },
+          { n: 5, title: "Train/test split and data leakage", why: "Critical before building any model", hrs: "2-3 hrs", keys: ["train_test_split"] },
+          { n: 6, title: "Correlation vs causation", why: "Foundational for feature analysis", hrs: "2-3 hrs", keys: ["corr_causation"] },
+          { n: 7, title: "Class imbalance", why: "German Credit dataset is imbalanced — need this now", hrs: "3-4 hrs", keys: ["class_imbalance"] },
+          { n: 8, title: "Logistic regression deeply + sklearn pipelines", why: "Your first model — understand it fully", hrs: "8-10 hrs", keys: ["logreg", "sklearn_pipelines"] },
+          { n: 9, title: "Bias-variance tradeoff + overfitting", why: "Explains why models fail — needed before tree models", hrs: "5-7 hrs", keys: ["bias_variance", "overfitting"] },
+          { n: 10, title: "Confusion matrix + Precision/Recall/AUC-ROC", why: "Core evaluation — finish German Credit project", hrs: "9-12 hrs", keys: ["confusion_matrix", "precision_recall_f1", "auc_roc"] },
         ]
       },
       {
         phase: "Phase 2 — Building Depth", items: [
-          { n: 11, title: "PD, LGD, EAD + Expected vs Unexpected Loss", why: "Core credit risk theory — connects ML to business", hrs: "5-7 hrs" },
-          { n: 12, title: "Decision trees", why: "Foundation for random forests and boosting", hrs: "3-4 hrs" },
-          { n: 13, title: "Random forests + Feature importance + SHAP", why: "Natural next model after logistic regression", hrs: "9-12 hrs" },
-          { n: 14, title: "Cross validation", why: "Needed before hyperparameter tuning", hrs: "3-4 hrs" },
-          { n: 15, title: "Class imbalance handling techniques", why: "SMOTE, weights, threshold tuning — needed for Give Me Some Credit", hrs: "4-5 hrs" },
-          { n: 16, title: "XGBoost / LightGBM", why: "Industry standard models — build on tree knowledge", hrs: "5-6 hrs" },
-          { n: 17, title: "Gini coefficient + KS statistic + Lift curves", why: "Credit-specific evaluation metrics", hrs: "6-8 hrs" },
-          { n: 18, title: "Feature selection and engineering", why: "Improves every model you build from here", hrs: "5-7 hrs" },
-          { n: 19, title: "SQL basics", why: "Needed for Home Credit multi-table project", hrs: "6-8 hrs" },
-          { n: 20, title: "Weight of Evidence and Information Value", why: "Scorecard development foundation", hrs: "4-5 hrs" },
+          { n: 11, title: "PD, LGD, EAD + Expected vs Unexpected Loss", why: "Core credit risk theory — connects ML to business", hrs: "5-7 hrs", keys: ["pd_lgd_ead", "el_ul"] },
+          { n: 12, title: "Decision trees", why: "Foundation for random forests and boosting", hrs: "3-4 hrs", keys: ["decision_trees"] },
+          { n: 13, title: "Random forests + Feature importance + SHAP", why: "Natural next model after logistic regression", hrs: "9-12 hrs", keys: ["random_forests", "feature_importance", "shap"] },
+          { n: 14, title: "Cross validation", why: "Needed before hyperparameter tuning", hrs: "3-4 hrs", keys: ["cross_validation"] },
+          { n: 15, title: "Class imbalance handling techniques", why: "SMOTE, weights, threshold tuning — needed for Give Me Some Credit", hrs: "4-5 hrs", keys: ["class_imbalance_techniques"] },
+          { n: 16, title: "XGBoost / LightGBM", why: "Industry standard models — build on tree knowledge", hrs: "5-6 hrs", keys: ["xgboost"] },
+          { n: 17, title: "Gini coefficient + KS statistic + Lift curves", why: "Credit-specific evaluation metrics", hrs: "6-8 hrs", keys: ["gini", "ks_statistic", "lift_curves"] },
+          { n: 18, title: "Feature selection and engineering", why: "Improves every model you build from here", hrs: "5-7 hrs", keys: ["feature_selection"] },
+          { n: 19, title: "SQL basics", why: "Needed for Home Credit multi-table project", hrs: "6-8 hrs", keys: ["sql_basics"] },
+          { n: 20, title: "Weight of Evidence and Information Value", why: "Scorecard development foundation", hrs: "4-5 hrs", keys: ["woe_iv"] },
         ]
       },
       {
         phase: "Phase 3 — Professional Depth", items: [
-          { n: 21, title: "Scorecard development", why: "Classic credit risk deliverable — highly employable skill", hrs: "6-8 hrs" },
-          { n: 22, title: "Maximum likelihood estimation", why: "Understand what logistic regression actually optimises", hrs: "4-5 hrs" },
-          { n: 23, title: "Vintage analysis", why: "Core credit risk analytical skill rarely taught in ML courses", hrs: "4-5 hrs" },
-          { n: 24, title: "Regularisation (L1/L2)", why: "Needed for production-grade logistic regression", hrs: "3-4 hrs" },
-          { n: 25, title: "Profit / cost matrix", why: "Translate model performance into business value", hrs: "3-4 hrs" },
-          { n: 26, title: "Stress testing + Portfolio concentration risk", why: "Connect ML outputs to macro risk — your mortgage background helps", hrs: "7-9 hrs" },
-          { n: 27, title: "Model calibration", why: "Essential for regulatory-grade PD models", hrs: "3-4 hrs" },
-          { n: 28, title: "Partial dependence plots", why: "Rounds out explainability toolkit alongside SHAP", hrs: "2-3 hrs" },
-          { n: 29, title: "IFRS 9 basics + Champion/challenger framework", why: "Regulatory context for production models", hrs: "7-9 hrs" },
-          { n: 30, title: "Confidence intervals", why: "Needed for stress scenario best/worst case modelling", hrs: "3-4 hrs" },
+          { n: 21, title: "Scorecard development", why: "Classic credit risk deliverable — highly employable skill", hrs: "6-8 hrs", keys: ["scorecard_dev"] },
+          { n: 22, title: "Maximum likelihood estimation", why: "Understand what logistic regression actually optimises", hrs: "4-5 hrs", keys: ["mle"] },
+          { n: 23, title: "Vintage analysis", why: "Core credit risk analytical skill rarely taught in ML courses", hrs: "4-5 hrs", keys: ["vintage_analysis"] },
+          { n: 24, title: "Regularisation (L1/L2)", why: "Needed for production-grade logistic regression", hrs: "3-4 hrs", keys: ["regularisation"] },
+          { n: 25, title: "Profit / cost matrix", why: "Translate model performance into business value", hrs: "3-4 hrs", keys: ["profit_cost_matrix"] },
+          { n: 26, title: "Stress testing + Portfolio concentration risk", why: "Connect ML outputs to macro risk — your mortgage background helps", hrs: "7-9 hrs", keys: ["stress_testing", "portfolio_concentration"] },
+          { n: 27, title: "Model calibration", why: "Essential for regulatory-grade PD models", hrs: "3-4 hrs", keys: ["model_calibration"] },
+          { n: 28, title: "Partial dependence plots", why: "Rounds out explainability toolkit alongside SHAP", hrs: "2-3 hrs", keys: ["pdp"] },
+          { n: 29, title: "IFRS 9 basics + Champion/challenger framework", why: "Regulatory context for production models", hrs: "7-9 hrs", keys: ["ifrs9", "champion_challenger"] },
+          { n: 30, title: "Confidence intervals", why: "Needed for stress scenario best/worst case modelling", hrs: "3-4 hrs", keys: ["conf_intervals"] },
         ]
       },
       {
         phase: "Phase 4 — Long Term", items: [
-          { n: 31, title: "Plotly", why: "Better charts for portfolio and presentations", hrs: "4-5 hrs" },
-          { n: 32, title: "Power BI", why: "Common in Adelaide job ads — Python knowledge helps", hrs: "6-8 hrs" },
-          { n: 33, title: "Central limit theorem", why: "Deepens statistical intuition", hrs: "3-4 hrs" },
-          { n: 34, title: "Linear algebra basics", why: "Underpins how models work under the hood", hrs: "6-8 hrs" },
-          { n: 35, title: "Maximum likelihood estimation (depth)", why: "Full mathematical derivation", hrs: "4-5 hrs" },
-          { n: 36, title: "SR 11-7 / Model governance + Basel III/APRA", why: "Regulatory knowledge for senior roles", hrs: "7-9 hrs" },
-          { n: 37, title: "Cloud basics (AWS/Azure)", why: "Increasingly expected at mid-senior level", hrs: "8-10 hrs" },
+          { n: 31, title: "Plotly", why: "Better charts for portfolio and presentations", hrs: "4-5 hrs", keys: ["plotly"] },
+          { n: 32, title: "Power BI", why: "Common in Adelaide job ads — Python knowledge helps", hrs: "6-8 hrs", keys: ["power_bi"] },
+          { n: 33, title: "Central limit theorem", why: "Deepens statistical intuition", hrs: "3-4 hrs", keys: ["clt"] },
+          { n: 34, title: "Linear algebra basics", why: "Underpins how models work under the hood", hrs: "6-8 hrs", keys: ["linear_algebra"] },
+          { n: 35, title: "Maximum likelihood estimation (depth)", why: "Full mathematical derivation", hrs: "4-5 hrs", keys: ["mle"] },
+          { n: 36, title: "SR 11-7 / Model governance + Basel III/APRA", why: "Regulatory knowledge for senior roles", hrs: "7-9 hrs", keys: ["sr11_7", "basel_apra"] },
+          { n: 37, title: "Cloud basics (AWS/Azure)", why: "Increasingly expected at mid-senior level", hrs: "8-10 hrs", keys: ["cloud_basics"] },
         ]
       },
     ];
 
     // ---- State load/save ----
+    // Backfills the `key` field on concepts saved before the Recommended Sequence
+    // linking feature existed, by matching on topic text against the default
+    // checklist, so old saved/exported/imported state still links up correctly.
+    function migrateState(parsed) {
+      try {
+        const defaultByTopic = {};
+        DEFAULT_STATE.concepts.forEach(c => { defaultByTopic[c.topic.trim().toLowerCase()] = c.key; });
+        (parsed.concepts || []).forEach(c => {
+          if (!c.key) {
+            const match = defaultByTopic[(c.topic || "").trim().toLowerCase()];
+            if (match) c.key = match;
+          }
+        });
+      } catch (e) { console.warn("Could not migrate concept keys", e); }
+      return parsed;
+    }
     function loadState() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (raw) {
           const parsed = JSON.parse(raw);
-          if (parsed && parsed.concepts && parsed.projects && parsed.quizzes) return parsed;
+          if (parsed && parsed.concepts && parsed.projects && parsed.quizzes) return migrateState(parsed);
         }
       } catch (e) { console.warn("Could not load saved state, using defaults", e); }
       return JSON.parse(JSON.stringify(DEFAULT_STATE));
@@ -1039,6 +1090,7 @@
     let saveTimer = null;
     function saveState() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      fileIsDirty = true;
       const ind = document.getElementById("saveIndicator");
       ind.classList.add("show");
       clearTimeout(saveTimer);
@@ -1127,6 +1179,7 @@
       renderCards();
       renderStatusChart();
       renderCategoryBars();
+      renderSequence();
     }
 
     function escapeHtml(s) {
@@ -1222,7 +1275,7 @@
         } else {
           html += `<table><thead><tr>
         <th class="col-topic">Topic</th><th class="col-narrow">Status</th><th class="col-narrow">Priority</th>
-        <th class="col-xnarrow">Est.</th><th class="col-xnarrow">New?</th><th></th>
+        <th class="col-hrs">Est. Hours</th><th class="col-xnarrow">New?</th><th></th>
       </tr></thead><tbody>`;
           items.forEach(c => {
             html += `<tr data-concept-id="${c.id}">
@@ -1393,16 +1446,47 @@
       });
     }
 
-    // ============== SEQUENCE TAB (read-only) ==============
+    // ============== SEQUENCE TAB (linked live to Concepts Checklist) ==============
+    function conceptByKey(key) {
+      if (!key) return null;
+      return state.concepts.find(c => c.key === key) || null;
+    }
+    // A roadmap step's status is derived from the concept(s) it's linked to:
+    // Completed only once every linked concept is Completed; In Progress if any
+    // linked concept is started; otherwise Not Started. Steps with no linked
+    // concepts found (e.g. you deleted that concept) fall back to Not Started.
+    function seqItemStatus(item) {
+      if (!item.keys || !item.keys.length) return "Not Started";
+      const statuses = item.keys.map(k => { const c = conceptByKey(k); return c ? c.status : null; }).filter(s => s !== null);
+      if (!statuses.length) return "Not Started";
+      if (statuses.every(s => s === "Completed")) return "Completed";
+      if (statuses.some(s => s === "Completed" || s === "In Progress")) return "In Progress";
+      return "Not Started";
+    }
     function renderSequence() {
-      let html = "";
+      const flatItems = [];
+      sequence.forEach(ph => ph.items.forEach(it => flatItems.push(it)));
+      const statusByN = {};
+      flatItems.forEach(it => { statusByN[it.n] = seqItemStatus(it); });
+      // "Current" = the first not-yet-completed step, in order — moves forward
+      // automatically as you complete concepts in the Checklist tab.
+      let currentN = null;
+      for (const it of flatItems) {
+        if (statusByN[it.n] !== "Completed") { currentN = it.n; break; }
+      }
+      const doneCount = flatItems.filter(it => statusByN[it.n] === "Completed").length;
+
+      let html = `<p class="empty-hint">${doneCount} / ${flatItems.length} roadmap steps completed — status is pulled live from the Concepts Checklist tab, no manual updating needed.</p>`;
       sequence.forEach(ph => {
         html += `<div class="seq-phase"><div class="seq-phase-title">${ph.phase}</div>`;
         ph.items.forEach(it => {
-          html += `<div class="seq-item ${it.current ? 'current' : ''}">
-        <div class="seq-num">${it.n}</div>
+          const st = statusByN[it.n];
+          const isCurrent = it.n === currentN;
+          const dot = st === "Completed" ? "✅" : st === "In Progress" ? "🟡" : "⚪";
+          html += `<div class="seq-item ${isCurrent ? 'current' : ''}">
+        <div class="seq-num">${st === "Completed" ? "✓" : it.n}</div>
         <div style="flex:1">
-          <div class="seq-title">${it.title}${it.current ? ' — 📍 you are here' : ''}</div>
+          <div class="seq-title ${statusClass(st)}">${dot} ${it.title}${isCurrent ? ' — 📍 you are here' : ''}</div>
           <div class="seq-why">${it.why}</div>
         </div>
         <div class="seq-hrs">${it.hrs}</div>
@@ -1517,7 +1601,7 @@
         try {
           const parsed = JSON.parse(reader.result);
           if (!parsed.concepts || !parsed.projects || !parsed.quizzes) throw new Error("Missing expected fields");
-          state = parsed;
+          state = migrateState(parsed);
           saveState();
           renderAll();
           alert("Backup imported successfully.");
@@ -1540,7 +1624,7 @@
     document.getElementById("connectFileBtn").onclick = connectFile;
     document.getElementById("saveFileNowBtn").onclick = () => {
       if (!fileHandle) { alert("Connect a data file first."); return; }
-      writeStateToFile();
+      writeStateToFile(true); // force: an explicit click should always write, regardless of dirty tracking
     };
 
     function renderAll() {
@@ -1548,7 +1632,6 @@
       renderConceptFilters();
       renderConceptTables();
       renderProjectTables();
-      renderSequence();
       renderQuizzes();
     }
 
