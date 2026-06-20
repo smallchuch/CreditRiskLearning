@@ -642,6 +642,9 @@
     Fully editable — changes autosave to this browser.</p>
 
   <div class="toolbar">
+    <span class="pill" id="fileStatus">📁 Not connected — saving to this browser only</span>
+    <button class="btn primary" id="connectFileBtn">🔗 Connect data file</button>
+    <button class="btn small" id="saveFileNowBtn">💾 Save to file now</button>
     <button class="btn" id="exportBtn">⬇ Export backup (JSON)</button>
     <button class="btn" id="importBtn">⬆ Import backup</button>
     <input type="file" id="importFile" accept=".json" style="display:none">
@@ -707,12 +710,167 @@
     </div>
   </div>
 
-  <p class="footer-note">Edits autosave to this browser's local storage (tied to this file, on this device/browser). Use
-    "Export backup" occasionally to keep a JSON copy somewhere safe.</p>
+  <p class="footer-note">Edits always autosave instantly to this browser. If a data file is connected, it's also
+    written to disk when you switch away from this tab/window, close it, or click "Save to file now" — not on every
+    keystroke, so a live-reloading local server won't interrupt you mid-typing. Commit &amp; push that file in your
+    repo to carry progress between machines. Use "Export backup" occasionally as an extra safety copy.</p>
 
   <script>
     const STORAGE_KEY = "crml_dashboard_state_v1";
     const uid = () => "id_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
+
+    // ---- File sync (File System Access API) ----
+    // Lets this dashboard read/write a JSON file on disk (e.g. inside your git repo)
+    // so progress can be committed/pushed/pulled between machines, instead of being
+    // stuck in one browser's local storage.
+    const DB_NAME = "crml_dashboard_db";
+    const DB_STORE = "handles";
+    const HANDLE_KEY = "dataFileHandle";
+    let fileHandle = null;
+    let fileWriteLock = Promise.resolve();
+
+    function openDb() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, 1);
+        req.onupgradeneeded = () => req.result.createObjectStore(DB_STORE);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+    async function idbSet(key, val) {
+      const db = await openDb();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(DB_STORE, "readwrite");
+        tx.objectStore(DB_STORE).put(val, key);
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+      });
+    }
+    async function idbGet(key) {
+      const db = await openDb();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(DB_STORE, "readonly");
+        const req = tx.objectStore(DB_STORE).get(key);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    function updateFileStatus() {
+      const el = document.getElementById("fileStatus");
+      const btn = document.getElementById("connectFileBtn");
+      if (!el || !btn) return;
+      if (fileHandle) {
+        el.textContent = `📁 Synced to: ${fileHandle.name}`;
+        btn.textContent = "🔁 Reconnect";
+      } else {
+        el.textContent = "📁 Not connected — saving to this browser only";
+        btn.textContent = "🔗 Connect data file";
+      }
+    }
+
+    async function loadFromFileHandle() {
+      try {
+        const file = await fileHandle.getFile();
+        const text = await file.text();
+        if (text && text.trim()) {
+          const parsed = JSON.parse(text);
+          if (parsed && parsed.concepts && parsed.projects && parsed.quizzes) {
+            state = parsed;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            renderAll();
+          }
+        }
+      } catch (e) {
+        console.warn("Could not read connected file", e);
+      }
+    }
+
+    function writeStateToFile() {
+      if (!fileHandle) return Promise.resolve();
+      fileWriteLock = fileWriteLock.then(async () => {
+        try {
+          const writable = await fileHandle.createWritable();
+          await writable.write(JSON.stringify(state, null, 2));
+          await writable.close();
+        } catch (e) {
+          console.warn("Could not write connected file", e);
+        }
+      });
+      return fileWriteLock;
+    }
+
+    // File writes are intentionally NOT triggered on every keystroke — if this page is
+    // viewed through a local dev server with live-reload (e.g. VS Code Live Server),
+    // writing the data file on every keystroke causes the watcher to reload the whole
+    // page mid-typing. Instead, the file is written when you switch away from this
+    // tab/window, before closing, when first connecting, or via the manual save button.
+    window.addEventListener("blur", () => { if (fileHandle) writeStateToFile(); });
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden && fileHandle) writeStateToFile();
+    });
+    window.addEventListener("beforeunload", () => { if (fileHandle) writeStateToFile(); });
+
+    async function connectFile() {
+      if (!("showOpenFilePicker" in window)) {
+        alert("Direct file sync needs Chrome or Edge. In other browsers, use Export/Import to move data between machines manually.");
+        return;
+      }
+      try {
+        // Already have a handle from a previous session — just re-authorize and reload it.
+        if (fileHandle) {
+          const granted = await fileHandle.requestPermission({ mode: "readwrite" });
+          if (granted === "granted") {
+            await loadFromFileHandle();
+            updateFileStatus();
+            return;
+          }
+        }
+        const pickExisting = confirm(
+          "Click OK to select your EXISTING learning_journey_data.json (e.g. already in your repo after a git pull).\n" +
+          "Click Cancel to CREATE a new one."
+        );
+        let handle;
+        if (pickExisting) {
+          [handle] = await window.showOpenFilePicker({
+            types: [{ description: "JSON", accept: { "application/json": [".json"] } }],
+          });
+        } else {
+          handle = await window.showSaveFilePicker({
+            suggestedName: "learning_journey_data.json",
+            types: [{ description: "JSON", accept: { "application/json": [".json"] } }],
+          });
+        }
+        const granted = await handle.requestPermission({ mode: "readwrite" });
+        if (granted !== "granted") { alert("Permission was not granted."); return; }
+        fileHandle = handle;
+        await idbSet(HANDLE_KEY, handle);
+        if (pickExisting) {
+          await loadFromFileHandle();
+        } else {
+          await writeStateToFile();
+        }
+        updateFileStatus();
+      } catch (e) {
+        if (e.name !== "AbortError") alert("Couldn't connect file: " + e.message);
+      }
+    }
+
+    async function tryReconnectFile() {
+      if (!("showOpenFilePicker" in window)) { updateFileStatus(); return; }
+      try {
+        const handle = await idbGet(HANDLE_KEY);
+        if (!handle) { updateFileStatus(); return; }
+        fileHandle = handle;
+        const granted = await handle.queryPermission({ mode: "readwrite" });
+        if (granted === "granted") {
+          await loadFromFileHandle();
+        }
+      } catch (e) {
+        console.warn("Could not reconnect to data file", e);
+      }
+      updateFileStatus();
+    }
 
     const DEFAULT_STATE = {
       categories: ["Statistics Foundations", "Data Fundamentals", "Machine Learning Core", "Evaluation Metrics", "Credit Risk Specific", "Explainability", "Tools"],
@@ -1379,6 +1537,11 @@
     document.getElementById("addCategoryBtn").onclick = addCategory;
     document.getElementById("addLevelBtn").onclick = addLevel;
     document.getElementById("addQuizBtn").onclick = addQuiz;
+    document.getElementById("connectFileBtn").onclick = connectFile;
+    document.getElementById("saveFileNowBtn").onclick = () => {
+      if (!fileHandle) { alert("Connect a data file first."); return; }
+      writeStateToFile();
+    };
 
     function renderAll() {
       refreshSummary();
@@ -1390,6 +1553,7 @@
     }
 
     renderAll();
+    tryReconnectFile();
   </script>
 </body>
 
