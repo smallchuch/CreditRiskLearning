@@ -537,7 +537,8 @@ def show_fonts():
     plt.show()
 
 
-def style_df(df, gradient_cols=None, highlight_nulls=False):
+def style_df(df, gradient_cols=None, gradient_cmap='Purples', gradient_vmin=None,
+             gradient_vmax=None, gradient_axis=0, highlight_nulls=False):
     """Apply clean consistent styling to any DataFrame output."""
     BG_HEADER = '#1F4E79'
     BG_EVEN   = '#DEEAF1'
@@ -578,9 +579,14 @@ def style_df(df, gradient_cols=None, highlight_nulls=False):
             ('background-color', BG_HOVER),
         ]},
     ])
-
     if gradient_cols:
-        styled = styled.background_gradient(subset=gradient_cols, cmap='Purples')
+        styled = styled.background_gradient(
+            subset=gradient_cols,
+            cmap=gradient_cmap,
+            vmin=gradient_vmin,
+            vmax=gradient_vmax,
+            axis=gradient_axis,
+        )
     if highlight_nulls:
         styled = styled.highlight_null(color='#FCEBEA')
 

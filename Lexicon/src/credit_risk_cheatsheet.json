@@ -1,0 +1,560 @@
+{
+  "functions": [
+    {
+      "id": "227ga084",
+      "library": "seaborn",
+      "name": "sns.kdeplot()",
+      "useCases": [
+        "Visualization"
+      ],
+      "explanation": "A KDE (Kernel Density Estimate) plot is a data visualization that shows the probability distribution of a continuous variable. It works like a smoothed, continuous version of a histogram, where every individual data point contributes a small, rounded \"bump\" (a kernel). Adding these bumps together creates a single, smooth curve.",
+      "example": "sns.kdeplot(data=df, x=\"AMT_CREDIT\", hue=\"TARGET\", common_norm=False)"
+    },
+    {
+      "id": "3wctfvia",
+      "library": "pandas",
+      "name": "df.select_dtypes(include=\"object/number\")",
+      "useCases": [
+        "Other"
+      ],
+      "explanation": "Selected columns of a certain datatype. Usually assigned to a variable to store it for analysis by datatype.",
+      "example": "cat_cols = df.select_dtypes(include=\"object\").columns\nnum_cols = df.select_dtypes(include=\"number\").columns"
+    },
+    {
+      "id": "hrshg7qb",
+      "library": "pandas",
+      "name": "df.dtypes",
+      "useCases": [
+        "Other"
+      ],
+      "explanation": "Shows data type for each column of a dataframe",
+      "example": "Example Output:\n\nSK_ID_CURR        int64\nAMT_CREDIT      float64\nNAME_CONTRACT_TYPE    object\nFLAG_OWN_CAR          object\nTARGET                int64\ndtype: object"
+    },
+    {
+      "id": "c0bnap5z",
+      "library": "python (built-in)",
+      "name": ".round()",
+      "useCases": [
+        "Other"
+      ],
+      "explanation": "Round to a number of decimals",
+      "example": "df.describe().round(2)"
+    },
+    {
+      "id": "f1",
+      "library": "pandas",
+      "name": "df.head()",
+      "useCases": [
+        "Exploration"
+      ],
+      "explanation": "Returns the first 5 rows (or n rows) of a DataFrame. First thing you run on any new dataset.",
+      "example": "df.head()\ndf.head(10)  # first 10 rows"
+    },
+    {
+      "id": "f2",
+      "library": "pandas",
+      "name": "df.info()",
+      "useCases": [
+        "Exploration"
+      ],
+      "explanation": "Prints column dtypes, non-null counts, and memory usage. Use to spot missing data or wrong types fast.",
+      "example": "df.info()"
+    },
+    {
+      "id": "f3",
+      "library": "pandas",
+      "name": "df.describe()",
+      "useCases": [
+        "Exploration",
+        "Statistics"
+      ],
+      "explanation": "Summary stats (count, mean, std, min, quartiles, max) for numeric columns.",
+      "example": "df.describe()\ndf.describe(include='all')  # include categorical too\n\ndf['COLUMN'].describe() # select a column"
+    },
+    {
+      "id": "f4",
+      "library": "pandas",
+      "name": "df.shape",
+      "useCases": [
+        "Exploration"
+      ],
+      "explanation": "Returns (rows, columns) as a tuple. No parentheses — it's an attribute, not a method.",
+      "example": "rows, cols = df.shape\nprint(df.shape)"
+    },
+    {
+      "id": "f5",
+      "library": "pandas",
+      "name": "df.columns",
+      "useCases": [
+        "Exploration"
+      ],
+      "explanation": "Returns the column labels as an Index object. Useful for checking names or looping over columns.",
+      "example": "print(df.columns)\nfor col in df.columns:\n    print(col)"
+    },
+    {
+      "id": "f6",
+      "library": "pandas",
+      "name": "df.isnull()",
+      "useCases": [
+        "Data Cleaning"
+      ],
+      "explanation": "Returns a same-shaped DataFrame of booleans marking where values are NaN/None.",
+      "example": "df.isnull()"
+    },
+    {
+      "id": "f7",
+      "library": "pandas",
+      "name": "df.isnull().sum()",
+      "useCases": [
+        "Data Cleaning",
+        "Exploration"
+      ],
+      "explanation": "Counts missing values per column — the standard first check for data quality.",
+      "example": "df.isnull().sum()"
+    },
+    {
+      "id": "f8",
+      "library": "pandas",
+      "name": "df.fillna()",
+      "useCases": [
+        "Data Cleaning"
+      ],
+      "explanation": "Replaces NaN values with a specified value, method, or per-column mapping.",
+      "example": "df.fillna(0)\ndf['col'].fillna(df['col'].mean(), inplace=True)"
+    },
+    {
+      "id": "f9",
+      "library": "pandas",
+      "name": "df.dropna()",
+      "useCases": [
+        "Data Cleaning"
+      ],
+      "explanation": "Removes rows (or columns) containing NaN values. Use subset= to target specific columns.",
+      "example": "df.dropna()\ndf.dropna(subset=['income'], how='any')"
+    },
+    {
+      "id": "f10",
+      "library": "pandas",
+      "name": "df['new'] = ...",
+      "useCases": [
+        "Feature Engineering"
+      ],
+      "explanation": "Creates or overwrites a column by assigning a Series, scalar, or computed expression.",
+      "example": "df['debt_to_income'] = df['debt'] / df['income']"
+    },
+    {
+      "id": "f11",
+      "library": "pandas",
+      "name": "df.apply()",
+      "useCases": [
+        "Feature Engineering"
+      ],
+      "explanation": "Applies a function along an axis (rows or columns). Slower than vectorised ops but flexible for custom logic.",
+      "example": "df['risk_band'] = df['score'].apply(lambda s: 'high' if s < 600 else 'low')"
+    },
+    {
+      "id": "f12",
+      "library": "pandas",
+      "name": "df.applymap()",
+      "useCases": [
+        "Feature Engineering"
+      ],
+      "explanation": "Applies a function element-wise to every cell of a DataFrame (not Series-aware). Deprecated in newer pandas in favour of df.map().",
+      "example": "df.applymap(lambda x: round(x, 2) if isinstance(x, float) else x)"
+    },
+    {
+      "id": "f13",
+      "library": "pandas",
+      "name": "pd.cut()",
+      "useCases": [
+        "Feature Engineering",
+        "Binning"
+      ],
+      "explanation": "Bins continuous values into discrete intervals you define — classic for credit score bands.",
+      "example": "df['score_band'] = pd.cut(df['credit_score'], bins=[0,580,670,740,800,850],\n    labels=['Poor','Fair','Good','VeryGood','Excellent'])"
+    },
+    {
+      "id": "f14",
+      "library": "pandas",
+      "name": "pd.qcut()",
+      "useCases": [
+        "Feature Engineering",
+        "Binning"
+      ],
+      "explanation": "Bins values into quantile-based buckets (equal-sized groups) rather than fixed-width ranges.",
+      "example": "df['income_quartile'] = pd.qcut(df['income'], q=4, labels=['Q1','Q2','Q3','Q4'])"
+    },
+    {
+      "id": "f15",
+      "library": "pandas",
+      "name": "pd.to_datetime()",
+      "useCases": [
+        "Data Cleaning",
+        "Feature Engineering"
+      ],
+      "explanation": "Converts a column of strings/numbers into proper datetime objects so you can use .dt accessors.",
+      "example": "df['app_date'] = pd.to_datetime(df['app_date'], format='%Y-%m-%d')"
+    },
+    {
+      "id": "f16",
+      "library": "pandas",
+      "name": "df['col'].dt.year",
+      "useCases": [
+        "Feature Engineering"
+      ],
+      "explanation": "Extracts the year (or .month, .day, .dayofweek etc.) from a datetime column.",
+      "example": "df['app_year'] = df['app_date'].dt.year\ndf['app_month'] = df['app_date'].dt.month"
+    },
+    {
+      "id": "f17",
+      "library": "pandas",
+      "name": "df['a'] + df['b']",
+      "useCases": [
+        "Feature Engineering"
+      ],
+      "explanation": "Vectorised element-wise addition between two columns — fast, no loop needed.",
+      "example": "df['total_debt'] = df['credit_card_debt'] + df['loan_debt']"
+    },
+    {
+      "id": "f18",
+      "library": "pandas",
+      "name": "df['a'] - df['b']",
+      "useCases": [
+        "Feature Engineering"
+      ],
+      "explanation": "Vectorised element-wise subtraction between two columns.",
+      "example": "df['net_income'] = df['gross_income'] - df['expenses']"
+    },
+    {
+      "id": "f19",
+      "library": "pandas",
+      "name": "df['a'] * df['b']",
+      "useCases": [
+        "Feature Engineering"
+      ],
+      "explanation": "Vectorised element-wise multiplication between two columns.",
+      "example": "df['exposure'] = df['loan_amount'] * df['utilisation_rate']"
+    },
+    {
+      "id": "f20",
+      "library": "pandas",
+      "name": "df['a'] / df['b']",
+      "useCases": [
+        "Feature Engineering"
+      ],
+      "explanation": "Vectorised element-wise division. Watch for divide-by-zero producing inf/NaN.",
+      "example": "df['dti_ratio'] = df['total_debt'] / df['income'].replace(0, np.nan)"
+    },
+    {
+      "id": "f21",
+      "library": "pandas",
+      "name": "df.add()",
+      "useCases": [
+        "Feature Engineering"
+      ],
+      "explanation": "Method form of addition, useful because it supports a fill_value for missing data instead of producing NaN.",
+      "example": "df['total'] = df['a'].add(df['b'], fill_value=0)"
+    },
+    {
+      "id": "f22",
+      "library": "pandas",
+      "name": "df['col']",
+      "useCases": [
+        "Selection"
+      ],
+      "explanation": "Selects a single column as a Series.",
+      "example": "scores = df['credit_score']"
+    },
+    {
+      "id": "f23",
+      "library": "pandas",
+      "name": "df.loc[]",
+      "useCases": [
+        "Selection"
+      ],
+      "explanation": "Label-based indexing — select rows/columns by index label or boolean mask.",
+      "example": "df.loc[df['income'] > 50000, ['name','income']]"
+    },
+    {
+      "id": "f24",
+      "library": "pandas",
+      "name": "df.iloc[]",
+      "useCases": [
+        "Selection"
+      ],
+      "explanation": "Position-based indexing — select rows/columns by integer position, like numpy slicing.",
+      "example": "df.iloc[0:5, 0:3]  # first 5 rows, first 3 cols"
+    },
+    {
+      "id": "f25",
+      "library": "pandas",
+      "name": "df.query()",
+      "useCases": [
+        "Selection"
+      ],
+      "explanation": "Filters rows using a string expression — often more readable than chained boolean masks.",
+      "example": "df.query('income > 50000 and default == 0')"
+    },
+    {
+      "id": "f26",
+      "library": "pandas",
+      "name": "df.filter()",
+      "useCases": [
+        "Selection"
+      ],
+      "explanation": "Selects columns or rows by label pattern (e.g. regex or substring), not by value.",
+      "example": "df.filter(like='score')  # all columns containing 'score'"
+    },
+    {
+      "id": "f27",
+      "library": "pandas",
+      "name": "df.groupby()",
+      "useCases": [
+        "Aggregation"
+      ],
+      "explanation": "Splits the DataFrame into groups by key(s) so you can aggregate/transform within each group.",
+      "example": "df.groupby('region')['default'].mean()"
+    },
+    {
+      "id": "f28",
+      "library": "pandas",
+      "name": "df.agg()",
+      "useCases": [
+        "Aggregation"
+      ],
+      "explanation": "Applies one or more aggregation functions, often after groupby, including different functions per column.",
+      "example": "df.groupby('region').agg({'income':'mean', 'default':'sum'})"
+    },
+    {
+      "id": "f29",
+      "library": "pandas",
+      "name": "df.transform()",
+      "useCases": [
+        "Aggregation",
+        "Feature Engineering"
+      ],
+      "explanation": "Like agg, but returns a result the same shape as the input — great for group-relative features.",
+      "example": "df['income_vs_region_avg'] = df.groupby('region')['income'].transform('mean')"
+    },
+    {
+      "id": "f30",
+      "library": "pandas",
+      "name": "pd.merge()",
+      "useCases": [
+        "Combining Data"
+      ],
+      "explanation": "SQL-style join between two DataFrames on key column(s).",
+      "example": "pd.merge(loans, customers, on='customer_id', how='left')"
+    },
+    {
+      "id": "f31",
+      "library": "pandas",
+      "name": "df.join()",
+      "useCases": [
+        "Combining Data"
+      ],
+      "explanation": "Joins DataFrames primarily on their index rather than a column key.",
+      "example": "df.join(other_df, how='left')"
+    },
+    {
+      "id": "f32",
+      "library": "pandas",
+      "name": "pd.concat()",
+      "useCases": [
+        "Combining Data"
+      ],
+      "explanation": "Stacks DataFrames together along an axis (rows by default), e.g. combining batches of data.",
+      "example": "pd.concat([df_2023, df_2024], axis=0, ignore_index=True)"
+    },
+    {
+      "id": "f33",
+      "library": "pandas",
+      "name": "df.pivot_table()",
+      "useCases": [
+        "Aggregation",
+        "Combining Data"
+      ],
+      "explanation": "Reshapes data into a spreadsheet-style pivot with aggregation built in.",
+      "example": "df.pivot_table(values='default', index='region', columns='score_band', aggfunc='mean')"
+    },
+    {
+      "id": "f34",
+      "library": "pandas",
+      "name": "df.sort_values()",
+      "useCases": [
+        "Selection"
+      ],
+      "explanation": "Sorts rows by one or more column values.",
+      "example": "df.sort_values('credit_score', ascending=False)"
+    },
+    {
+      "id": "f35",
+      "library": "pandas",
+      "name": "df.sort_index()",
+      "useCases": [
+        "Selection"
+      ],
+      "explanation": "Sorts rows (or columns) by their index labels rather than values.",
+      "example": "df.sort_index()"
+    },
+    {
+      "id": "f36",
+      "library": "pandas",
+      "name": "df.corr()",
+      "useCases": [
+        "Statistics",
+        "Exploration"
+      ],
+      "explanation": "Computes pairwise correlation between numeric columns — useful for spotting multicollinearity before modelling.",
+      "example": "df.corr(numeric_only=True)"
+    },
+    {
+      "id": "f37",
+      "library": "pandas",
+      "name": "df.mean()",
+      "useCases": [
+        "Statistics"
+      ],
+      "explanation": "Computes the mean of numeric columns (or a Series).",
+      "example": "df['income'].mean()\ndf.mean(numeric_only=True)"
+    },
+    {
+      "id": "f38",
+      "library": "pandas",
+      "name": "df.std()",
+      "useCases": [
+        "Statistics"
+      ],
+      "explanation": "Computes the standard deviation of numeric columns (or a Series).",
+      "example": "df['income'].std()"
+    }
+  ],
+  "snippets": [
+    {
+      "id": "u2in280i",
+      "title": "Categorical Cardinality Assessment",
+      "libraries": [
+        "pandas"
+      ],
+      "useCases": [
+        "Exploration"
+      ],
+      "description": "This single loop tells you which categorical columns are well-behaved (5-10 categories, fine for one-hot encoding) versus which are secretly high-cardinality (a column with 50+ distinct values masquerading as \"categorical\" — these need different treatment, like grouping rare categories into \"Other,\" rather than naive one-hot encoding blowing your column count up).",
+      "code": "for col in cat_cols:\n    print(col, df[col].nunique())"
+    },
+    {
+      "id": "umbytamw",
+      "title": "Numerical and Categorical Split",
+      "libraries": [
+        "pandas"
+      ],
+      "useCases": [
+        "Exploration"
+      ],
+      "description": "Split data frame into numerical and categorical datatypes for EDA Analysis and Imputation",
+      "code": "cat_cols = df.select_dtypes(include=\"object\").columns\nnum_cols = df.select_dtypes(include=\"number\").columns\n\ndf_cat = df.select_dtypes(include='object')\ndf_num = df.select_dtypes(include='number')\n\nprint(cat_cols)\nprint(num_cols)"
+    },
+    {
+      "id": "dpx7dy4y",
+      "title": "Histogram with labelled, dollar-formatted axes",
+      "libraries": [
+        "matplotlib"
+      ],
+      "useCases": [
+        "Exploration",
+        "Visualization"
+      ],
+      "description": "Base histogram, but with axis labels and $-formatted ticks instead of matplotlib's default 1e6 scientific notation — useful any time you're plotting a currency column.",
+      "code": "import matplotlib.pyplot as plt\nimport matplotlib.ticker as mticker\n\nax = df['AMT_CREDIT'].hist(bins=50)  # plot histogram, capture the Axes object\nax.set_xlabel(\"Credit Amount ($)\")   # label x-axis\nax.set_ylabel(\"Frequency\")           # label y-axis (histograms show counts, not density)\n\n# Reformat x-axis ticks: 1000000 -> \"$1,000,000\" instead of \"1e6\"\nax.xaxis.set_major_formatter(mticker.FuncFormatter(lambda x, _: f'${x:,.0f}'))\nplt.show()"
+    },
+    {
+      "id": "9j3l0f1m",
+      "title": "Axis tick formatting — readable numbers on any plot",
+      "libraries": [
+        "seaborn"
+      ],
+      "useCases": [
+        "Visualization"
+      ],
+      "description": "Overrides matplotlib's default tick labels (which switch to 1e6-style scientific notation for large numbers) with custom formatted text. Works on any matplotlib/seaborn axis — bar charts, scatter plots, histograms, not just KDE.",
+      "code": "import matplotlib.ticker as mticker  # gives us FuncFormatter, for custom tick labels\n\nax.set_xlabel(\"Credit Amount ($)\")  # override default x-axis label\nax.set_ylabel(\"Density\")            # override default y-axis label\n\n# Reformat every x-axis tick: raw number -> \"$\" + comma-separated + no decimals\n# e.g. 1000000 -> \"$1,000,000\" instead of matplotlib's default \"1e6\"\nax.xaxis.set_major_formatter(mticker.FuncFormatter(lambda x, _: f'${x:,.0f}'))\n\nplt.show()  # render the plot"
+    },
+    {
+      "id": "uu7brmiz",
+      "title": "KDE Plot — comparing distributions between groups",
+      "libraries": [
+        "seaborn"
+      ],
+      "useCases": [
+        "Visualization",
+        "Exploration"
+      ],
+      "description": "Shows the shape of a numeric variable's distribution, split into separate curves per category. Each curve is normalised independently (common_norm=False), so you're comparing shape, not raw counts — useful for spotting whether two groups (e.g. defaulters vs non-defaulters) differ in distribution, but doesn't tell you rate/probability by itself.",
+      "code": "import seaborn as sns\n\n# KDE plot of AMT_CREDIT, split into separate curves by TARGET (0=repaid, 1=defaulted)\n# common_norm=False -> each curve normalised independently, so shapes are comparable\n# regardless of how imbalanced the two groups are\nax = sns.kdeplot(data=df, x=\"AMT_CREDIT\", hue=\"TARGET\", common_norm=False)"
+    },
+    {
+      "id": "qm38e3s7",
+      "title": "Ascending Order Missing Values (Exclude Zeros)",
+      "libraries": [
+        "pandas"
+      ],
+      "useCases": [
+        "Other"
+      ],
+      "description": "Checks how many missing values there are in each column of a data frame and orders them highest to lowest.",
+      "code": "missing = df.isnull().sum()\nmissing = missing[missing > 0].sort_values(ascending=False)\nprint(missing)"
+    },
+    {
+      "id": "5nv4v0yv",
+      "title": "Correlation Heatmap",
+      "libraries": [
+        "seaborn",
+        "matplotlib"
+      ],
+      "useCases": [
+        "Exploration",
+        "Visualization"
+      ],
+      "description": "Correlation heatmap for columns in a data frame. Create a subset for large dataframes for readability.",
+      "code": "# import seaborn as sns\n# import matplotlib.pyplot as plt\n# import numpy as np\n\ncorr = df.corr(numeric_only=True)\nmask = np.eye(len(corr), dtype=bool)\n\nn = len(corr)\nplt.figure(figsize=(n * 0.5, n * 0.5))  # scale figure size to number of columns\nsns.heatmap(\n    corr, mask=mask, cmap='RdYlGn', vmin=-1, vmax=1,\n    annot=True, fmt='.2f', annot_kws={'size': 7}, linewidths=0.5,\n)\nplt.tight_layout()\nplt.show()"
+    },
+    {
+      "id": "s1",
+      "title": "PD bucket via score banding",
+      "libraries": [
+        "pandas"
+      ],
+      "useCases": [
+        "Feature Engineering",
+        "Binning"
+      ],
+      "description": "Bands a continuous credit score into standard risk tiers for a quick PD proxy view.",
+      "code": "bins = [0, 580, 670, 740, 800, 850]\nlabels = ['Poor', 'Fair', 'Good', 'Very Good', 'Excellent']\ndf['score_band'] = pd.cut(df['credit_score'], bins=bins, labels=labels)\n\ndefault_rate_by_band = df.groupby('score_band')['default'].mean()\nprint(default_rate_by_band)"
+    },
+    {
+      "id": "s2",
+      "title": "Missing value audit",
+      "libraries": [
+        "pandas"
+      ],
+      "useCases": [
+        "Data Cleaning",
+        "Exploration"
+      ],
+      "description": "Quick audit of null counts and percentages across all columns, sorted worst first.",
+      "code": "null_counts = df.isnull().sum()\nnull_pct = (null_counts / len(df) * 100).round(2)\naudit = pd.DataFrame({'nulls': null_counts, 'pct': null_pct})\naudit = audit[audit['nulls'] > 0].sort_values('pct', ascending=False)\nprint(audit)"
+    }
+  ],
+  "libraries": [
+    "pandas",
+    "numpy",
+    "sklearn",
+    "matplotlib",
+    "seaborn",
+    "sql",
+    "python",
+    "python (built-in)",
+    "other"
+  ],
+  "exportedAt": "2026-06-24T05:15:30.317Z"
+}

@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import {
   Copy, Check, Download, Upload, Plus, X, Search, Code2, FunctionSquare,
-  Trash2, ChevronRight, ChevronDown, ArrowLeft, Filter, Save, Loader2,
+  Trash2, Pencil, ChevronRight, ChevronDown, ArrowLeft, Filter, Save, Loader2,
 } from "lucide-react";
 
 // ---------- Seed data ----------
@@ -50,7 +50,7 @@ const SEED_SNIPPETS = [
   {
     id: "s1",
     title: "PD bucket via score banding",
-    library: "pandas",
+    libraries: ["pandas"],
     useCases: ["Feature Engineering", "Binning"],
     description: "Bands a continuous credit score into standard risk tiers for a quick PD proxy view.",
     code:
@@ -64,7 +64,7 @@ print(default_rate_by_band)`,
   {
     id: "s2",
     title: "Missing value audit",
-    library: "pandas",
+    libraries: ["pandas"],
     useCases: ["Data Cleaning", "Exploration"],
     description: "Quick audit of null counts and percentages across all columns, sorted worst first.",
     code:
@@ -85,6 +85,58 @@ const USE_CASES = [
 ];
 
 const uid = () => Math.random().toString(36).slice(2, 10);
+
+// Back-compat: older exports/autosave files may have snippets with a single `library` string
+// rather than a `libraries` array. Normalize on the way in so the rest of the app can assume
+// every snippet has a `libraries` array.
+function normalizeSnippets(arr) {
+  return (Array.isArray(arr) ? arr : []).map((s) =>
+    Array.isArray(s.libraries) ? s : { ...s, libraries: s.library ? [s.library] : ["other"] }
+  );
+}
+
+// ---------- Remember the autosave file handle across reloads (IndexedDB) ----------
+// A FileSystemFileHandle is structured-clonable, so it can be stored directly in IndexedDB.
+// This is what lets a reload reconnect to the same file instead of forcing Import every time.
+const AUTOSAVE_DB = "lexicon-db";
+const AUTOSAVE_STORE = "handles";
+const AUTOSAVE_KEY = "cheatsheet-autosave-handle";
+
+function idbOpen() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(AUTOSAVE_DB, 1);
+    req.onupgradeneeded = () => req.result.createObjectStore(AUTOSAVE_STORE);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+async function idbSet(key, value) {
+  const db = await idbOpen();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(AUTOSAVE_STORE, "readwrite");
+    tx.objectStore(AUTOSAVE_STORE).put(value, key);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+async function idbGet(key) {
+  const db = await idbOpen();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(AUTOSAVE_STORE, "readonly");
+    const req = tx.objectStore(AUTOSAVE_STORE).get(key);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+async function idbDel(key) {
+  const db = await idbOpen();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(AUTOSAVE_STORE, "readwrite");
+    tx.objectStore(AUTOSAVE_STORE).delete(key);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
 
 // ---------- VS Code Dark+ syntax colors ----------
 const VSC = {
@@ -258,8 +310,85 @@ function MultiTagPicker({ selected, onToggle, options = USE_CASES }) {
   );
 }
 
+// ---------- Multi-library picker (for snippets, which can belong to several libraries) ----------
+function MultiLibraryPicker({ selected, onToggle, libraries, onAddLibrary }) {
+  const [adding, setAdding] = useState(false);
+  const [newLib, setNewLib] = useState("");
+
+  const confirmAdd = () => {
+    const trimmed = newLib.trim();
+    if (trimmed) {
+      onAddLibrary(trimmed);
+      if (!selected.includes(trimmed)) onToggle(trimmed);
+    }
+    setNewLib("");
+    setAdding(false);
+  };
+
+  return (
+    <div className="flex flex-wrap gap-1.5 items-center">
+      {libraries.map((l) => {
+        const active = selected.includes(l);
+        return (
+          <button
+            key={l}
+            type="button"
+            onClick={() => onToggle(l)}
+            className={`rounded-full border px-2.5 py-1 text-xs font-medium transition-colors ${
+              active
+                ? "border-brandTeal bg-brandTeal text-white"
+                : "border-slate-200 bg-white text-slate-500 hover:border-slate-300"
+            }`}
+          >
+            {l}
+          </button>
+        );
+      })}
+      {adding ? (
+        <span className="inline-flex items-center gap-1">
+          <input
+            autoFocus
+            className="w-28 rounded-md border border-slate-200 px-2 py-1 text-xs"
+            placeholder="New library"
+            value={newLib}
+            onChange={(e) => setNewLib(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") confirmAdd();
+              if (e.key === "Escape") { setAdding(false); setNewLib(""); }
+            }}
+          />
+          <button
+            type="button"
+            onClick={confirmAdd}
+            className="rounded-md bg-brandTeal p-1 text-white hover:bg-brandTealDark"
+            title="Add library"
+          >
+            <Check size={12} />
+          </button>
+          <button
+            type="button"
+            onClick={() => { setAdding(false); setNewLib(""); }}
+            className="rounded-md border border-slate-200 p-1 text-slate-400 hover:text-slate-600"
+            title="Cancel"
+          >
+            <X size={12} />
+          </button>
+        </span>
+      ) : (
+        <button
+          type="button"
+          onClick={() => setAdding(true)}
+          className="inline-flex items-center gap-1 rounded-full border border-dashed border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-400 hover:border-brandTeal hover:text-brandTeal"
+        >
+          <Plus size={11} /> New
+        </button>
+      )}
+    </div>
+  );
+}
+
 // ---------- Function card ----------
-function FunctionCard({ item, onDelete }) {
+function FunctionCard({ item, onDelete, onEdit }) {
   return (
     <div className="group rounded-xl border border-slate-200 bg-white p-4 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between gap-3">
@@ -269,15 +398,26 @@ function FunctionCard({ item, onDelete }) {
           </code>
           <Tag tone="emerald">{item.library}</Tag>
         </div>
-        {onDelete && (
-          <button
-            onClick={() => onDelete(item.id)}
-            className="opacity-0 group-hover:opacity-100 text-slate-300 hover:text-rose-500 transition-opacity"
-            title="Delete"
-          >
-            <Trash2 size={15} />
-          </button>
-        )}
+        <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+          {onEdit && (
+            <button
+              onClick={() => onEdit(item)}
+              className="text-slate-300 hover:text-brandTeal"
+              title="Edit"
+            >
+              <Pencil size={15} />
+            </button>
+          )}
+          {onDelete && (
+            <button
+              onClick={() => onDelete(item.id)}
+              className="text-slate-300 hover:text-rose-500"
+              title="Delete"
+            >
+              <Trash2 size={15} />
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="mt-2 flex flex-wrap gap-1.5">
@@ -299,28 +439,42 @@ function FunctionCard({ item, onDelete }) {
 }
 
 // ---------- Snippet card ----------
-function SnippetCard({ item, onDelete }) {
+function SnippetCard({ item, onDelete, onEdit }) {
+  const libs = item.libraries && item.libraries.length ? item.libraries : (item.library ? [item.library] : []);
   return (
     <div className="group rounded-xl border border-slate-200 bg-white p-4 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between gap-3">
         <div>
           <h3 className="text-sm font-semibold text-brandNavy">{item.title}</h3>
           <div className="mt-1 flex items-center gap-2 flex-wrap">
-            <Tag tone="emerald">{item.library}</Tag>
+            {libs.map((l) => (
+              <Tag key={l} tone="emerald">{l}</Tag>
+            ))}
             {item.useCases.map((uc) => (
               <Tag key={uc}>{uc}</Tag>
             ))}
           </div>
         </div>
-        {onDelete && (
-          <button
-            onClick={() => onDelete(item.id)}
-            className="opacity-0 group-hover:opacity-100 text-slate-300 hover:text-rose-500 transition-opacity"
-            title="Delete"
-          >
-            <Trash2 size={15} />
-          </button>
-        )}
+        <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+          {onEdit && (
+            <button
+              onClick={() => onEdit(item)}
+              className="text-slate-300 hover:text-brandTeal"
+              title="Edit"
+            >
+              <Pencil size={15} />
+            </button>
+          )}
+          {onDelete && (
+            <button
+              onClick={() => onDelete(item.id)}
+              className="text-slate-300 hover:text-rose-500"
+              title="Delete"
+            >
+              <Trash2 size={15} />
+            </button>
+          )}
+        </div>
       </div>
 
       {item.description && (
@@ -337,7 +491,7 @@ function SnippetCard({ item, onDelete }) {
   );
 }
 
-// ---------- Library picker with inline "add new" ----------
+// ---------- Library picker with inline "add new" (single-select, used by functions) ----------
 function LibrarySelect({ value, onChange, libraries, onAddLibrary }) {
   const [adding, setAdding] = useState(false);
   const [newLib, setNewLib] = useState("");
@@ -409,21 +563,21 @@ function LibrarySelect({ value, onChange, libraries, onAddLibrary }) {
   );
 }
 
-// ---------- Add Function form ----------
-function AddFunctionForm({ onAdd, onClose, libraries, onAddLibrary }) {
-  const [name, setName] = useState("");
-  const [library, setLibrary] = useState("pandas");
-  const [useCases, setUseCases] = useState([]);
-  const [explanation, setExplanation] = useState("");
-  const [example, setExample] = useState("");
+// ---------- Add/Edit Function form ----------
+function FunctionForm({ mode = "add", initial = null, onSubmit, onClose, libraries, onAddLibrary }) {
+  const [name, setName] = useState(initial?.name || "");
+  const [library, setLibrary] = useState(initial?.library || "pandas");
+  const [useCases, setUseCases] = useState(initial?.useCases || []);
+  const [explanation, setExplanation] = useState(initial?.explanation || "");
+  const [example, setExample] = useState(initial?.example || "");
 
   const toggleUseCase = (uc) =>
     setUseCases((prev) => (prev.includes(uc) ? prev.filter((x) => x !== uc) : [...prev, uc]));
 
   const submit = () => {
     if (!name.trim()) return;
-    onAdd({
-      id: uid(),
+    onSubmit({
+      id: mode === "edit" ? initial.id : uid(),
       library,
       name: name.trim(),
       useCases: useCases.length ? useCases : ["Other"],
@@ -436,7 +590,7 @@ function AddFunctionForm({ onAdd, onClose, libraries, onAddLibrary }) {
   return (
     <div className="rounded-xl border border-brandTeal/30 bg-brandTeal/5 p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-brandNavy">Add function</h3>
+        <h3 className="text-sm font-semibold text-brandNavy">{mode === "edit" ? "Edit function" : "Add function"}</h3>
         <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
           <X size={16} />
         </button>
@@ -483,29 +637,31 @@ function AddFunctionForm({ onAdd, onClose, libraries, onAddLibrary }) {
         disabled={!name.trim()}
         className="rounded-md bg-brandTeal px-4 py-2 text-sm font-medium text-white hover:bg-brandTealDark disabled:opacity-40"
       >
-        Add to cheat sheet
+        {mode === "edit" ? "Save changes" : "Add to cheat sheet"}
       </button>
     </div>
   );
 }
 
-// ---------- Add Snippet form ----------
-function AddSnippetForm({ onAdd, onClose, libraries, onAddLibrary }) {
-  const [title, setTitle] = useState("");
-  const [library, setLibrary] = useState("pandas");
-  const [useCases, setUseCases] = useState([]);
-  const [description, setDescription] = useState("");
-  const [code, setCode] = useState("");
+// ---------- Add/Edit Snippet form ----------
+function SnippetForm({ mode = "add", initial = null, onSubmit, onClose, libraries, onAddLibrary }) {
+  const [title, setTitle] = useState(initial?.title || "");
+  const [libs, setLibs] = useState(initial?.libraries || (initial?.library ? [initial.library] : ["pandas"]));
+  const [useCases, setUseCases] = useState(initial?.useCases || []);
+  const [description, setDescription] = useState(initial?.description || "");
+  const [code, setCode] = useState(initial?.code || "");
 
   const toggleUseCase = (uc) =>
     setUseCases((prev) => (prev.includes(uc) ? prev.filter((x) => x !== uc) : [...prev, uc]));
+  const toggleLibrary = (lib) =>
+    setLibs((prev) => (prev.includes(lib) ? prev.filter((x) => x !== lib) : [...prev, lib]));
 
   const submit = () => {
     if (!title.trim() || !code.trim()) return;
-    onAdd({
-      id: uid(),
+    onSubmit({
+      id: mode === "edit" ? initial.id : uid(),
       title: title.trim(),
-      library,
+      libraries: libs.length ? libs : ["other"],
       useCases: useCases.length ? useCases : ["Other"],
       description: description.trim(),
       code: code.trim(),
@@ -516,25 +672,22 @@ function AddSnippetForm({ onAdd, onClose, libraries, onAddLibrary }) {
   return (
     <div className="rounded-xl border border-brandTeal/30 bg-brandTeal/5 p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-brandNavy">Add snippet</h3>
+        <h3 className="text-sm font-semibold text-brandNavy">{mode === "edit" ? "Edit snippet" : "Add snippet"}</h3>
         <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
           <X size={16} />
         </button>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <input
-          className="rounded-md border border-slate-200 px-3 py-2 text-sm"
-          placeholder="Snippet title, e.g. Train/test split with stratify"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <LibrarySelect
-          value={library}
-          onChange={setLibrary}
-          libraries={libraries}
-          onAddLibrary={onAddLibrary}
-        />
+      <input
+        className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm"
+        placeholder="Snippet title, e.g. Train/test split with stratify"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+
+      <div>
+        <p className="text-xs font-medium text-slate-500 mb-1.5">Libraries (select multiple)</p>
+        <MultiLibraryPicker selected={libs} onToggle={toggleLibrary} libraries={libraries} onAddLibrary={onAddLibrary} />
       </div>
 
       <div>
@@ -563,14 +716,17 @@ function AddSnippetForm({ onAdd, onClose, libraries, onAddLibrary }) {
         disabled={!title.trim() || !code.trim()}
         className="rounded-md bg-brandTeal px-4 py-2 text-sm font-medium text-white hover:bg-brandTealDark disabled:opacity-40"
       >
-        Add to cheat sheet
+        {mode === "edit" ? "Save changes" : "Add to cheat sheet"}
       </button>
     </div>
   );
 }
 
-// ---------- Sidebar nav tree: Library -> Use Case -> Function ----------
-function NavTree({ tree, expandedLibs, expandedUCs, focusedItem, onSelectLib, onSelectUC, onSelectItem }) {
+// ---------- Sidebar nav tree: Library -> Functions/Snippets -> Use Case -> item ----------
+function NavTree({
+  tree, expandedLibs, expandedTypes, expandedUCs, focusedItem,
+  onSelectLib, onSelectType, onSelectUC, onSelectItem,
+}) {
   const libs = Object.keys(tree).sort();
   if (libs.length === 0) {
     return <p className="px-2 text-xs text-slate-400">Nothing to browse yet.</p>;
@@ -578,10 +734,17 @@ function NavTree({ tree, expandedLibs, expandedUCs, focusedItem, onSelectLib, on
   return (
     <nav className="space-y-0.5">
       {libs.map((lib) => {
-        const ucMap = tree[lib];
+        const node = tree[lib];
         const libOpen = !!expandedLibs[lib];
-        const useCases = Object.keys(ucMap).sort();
-        const totalCount = useCases.reduce((n, uc) => n + ucMap[uc].length, 0);
+        const funcCount = Object.values(node.function).reduce((n, arr) => n + arr.length, 0);
+        const snipCount = Object.values(node.snippet).reduce((n, arr) => n + arr.length, 0);
+        const totalCount = funcCount + snipCount;
+
+        const typeRows = [
+          { type: "function", label: "Functions", count: funcCount, Icon: FunctionSquare },
+          { type: "snippet", label: "Snippets", count: snipCount, Icon: Code2 },
+        ].filter((t) => t.count > 0);
+
         return (
           <div key={lib}>
             <button
@@ -595,38 +758,62 @@ function NavTree({ tree, expandedLibs, expandedUCs, focusedItem, onSelectLib, on
 
             {libOpen && (
               <div className="ml-3 border-l border-slate-100 pl-2 space-y-0.5">
-                {useCases.map((uc) => {
-                  const ucKey = `${lib}::${uc}`;
-                  const ucOpen = !!expandedUCs[ucKey];
-                  const items = ucMap[uc];
+                {typeRows.map(({ type, label, count, Icon }) => {
+                  const typeKey = `${lib}::${type}`;
+                  const typeOpen = !!expandedTypes[typeKey];
+                  const ucMap = node[type];
+                  const useCases = Object.keys(ucMap).sort();
                   return (
-                    <div key={uc}>
+                    <div key={type}>
                       <button
-                        onClick={() => onSelectUC(lib, uc)}
+                        onClick={() => onSelectType(lib, type)}
                         className="w-full flex items-center gap-1.5 rounded-md px-2 py-1 text-sm font-medium text-slate-600 hover:bg-slate-100"
                       >
-                        {ucOpen ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
-                        <span className="flex-1 text-left truncate">{uc}</span>
-                        <span className="text-[11px] text-slate-500">{items.length}</span>
+                        {typeOpen ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+                        <Icon size={12} />
+                        <span className="flex-1 text-left truncate">{label}</span>
+                        <span className="text-[11px] text-slate-500">{count}</span>
                       </button>
 
-                      {ucOpen && (
+                      {typeOpen && (
                         <div className="ml-3 border-l border-slate-100 pl-2 space-y-0.5">
-                          {items.map((item) => {
-                            const isActive =
-                              focusedItem && focusedItem.id === item.id && focusedItem.type === item._type;
+                          {useCases.map((uc) => {
+                            const ucKey = `${lib}::${type}::${uc}`;
+                            const ucOpen = !!expandedUCs[ucKey];
+                            const items = ucMap[uc];
                             return (
-                              <button
-                                key={item._type + item.id}
-                                onClick={() => onSelectItem(item, lib, uc)}
-                                title={item._label}
-                                className={`w-full flex items-center gap-1.5 rounded-md px-2 py-1 text-[13px] text-left transition-colors ${
-                                  isActive ? "bg-brandTeal text-white font-medium" : "text-slate-600 hover:bg-slate-100"
-                                }`}
-                              >
-                                {item._type === "function" ? <FunctionSquare size={11} /> : <Code2 size={11} />}
-                                <span className="truncate font-mono">{item._label}</span>
-                              </button>
+                              <div key={uc}>
+                                <button
+                                  onClick={() => onSelectUC(lib, type, uc)}
+                                  className="w-full flex items-center gap-1.5 rounded-md px-2 py-1 text-[13px] font-medium text-slate-500 hover:bg-slate-100"
+                                >
+                                  {ucOpen ? <ChevronDown size={11} /> : <ChevronRight size={11} />}
+                                  <span className="flex-1 text-left truncate">{uc}</span>
+                                  <span className="text-[11px] text-slate-400">{items.length}</span>
+                                </button>
+
+                                {ucOpen && (
+                                  <div className="ml-3 border-l border-slate-100 pl-2 space-y-0.5">
+                                    {items.map((item) => {
+                                      const isActive =
+                                        focusedItem && focusedItem.id === item.id && focusedItem.type === item._type;
+                                      return (
+                                        <button
+                                          key={item._type + item.id}
+                                          onClick={() => onSelectItem(item, lib, uc)}
+                                          title={item._label}
+                                          className={`w-full flex items-center gap-1.5 rounded-md px-2 py-1 text-[13px] text-left transition-colors ${
+                                            isActive ? "bg-brandTeal text-white font-medium" : "text-slate-600 hover:bg-slate-100"
+                                          }`}
+                                        >
+                                          {item._type === "function" ? <FunctionSquare size={11} /> : <Code2 size={11} />}
+                                          <span className="truncate font-mono">{item._label}</span>
+                                        </button>
+                                      );
+                                    })}
+                                  </div>
+                                )}
+                              </div>
                             );
                           })}
                         </div>
@@ -664,7 +851,8 @@ export default function CreditRiskCheatSheet() {
   const [search, setSearch] = useState("");
   const [libraryFilter, setLibraryFilter] = useState("all");
   const [useCaseFilters, setUseCaseFilters] = useState([]);
-  const [showAddForm, setShowAddForm] = useState(false);
+  const [formMode, setFormMode] = useState(null); // null | 'add' | 'edit'
+  const [editingItem, setEditingItem] = useState(null);
   const [importMsg, setImportMsg] = useState("");
   const [filterOpen, setFilterOpen] = useState(false);
   const fileInputRef = useRef(null);
@@ -673,9 +861,60 @@ export default function CreditRiskCheatSheet() {
   // Autosave-to-file (File System Access API — Chrome/Edge only)
   const autosaveSupported = typeof window !== "undefined" && !!window.showSaveFilePicker;
   const [fileHandle, setFileHandle] = useState(null);
+  const [pendingHandle, setPendingHandle] = useState(null); // remembered handle awaiting a permission re-grant
   const [autosaveState, setAutosaveState] = useState("idle"); // idle | saving | saved | error
   const [autosaveError, setAutosaveError] = useState("");
   const writeQueueRef = useRef(Promise.resolve());
+
+  // Reads whatever's already in a handle's file and loads it into state. Shared by the initial
+  // connect, the reconnect button, and the silent auto-restore-on-load attempt below.
+  const loadFromHandle = async (handle) => {
+    let resumed = false;
+    try {
+      const file = await handle.getFile();
+      if (file.size > 0) {
+        const text = await file.text();
+        const data = JSON.parse(text);
+        if (Array.isArray(data.functions)) { setFunctions(data.functions); resumed = true; }
+        if (Array.isArray(data.snippets)) { setSnippets(normalizeSnippets(data.snippets)); resumed = true; }
+        if (Array.isArray(data.libraries)) setLibraries(data.libraries);
+      }
+    } catch (readErr) {
+      console.warn("Couldn't read existing autosave file contents, starting fresh:", readErr);
+    }
+    return resumed;
+  };
+
+  // On mount, try to pick up the autosave file remembered from last time. If the browser still
+  // has the permission grant, this resumes silently with zero clicks. If the grant didn't survive
+  // the reload (common after closing the browser, since File System Access permissions aren't
+  // guaranteed to persist), fall back to showing a one-click "Reconnect autosave" button instead
+  // of forcing a full re-import + re-pick-the-file flow.
+  useEffect(() => {
+    if (!autosaveSupported) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const handle = await idbGet(AUTOSAVE_KEY);
+        if (!handle || cancelled) return;
+        const granted = (await handle.queryPermission({ mode: "readwrite" })) === "granted";
+        if (cancelled) return;
+        if (granted) {
+          const resumed = await loadFromHandle(handle);
+          if (cancelled) return;
+          setFileHandle(handle);
+          setImportMsg(resumed ? "Resumed autosave automatically." : "Autosave reconnected.");
+          setTimeout(() => setImportMsg(""), 3000);
+        } else {
+          setPendingHandle(handle);
+        }
+      } catch (err) {
+        console.warn("Couldn't restore remembered autosave file:", err);
+      }
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!filterOpen) return;
@@ -688,20 +927,32 @@ export default function CreditRiskCheatSheet() {
 
   // Sidebar nav state
   const [expandedLibs, setExpandedLibs] = useState({});
+  const [expandedTypes, setExpandedTypes] = useState({});
   const [expandedUCs, setExpandedUCs] = useState({});
   const [focusedItem, setFocusedItem] = useState(null); // { type, id, library, useCase }
 
+  // Tree shape: { [library]: { function: { [useCase]: items[] }, snippet: { [useCase]: items[] } } }
   const navTree = useMemo(() => {
     const tree = {};
-    const allItems = [
-      ...functions.map((f) => ({ ...f, _type: "function", _label: f.name })),
-      ...snippets.map((s) => ({ ...s, _type: "snippet", _label: s.title })),
-    ];
-    allItems.forEach((item) => {
-      if (!tree[item.library]) tree[item.library] = {};
-      item.useCases.forEach((uc) => {
-        if (!tree[item.library][uc]) tree[item.library][uc] = [];
-        tree[item.library][uc].push(item);
+    const ensure = (lib) => {
+      if (!tree[lib]) tree[lib] = { function: {}, snippet: {} };
+      return tree[lib];
+    };
+    functions.forEach((f) => {
+      const node = ensure(f.library);
+      f.useCases.forEach((uc) => {
+        if (!node.function[uc]) node.function[uc] = [];
+        node.function[uc].push({ ...f, _type: "function", _label: f.name });
+      });
+    });
+    snippets.forEach((s) => {
+      const libs = s.libraries && s.libraries.length ? s.libraries : ["other"];
+      libs.forEach((lib) => {
+        const node = ensure(lib);
+        s.useCases.forEach((uc) => {
+          if (!node.snippet[uc]) node.snippet[uc] = [];
+          node.snippet[uc].push({ ...s, _type: "snippet", _label: s.title });
+        });
       });
     });
     return tree;
@@ -713,9 +964,13 @@ export default function CreditRiskCheatSheet() {
   const activeList = tab === "functions" ? functions : snippets;
 
   const librariesInUse = useMemo(() => {
-    const set = new Set(activeList.map((i) => i.library));
+    const set = new Set();
+    activeList.forEach((i) => {
+      if (tab === "functions") set.add(i.library);
+      else (i.libraries || []).forEach((l) => set.add(l));
+    });
     return ["all", ...Array.from(set).sort()];
-  }, [activeList]);
+  }, [activeList, tab]);
 
   const activeFilterCount = (libraryFilter !== "all" ? 1 : 0) + useCaseFilters.length;
 
@@ -728,21 +983,43 @@ export default function CreditRiskCheatSheet() {
         nameField.toLowerCase().includes(q) ||
         (item.explanation || item.description || "").toLowerCase().includes(q) ||
         (item.code || item.example || "").toLowerCase().includes(q);
-      const matchesLibrary = libraryFilter === "all" || item.library === libraryFilter;
+      const matchesLibrary =
+        libraryFilter === "all" ||
+        (tab === "functions" ? item.library === libraryFilter : (item.libraries || []).includes(libraryFilter));
       const matchesUseCases =
         useCaseFilters.length === 0 || useCaseFilters.every((uc) => item.useCases.includes(uc));
       return matchesSearch && matchesLibrary && matchesUseCases;
     });
   }, [activeList, search, libraryFilter, useCaseFilters, tab]);
 
+  const closeForm = () => { setFormMode(null); setEditingItem(null); };
+
   const handleDelete = (id) => {
     if (tab === "functions") setFunctions((prev) => prev.filter((f) => f.id !== id));
     else setSnippets((prev) => prev.filter((s) => s.id !== id));
     setFocusedItem(null);
+    if (editingItem?.id === id) closeForm();
   };
 
-  const handleAddFunction = (item) => setFunctions((prev) => [item, ...prev]);
-  const handleAddSnippet = (item) => setSnippets((prev) => [item, ...prev]);
+  const startEdit = (item) => {
+    setFormMode("edit");
+    setEditingItem(item);
+    setFocusedItem(null);
+  };
+
+  // Add or update by id — edit keeps the same id, add generates a fresh one.
+  const handleSaveFunction = (item) => {
+    setFunctions((prev) => {
+      const exists = prev.some((f) => f.id === item.id);
+      return exists ? prev.map((f) => (f.id === item.id ? item : f)) : [item, ...prev];
+    });
+  };
+  const handleSaveSnippet = (item) => {
+    setSnippets((prev) => {
+      const exists = prev.some((s) => s.id === item.id);
+      return exists ? prev.map((s) => (s.id === item.id ? item : s)) : [item, ...prev];
+    });
+  };
 
   const handleAddLibrary = (name) => {
     setLibraries((prev) => {
@@ -785,23 +1062,13 @@ export default function CreditRiskCheatSheet() {
         return;
       }
 
-      let resumed = false;
-      try {
-        const file = await handle.getFile();
-        if (file.size > 0) {
-          const text = await file.text();
-          const data = JSON.parse(text);
-          if (Array.isArray(data.functions)) { setFunctions(data.functions); resumed = true; }
-          if (Array.isArray(data.snippets)) { setSnippets(data.snippets); resumed = true; }
-          if (Array.isArray(data.libraries)) setLibraries(data.libraries);
-        }
-      } catch (readErr) {
-        // File existed but wasn't readable/valid JSON from this app — proceed and treat it as a
-        // fresh autosave target rather than blocking the whole connect flow.
-        console.warn("Couldn't read existing autosave file contents, starting fresh:", readErr);
-      }
+      const resumed = await loadFromHandle(handle);
 
       setFileHandle(handle);
+      setPendingHandle(null);
+      idbSet(AUTOSAVE_KEY, handle).catch((e) =>
+        console.warn("Couldn't remember autosave file for next time:", e)
+      );
       setImportMsg(resumed ? "Resumed from existing file." : "Autosave connected.");
       setTimeout(() => setImportMsg(""), 3000);
     } catch (err) {
@@ -812,14 +1079,40 @@ export default function CreditRiskCheatSheet() {
     }
   };
 
-  const handleDisconnectAutosave = () => {
-    setFileHandle(null);
-    setAutosaveState("idle");
-    setAutosaveError("");
+  // One click instead of a full re-pick: reuses the remembered handle and just asks the browser
+  // to re-grant write permission on it (allowed without a file picker since this runs from a
+  // direct button click, i.e. with a user gesture already in hand).
+  const reconnectAutosave = async () => {
+    if (!pendingHandle) return;
+    try {
+      const granted = (await pendingHandle.requestPermission({ mode: "readwrite" })) === "granted";
+      if (!granted) {
+        setImportMsg("Permission denied — use Autosave to file to pick the file again.");
+        setTimeout(() => setImportMsg(""), 5000);
+        return;
+      }
+      const resumed = await loadFromHandle(pendingHandle);
+      setFileHandle(pendingHandle);
+      setPendingHandle(null);
+      setImportMsg(resumed ? "Resumed from existing file." : "Autosave reconnected.");
+      setTimeout(() => setImportMsg(""), 3000);
+    } catch (err) {
+      console.error("Autosave reconnect failed:", err);
+      setImportMsg(`Couldn't reconnect autosave: ${err?.message || err?.name || "unknown error"}`);
+      setTimeout(() => setImportMsg(""), 5000);
+    }
   };
 
-  // Fires whenever data actually changes (add/delete/import/add-library) — not on every keystroke,
-  // since those live in local form state until submitted.
+  const handleDisconnectAutosave = () => {
+    setFileHandle(null);
+    setPendingHandle(null);
+    setAutosaveState("idle");
+    setAutosaveError("");
+    idbDel(AUTOSAVE_KEY).catch(() => {});
+  };
+
+  // Fires whenever data actually changes (add/delete/edit/import/add-library) — not on every
+  // keystroke, since those live in local form state until submitted.
   // Writes are serialized through writeQueueRef so two overlapping calls can never both have a
   // writable stream open on the same file handle at once (a file only allows one at a time — React
   // StrictMode's deliberate double-invoke-effects-on-mount in dev would otherwise trigger exactly
@@ -860,7 +1153,7 @@ export default function CreditRiskCheatSheet() {
         const hasFunctions = Array.isArray(data.functions);
         const hasSnippets = Array.isArray(data.snippets);
         if (hasFunctions) setFunctions(data.functions);
-        if (hasSnippets) setSnippets(data.snippets);
+        if (hasSnippets) setSnippets(normalizeSnippets(data.snippets));
         if (Array.isArray(data.libraries)) setLibraries(data.libraries);
         if (!hasFunctions && !hasSnippets) {
           setImportMsg(`That JSON doesn't have "functions"/"snippets" arrays at the top level — got keys: ${Object.keys(data).join(", ") || "(none)"}.`);
@@ -889,10 +1182,19 @@ export default function CreditRiskCheatSheet() {
     setFocusedItem(null);
   };
 
-  const selectUC = (lib, uc) => {
-    const key = `${lib}::${uc}`;
+  const selectType = (lib, type) => {
+    const key = `${lib}::${type}`;
+    setExpandedTypes((prev) => ({ ...prev, [key]: !prev[key] }));
+    setLibraryFilter(lib);
+    setTab(type === "function" ? "functions" : "snippets");
+    setFocusedItem(null);
+  };
+
+  const selectUC = (lib, type, uc) => {
+    const key = `${lib}::${type}::${uc}`;
     setExpandedUCs((prev) => ({ ...prev, [key]: !prev[key] }));
     setLibraryFilter(lib);
+    setTab(type === "function" ? "functions" : "snippets");
     setUseCaseFilters([uc]);
     setFocusedItem(null);
   };
@@ -910,15 +1212,17 @@ export default function CreditRiskCheatSheet() {
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans flex">
-      {/* Sidebar: Library -> Use Case -> Function nav */}
+      {/* Sidebar: Library -> Functions/Snippets -> Use Case -> item nav */}
       <aside className="hidden md:block w-64 shrink-0 border-r border-slate-200 bg-white px-3 py-5 sticky top-0 h-screen overflow-y-auto">
         <h2 className="px-2 text-[13px] font-semibold uppercase tracking-wide text-slate-500 mb-2">Browse</h2>
         <NavTree
           tree={navTree}
           expandedLibs={expandedLibs}
+          expandedTypes={expandedTypes}
           expandedUCs={expandedUCs}
           focusedItem={focusedItem}
           onSelectLib={selectLib}
+          onSelectType={selectType}
           onSelectUC={selectUC}
           onSelectItem={selectItem}
         />
@@ -953,6 +1257,14 @@ export default function CreditRiskCheatSheet() {
                     <X size={13} />
                   </button>
                 </div>
+              ) : pendingHandle ? (
+                <button
+                  onClick={reconnectAutosave}
+                  className="inline-flex items-center gap-1.5 rounded-md border border-brandTeal bg-brandTeal/5 px-3 py-2 text-sm font-medium text-brandTealDark hover:bg-brandTeal/10"
+                  title={`Re-grant permission to resume autosaving to ${pendingHandle.name}`}
+                >
+                  <Save size={14} /> Reconnect autosave
+                </button>
               ) : autosaveSupported ? (
                 <button
                   onClick={handleConnectAutosave}
@@ -1010,9 +1322,9 @@ export default function CreditRiskCheatSheet() {
               </div>
               <div className="mt-3">
                 {focusedItem.type === "function" ? (
-                  <FunctionCard item={focusedFullItem} onDelete={handleDelete} />
+                  <FunctionCard item={focusedFullItem} onDelete={handleDelete} onEdit={startEdit} />
                 ) : (
-                  <SnippetCard item={focusedFullItem} onDelete={handleDelete} />
+                  <SnippetCard item={focusedFullItem} onDelete={handleDelete} onEdit={startEdit} />
                 )}
               </div>
             </div>
@@ -1021,7 +1333,7 @@ export default function CreditRiskCheatSheet() {
               {/* Tabs */}
               <div className="mt-5 flex gap-1 border-b border-slate-200">
                 <button
-                  onClick={() => { setTab("functions"); setLibraryFilter("all"); setUseCaseFilters([]); setShowAddForm(false); }}
+                  onClick={() => { setTab("functions"); setLibraryFilter("all"); setUseCaseFilters([]); closeForm(); }}
                   className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
                     tab === "functions" ? "border-brandTeal text-brandTeal" : "border-transparent text-slate-400 hover:text-slate-600"
                   }`}
@@ -1029,7 +1341,7 @@ export default function CreditRiskCheatSheet() {
                   <FunctionSquare size={15} /> Functions ({functions.length})
                 </button>
                 <button
-                  onClick={() => { setTab("snippets"); setLibraryFilter("all"); setUseCaseFilters([]); setShowAddForm(false); }}
+                  onClick={() => { setTab("snippets"); setLibraryFilter("all"); setUseCaseFilters([]); closeForm(); }}
                   className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
                     tab === "snippets" ? "border-brandTeal text-brandTeal" : "border-transparent text-slate-400 hover:text-slate-600"
                   }`}
@@ -1108,27 +1420,34 @@ export default function CreditRiskCheatSheet() {
                 </div>
 
                 <button
-                  onClick={() => setShowAddForm((s) => !s)}
+                  onClick={() => {
+                    if (formMode === "add") closeForm();
+                    else { setFormMode("add"); setEditingItem(null); }
+                  }}
                   className="inline-flex items-center gap-1.5 rounded-md bg-brandTeal px-3 py-2 text-sm font-medium text-white hover:bg-brandTealDark"
                 >
                   <Plus size={14} /> Add {tab === "functions" ? "function" : "snippet"}
                 </button>
               </div>
 
-              {/* Add form */}
-              {showAddForm && (
+              {/* Add/Edit form */}
+              {formMode && (
                 <div className="mt-4">
                   {tab === "functions" ? (
-                    <AddFunctionForm
-                      onAdd={handleAddFunction}
-                      onClose={() => setShowAddForm(false)}
+                    <FunctionForm
+                      mode={formMode}
+                      initial={formMode === "edit" ? editingItem : null}
+                      onSubmit={handleSaveFunction}
+                      onClose={closeForm}
                       libraries={libraries}
                       onAddLibrary={handleAddLibrary}
                     />
                   ) : (
-                    <AddSnippetForm
-                      onAdd={handleAddSnippet}
-                      onClose={() => setShowAddForm(false)}
+                    <SnippetForm
+                      mode={formMode}
+                      initial={formMode === "edit" ? editingItem : null}
+                      onSubmit={handleSaveSnippet}
+                      onClose={closeForm}
                       libraries={libraries}
                       onAddLibrary={handleAddLibrary}
                     />
@@ -1140,9 +1459,9 @@ export default function CreditRiskCheatSheet() {
               <div className="mt-5 flex flex-col gap-4">
                 {filtered.map((item) =>
                   tab === "functions" ? (
-                    <FunctionCard key={item.id} item={item} onDelete={handleDelete} />
+                    <FunctionCard key={item.id} item={item} onDelete={handleDelete} onEdit={startEdit} />
                   ) : (
-                    <SnippetCard key={item.id} item={item} onDelete={handleDelete} />
+                    <SnippetCard key={item.id} item={item} onDelete={handleDelete} onEdit={startEdit} />
                   )
                 )}
               </div>
