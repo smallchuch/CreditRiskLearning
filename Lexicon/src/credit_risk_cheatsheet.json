@@ -431,6 +431,19 @@
   ],
   "snippets": [
     {
+      "id": "oyseamnk",
+      "title": "Histogram Plot Seaborn",
+      "libraries": [
+        "seaborn"
+      ],
+      "useCases": [
+        "Exploration",
+        "Visualization"
+      ],
+      "description": "Creates a histogram plot for a specified column.",
+      "code": "ax = sns.histplot(\n    data=df,\n    x=\"CONTINUOUS_VARIABLE\",\n    hue=\"CATEGORY_SPLIT\",\n    bins=30,\n    kde=True,\n    stat=\"count\",\n    multiple=\"layer\",\n    palette=\"viridis\",\n)\n\n# ax.xaxis.set_major_formatter(mticker.FuncFormatter(lambda x, _: f'${x:,.0f}')) # Axes Formattter for Dollar Value\nax.set_title(\"Distribution of CONTINUOUS_VARIABLE by CATEGORY_SPLIT\")\nax.set_xlabel(\"CONTINUOUS_VARIABLE\")\nax.set_ylabel(\"Count\")\n\nplt.show()"
+    },
+    {
       "id": "u2in280i",
       "title": "Categorical Cardinality Assessment",
       "libraries": [
@@ -556,5 +569,5 @@
     "python (built-in)",
     "other"
   ],
-  "exportedAt": "2026-06-24T05:15:30.317Z"
+  "exportedAt": "2026-06-28T00:38:32.422Z"
 }
