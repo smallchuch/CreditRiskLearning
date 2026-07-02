@@ -1,0 +1,42 @@
+borrower_id,full_name,age,annual_income,employment_status,state,credit_score
+B001,James Smith,34,62000,Employed,CA,712
+B002,Mary Johnson,29,,employed,California,688
+B003, Robert Williams ,41,88000,Self-Employed,TX,745
+B004,Patricia Brown,52,54000,EMPLOYED,NY,601
+B005,Michael Jones,25,41000,Unemployed,New York,559
+B006,Linda Garcia,38,97000,self-employed,TX,780
+B007,William Miller,60,,Retired,FL,690
+B008,Elizabeth Davis,45,73000,Employed,Florida,714
+B003, Robert Williams,41,88000,Self-Employed,TX,745
+B009,David Rodriguez,31,56000,employed,CA,633
+B010,Barbara Martinez,-5,39000,Unemployed,TX,568
+B011,Richard Hernandez,48,102000,Employed,WA,760
+B012,Susan Lopez,36,,Employed,Washington,701
+B013,Joseph Gonzalez,55,67000,Retired,OR,690
+B014,Jessica Wilson,27,48000,employed,CA,644
+B015,Thomas Anderson,33,71000,Self-employed,NY,
+B016,Sarah Thomas,44,59000,Employed,New York,682
+B017,Charles Taylor,39,,unemployed,TX,540
+B018,Karen Moore,50,84000,EMPLOYED,CA,999
+B019,Christopher Jackson,28,46000,Employed,IL,615
+B020,Nancy Martin,,63000,employed,Illinois,671
+B021,Daniel Lee,151,58000,Retired,FL,705
+B022,Lisa Perez,42,77000,Self-Employed,TX,733
+B023,Matthew Thompson,37,,Employed,CA,690
+B024,Betty White,61,51000,retired,OR,600
+B025,Anthony Harris,30,68000,Employed,WA,652
+B026,Margaret Sanchez,26,44000,unemployed,TX,
+B027,Mark Clark,47,91000,Employed,NY,758
+B028,Sandra Ramirez,35,,employed,California,610
+B029,Donald Lewis,53,73500,Self-Employed,IL,700
+B030,Ashley Robinson,24,39500,Employed,FL,589
+B031,Steven Walker,58,,Retired,TX,687
+B032,Kimberly Young,32,62500,employed,CA,720
+B033,Paul Allen,40,84500,Employed,New York,741
+B034,Emily King,29,47500,Unemployed,OR,555
+B035,Andrew Wright,46,,EMPLOYED,WA,695
+B036,Donna Scott,54,59500,Retired,Florida,680
+B037,Joshua Torres,31,66000,employed,TX,631
+B038,Michelle Nguyen,27,52500,Employed,CA,663
+B039,Kenneth Hill,49,0,unemployed,IL,0
+B040,Dorothy Flores,43,78000,Self-Employed,NY,749

@@ -1,0 +1,56 @@
+loan_id,borrower_id,loan_amount,interest_rate,term_months,purpose,issue_date,status
+L1001,B001,15000,12.5%,36,debt_consolidation,2023-01-15,Current
+L1002,B002,8000,9.2,24,credit_card,01/22/2023,current
+L1003,B003,25000,15.8%,60,home_improvement,15-Feb-2023,Current
+L1004,B004,12000,11.0,36,Debt Consolidation,2023-02-20,Late
+L1005,B005,5000,18.5%,12,other,2023/03/01,DEFAULT
+L1006,B006,30000,10.2,60,small_business,03/10/2023,Current
+L1007,B007,,8.5,36,credit_card,2023-03-15,Paid Off
+L1008,B008,18000,13.4%,48,Home Improvement,15-Mar-2023,current
+L1009,B009,9500,14.0,24,debt_consolidation,2023-04-01,Current
+L1010,B010,7000,19.9%,12,other,04/05/2023,default
+L1011,B011,40000,9.8,60,small_business,2023-04-10,Current
+L1012,B012,11000,,36,credit_card,10-Apr-2023,Current
+L1013,B013,6000,16.2%,24,Other,2023/04/18,Paid off
+L1014,B014,14500,12.0,36,debt_consolidation,04/22/2023,Current
+L1015,B015,-9000,11.5%,36,home_improvement,2023-05-01,Current
+L1016,B016,21000,10.9,48,Small Business,05/05/2023,Current
+L1017,B017,8800,17.3%,24,other,2023-05-12,Late
+L1018,B018,16500,13.0,36,credit_card,12-May-2023,current
+L1019,B019,,15.5%,24,debt_consolidation,2023/05/20,Current
+L1020,B020,10200,12.8,36,Credit Card,05/25/2023,Current
+L1021,B021,27000,9.5%,60,home_improvement,2023-06-01,Paid Off
+L1022,B022,19500,14.6,48,small_business,06/08/2023,Current
+L1023,B023,7200,18.0%,12,Other,2023-06-15,DEFAULT
+L1024,B024,13000,11.8,36,Debt Consolidation,15-Jun-2023,Current
+L1025,B025,22500,10.5%,48,home_improvement,2023/06/22,current
+L1026,B026,6500,19.2,12,other,06/28/2023,Late
+L1027,B027,35000,8.9%,60,small_business,2023-07-01,Current
+L1028,B028,9900,15.0,24,credit_card,07/05/2023,Current
+L1029,B029,17800,12.4%,36,Home Improvement,2023-07-11,current
+L1030,B030,5600,20.1,12,other,11-Jul-2023,Default
+L1031,B999,12500,13.5%,36,debt_consolidation,2023-07-15,Current
+L1032,B031,,10.0,48,small_business,07/20/2023,Current
+L1033,B032,14200,14.9%,36,credit_card,2023-07-25,Current
+L1034,B033,26800,9.1,60,home_improvement,2023-08-01,Current
+L1035,B034,8100,17.8%,24,Other,08/05/2023,Late
+L1036,B035,19900,11.2,36,Debt Consolidation,2023-08-10,current
+L1037,B036,6300,16.5%,12,other,10-Aug-2023,Paid Off
+L1038,B037,23400,10.8,48,small_business,2023/08/15,Current
+L1039,B038,10800,13.9%,36,credit_card,08/20/2023,Current
+L1040,B039,7700,18.9,24,Other,2023-08-25,DEFAULT
+L1041,B040,31000,9.4%,60,Home Improvement,08/30/2023,Current
+L1042,B041,9200,15.2,36,debt_consolidation,2023-09-01,Current
+L1043,B001,11000,11.6%,24,credit_card,2023-09-05,Current
+L1044,B003,20000,,48,small_business,09/10/2023,current
+L1045,B006,15500,12.9%,36,Other,2023-09-15,Current
+L1046,B008,8900,17.1,24,debt_consolidation,15-Sep-2023,Late
+L1047,B011,28000,9.9%,60,home_improvement,2023/09/20,Current
+L1048,B014,10500,13.2,36,Credit Card,09/25/2023,current
+L1049,B016,17200,12.0%,36,Small Business,2023-10-01,Current
+L1050,B019,6900,19.5,12,other,10/05/2023,Default
+L1051,B022,24500,10.3%,48,Home Improvement,2023-10-10,Current
+L1052,B025,13800,14.2,36,debt_consolidation,10-Oct-2023,current
+L1053,B027,32500,8.7%,60,small_business,2023/10/15,Current
+L1054,B029,9400,16.8,24,credit_card,10/20/2023,Current
+L1055,B033,21200,11.4%,48,other,2023-10-25,Current
