@@ -71,51 +71,62 @@ sizes = {
 
 
 # ── PALETTE ───────────────────────────────────────────────────────────────────
-# To swap a colour: change the hex string. Full 100-900 scale per hue.
-# 100 = lightest tint, 900 = darkest shade, 500 = base colour.
+# To swap a colour: change the hex string.
+# Brand/neutral hues use a compact 100-500 scale — 300 = the named base colour,
+# 100/200 = lighter tints, 400/500 = darker shades.
+# Risk-semantic hues (red/green/yellow) keep the fuller 100-900 scale so
+# heatmaps and gradients still have enough steps to work with.
 
 palette = {
 
-    # ── PURPLE — Brand Primary ─────────────────────────────────────────────
-    # Use for: main chart bars/lines, primary headers, key callouts
-    'purple': {
-        100: '#F1EAFB',   # barely-there tint — panel backgrounds, table fills
-        200: '#DCCAF5',   # light tint — hover states, subtle highlights
-        300: '#C0A0ED',   # soft — secondary bars, light chart elements
-        400: '#9D6CE4',   # medium — supporting data series
-        500: '#732DD9',   # BASE — primary bars, main data series, headings
-        600: '#5E26AF',   # dark — emphasis, selected states
-        700: '#491F86',   # darker — strong emphasis
-        800: '#34185C',   # very dark — near-black text on light backgrounds
-        900: '#1F1133',   # deepest — backgrounds only, use sparingly
+    # ── OFF WHITE — Background / Neutral Light ─────────────────────────────
+    # Use for: page backgrounds, cards/surfaces, subtle fills
+    'off_white': {
+        100: '#FDFCFB',   # near-white tint — cards, surfaces, text on dark
+        200: '#FAF9F5',   # subtle tint — table stripes, input fills
+        300: '#F7F5F0',   # BASE — page background
+        400: '#B9B8B4',   # medium — muted secondary text, placeholders
+        500: '#7C7B78',   # dark — use sparingly, low-emphasis mid-tone
     },
 
-    # ── CYAN — Brand Secondary ─────────────────────────────────────────────
-    # Use for: secondary data series, accent lines, highlights alongside purple
-    'cyan': {
-        100: '#E6FCFF',   # barely-there — background washes
-        200: '#C2F9FF',   # light — subtle highlights
-        300: '#92F5FF',   # soft — secondary chart fills
-        400: '#56F0FF',   # medium-light — supporting accents
-        500: '#0EEAFF',   # BASE — secondary bars/lines, accent elements
-        600: '#0DBDCE',   # dark — stronger accent, borders
-        700: '#0C909D',   # darker — text on light cyan backgrounds
-        800: '#0B636C',   # very dark — high contrast use
-        900: '#0A363B',   # deepest — use sparingly
-    },
-
-    # ── ORANGE — Brand Tertiary ────────────────────────────────────────────
+    # ── OLIVE — Brand Tertiary ──────────────────────────────────────────────
     # Use for: third data series, callout boxes, highlights, annotations
-    'orange': {
-        100: '#FFEEE8',   # barely-there — background tints
-        200: '#FFD5C7',   # light — soft fills
-        300: '#FFB39B',   # soft — tertiary chart fills
-        400: '#FF8964',   # medium — supporting highlights
-        500: '#FF5722',   # BASE — tertiary bars/lines, callouts
-        600: '#CE471D',   # dark — stronger callouts, borders
-        700: '#9D3818',   # darker — text on light orange backgrounds
-        800: '#6C2813',   # very dark — high contrast
-        900: '#3B190E',   # deepest — use sparingly
+    'olive': {
+        100: '#D1D5CA',   # barely-there — background tints
+        200: '#9CA38D',   # light — soft fills
+        300: '#67724F',   # BASE — tertiary bars/lines, callouts
+        400: '#4D563B',   # dark — stronger callouts, borders
+        500: '#343928',   # darkest — high contrast, use sparingly
+    },
+
+    # ── JACARANDA — Brand Primary ───────────────────────────────────────────
+    # Use for: main chart bars/lines, primary headers, key callouts
+    'jacaranda': {
+        100: '#D7CEE2',   # barely-there tint — panel backgrounds, table fills
+        200: '#A995C0',   # light — secondary bars, light chart elements
+        300: '#7A5C9E',   # BASE — primary bars, main data series, headings
+        400: '#5C4577',   # dark — emphasis, hover/link states
+        500: '#3D2E4F',   # darkest — pressed/active states, use sparingly
+    },
+
+    # ── GOLD — Brand Secondary ──────────────────────────────────────────────
+    # Use for: secondary data series, accent lines, highlights alongside jacaranda
+    'gold': {
+        100: '#EFE1C5',   # barely-there — background washes
+        200: '#DBBE80',   # light — subtle highlights
+        300: '#C89B3C',   # BASE — secondary bars/lines, accent elements
+        400: '#96742D',   # dark — stronger accent, borders
+        500: '#644E1E',   # darkest — high contrast use, use sparingly
+    },
+
+    # ── CHARCOAL — Neutral / Secondary Information ──────────────────────────
+    # Use for: axes, gridlines, secondary labels, benchmarks, body text
+    'charcoal': {
+        100: '#C1C1C1',   # light — dividers, table borders, gridlines
+        200: '#787878',   # medium — secondary axis ticks, mid-tone labels
+        300: '#2F2F2F',   # BASE — body text, axis labels, headings
+        400: '#232323',   # dark — primary body text, titles
+        500: '#181818',   # near-black — maximum contrast text
     },
 
     # ── RED — Danger / Default / High Risk / Reject ────────────────────────
@@ -160,79 +171,62 @@ palette = {
         900: '#3B3217',   # deepest — use sparingly
     },
 
-    # ── GREY — Neutral / Secondary Information ─────────────────────────────
-    # Use for: axes, gridlines, secondary labels, benchmarks, disabled states
-    'grey': {
-        100: '#F7F7F7',   # near white — page/panel backgrounds
-        200: '#EBEBEB',   # light — dividers, table borders
-        300: '#D4D4D4',   # soft — gridlines, subtle borders
-        400: '#ABABAB',   # medium — secondary axis ticks, placeholders
-        500: '#7F7F7F',   # BASE — secondary labels, annotations
-        600: '#5C5C5C',   # dark — body text, axis labels
-        700: '#3D3D3D',   # darker — strong secondary text
-        800: '#262626',   # very dark — primary body text, titles
-        900: '#0A0A0A',   # near black — maximum contrast text
-    },
-
-    # ── WHITE ──────────────────────────────────────────────────────────────
-    'white': '#FFFFFF',   # chart backgrounds, card fills, text on dark
-
 # ── SEMANTIC — DATA VISUALISATION ─────────────────────────────────────
     # For chart elements — bars, lines, risk indicators
-    'default_colour':       '#E53935',   # red 500    — default / loss
-    'safe_colour':          '#91C46C',   # green 500  — performing / approve
-    'watch_colour':         '#FFD34E',   # yellow 500 — watch / caution
-    'chart_primary':        '#732DD9',   # purple 500 — main data series
-    'chart_secondary':      '#0EEAFF',   # cyan 500   — secondary series
-    'chart_tertiary':       '#FF5722',   # orange 500 — third series
-    'chart_fourth':         '#9D6CE4',   # purple 400 — fourth series
+    'default_colour':       '#E53935',   # red 500       — default / loss
+    'safe_colour':          '#91C46C',   # green 500     — performing / approve
+    'watch_colour':         '#FFD34E',   # yellow 500    — watch / caution
+    'chart_primary':        '#7A5C9E',   # jacaranda 300 — main data series
+    'chart_secondary':      '#C89B3C',   # gold 300      — secondary series
+    'chart_tertiary':       '#67724F',   # olive 300     — third series
+    'chart_fourth':         '#A995C0',   # jacaranda 200 — fourth series
 
     # ── SEMANTIC — TYPOGRAPHY ──────────────────────────────────────────────
     # For text elements across dashboards and reports
-    'text_primary':         '#262626',   # grey 800 — headlines, body text
-    'text_secondary':       '#5C5C5C',   # grey 600 — subheadings, labels
-    'text_tertiary':        '#7F7F7F',   # grey 500 — hints, placeholders
-    'text_disabled':        '#ABABAB',   # grey 400 — disabled state text
-    'text_inverse':         '#FFFFFF',   # white    — text on dark backgrounds
-    'text_on_primary':      '#FFFFFF',   # white    — text on purple backgrounds
-    'text_on_danger':       '#FFFFFF',   # white    — text on red backgrounds
-    'text_link':            '#5E26AF',   # purple 600 — hyperlinks, clickable
+    'text_primary':         '#2F2F2F',   # charcoal 300  — headlines, body text
+    'text_secondary':       '#787878',   # charcoal 200  — subheadings, labels
+    'text_tertiary':        '#7C7B78',   # off-white 500 — hints, placeholders
+    'text_disabled':        '#B9B8B4',   # off-white 400 — disabled state text
+    'text_inverse':         '#FDFCFB',   # off-white 100 — text on dark backgrounds
+    'text_on_primary':      '#FDFCFB',   # off-white 100 — text on jacaranda backgrounds
+    'text_on_danger':       '#FDFCFB',   # off-white 100 — text on red backgrounds
+    'text_link':            '#5C4577',   # jacaranda 400 — hyperlinks, clickable
 
     # ── SEMANTIC — BACKGROUNDS ─────────────────────────────────────────────
     # For surfaces, panels, cards, page backgrounds
-    'bg_page':              '#F7F7F7',   # grey 100  — outermost page background
-    'bg_surface':           '#FFFFFF',   # white     — cards, panels, modals
-    'bg_subtle':            '#EBEBEB',   # grey 200  — table stripes, input fills
-    'bg_primary':           '#732DD9',   # purple 500 — primary buttons, headers
-    'bg_primary_hover':     '#5E26AF',   # purple 600 — primary button hover
-    'bg_primary_light':     '#F1EAFB',   # purple 100 — light tint backgrounds
-    'bg_danger':            '#FCEBEA',   # red 100   — error/alert backgrounds
-    'bg_danger_strong':     '#E53935',   # red 500   — strong danger fills
-    'bg_safe':              '#F4F9F0',   # green 100 — success backgrounds
-    'bg_safe_strong':       '#91C46C',   # green 500 — strong safe fills
-    'bg_watch':             '#FFFAED',   # yellow 100 — warning backgrounds
-    'bg_watch_strong':      '#FFD34E',   # yellow 500 — strong watch fills
-    'bg_info':              '#E6FCFF',   # cyan 100  — info/highlight backgrounds
-    'bg_info_strong':       '#0EEAFF',   # cyan 500  — strong info fills
+    'bg_page':              '#F7F5F0',   # off-white 300 — outermost page background
+    'bg_surface':           '#FDFCFB',   # off-white 100 — cards, panels, modals
+    'bg_subtle':            '#FAF9F5',   # off-white 200 — table stripes, input fills
+    'bg_primary':           '#7A5C9E',   # jacaranda 300 — primary buttons, headers
+    'bg_primary_hover':     '#5C4577',   # jacaranda 400 — primary button hover
+    'bg_primary_light':     '#D7CEE2',   # jacaranda 100 — light tint backgrounds
+    'bg_danger':            '#FCEBEA',   # red 100       — error/alert backgrounds
+    'bg_danger_strong':     '#E53935',   # red 500       — strong danger fills
+    'bg_safe':              '#F4F9F0',   # green 100     — success backgrounds
+    'bg_safe_strong':       '#91C46C',   # green 500     — strong safe fills
+    'bg_watch':             '#FFFAED',   # yellow 100    — warning backgrounds
+    'bg_watch_strong':      '#FFD34E',   # yellow 500    — strong watch fills
+    'bg_info':              '#EFE1C5',   # gold 100      — info/highlight backgrounds
+    'bg_info_strong':       '#C89B3C',   # gold 300      — strong info fills
 
     # ── SEMANTIC — BORDERS ─────────────────────────────────────────────────
     # For dividers, outlines, input borders
-    'border_subtle':        '#EBEBEB',   # grey 200 — subtle dividers, table lines
-    'border_default':       '#D4D4D4',   # grey 300 — default input borders
-    'border_strong':        '#ABABAB',   # grey 400 — focused/active borders
-    'border_primary':       '#732DD9',   # purple 500 — primary accent borders
-    'border_danger':        '#E53935',   # red 500  — error state borders
-    'border_safe':          '#91C46C',   # green 500 — success state borders
-    'border_watch':         '#FFD34E',   # yellow 500 — warning state borders
+    'border_subtle':        '#C1C1C1',   # charcoal 100  — subtle dividers, table lines
+    'border_default':       '#787878',   # charcoal 200  — default input borders
+    'border_strong':        '#2F2F2F',   # charcoal 300  — focused/active borders
+    'border_primary':       '#7A5C9E',   # jacaranda 300 — primary accent borders
+    'border_danger':        '#E53935',   # red 500       — error state borders
+    'border_safe':          '#91C46C',   # green 500     — success state borders
+    'border_watch':         '#FFD34E',   # yellow 500    — warning state borders
 
     # ── SEMANTIC — INTERACTIVE STATES ──────────────────────────────────────
     # For buttons, inputs, clickable elements
-    'interactive_primary':          '#732DD9',   # purple 500 — default
-    'interactive_primary_hover':    '#5E26AF',   # purple 600 — hover
-    'interactive_primary_active':   '#491F86',   # purple 700 — pressed
-    'interactive_primary_disabled': '#C0A0ED',   # purple 300 — disabled
-    'interactive_secondary':        '#0EEAFF',   # cyan 500
-    'interactive_secondary_hover':  '#0DBDCE',   # cyan 600
+    'interactive_primary':          '#7A5C9E',   # jacaranda 300 — default
+    'interactive_primary_hover':    '#5C4577',   # jacaranda 400 — hover
+    'interactive_primary_active':   '#3D2E4F',   # jacaranda 500 — pressed
+    'interactive_primary_disabled': '#D7CEE2',   # jacaranda 100 — disabled
+    'interactive_secondary':        '#C89B3C',   # gold 300
+    'interactive_secondary_hover':  '#96742D',   # gold 400
 
     # ── SEMANTIC — STATUS / BADGES ─────────────────────────────────────────
     # For pills, tags, status indicators
@@ -242,10 +236,10 @@ palette = {
     'status_safe_text':     '#5B7944',   # green 700
     'status_watch_bg':      '#FFFAED',   # yellow 100
     'status_watch_text':    '#9D8232',   # yellow 700
-    'status_info_bg':       '#E6FCFF',   # cyan 100
-    'status_info_text':     '#0C909D',   # cyan 700
-    'status_neutral_bg':    '#EBEBEB',   # grey 200
-    'status_neutral_text':  '#3D3D3D',   # grey 700
+    'status_info_bg':       '#EFE1C5',   # gold 100
+    'status_info_text':     '#96742D',   # gold 400
+    'status_neutral_bg':    '#FAF9F5',   # off-white 200
+    'status_neutral_text':  '#2F2F2F',   # charcoal 300
 
     # ── SEMANTIC — SHADOWS / OVERLAYS ──────────────────────────────────────
     'overlay':              'rgba(0, 0, 0, 0.4)',   # modal backdrops
@@ -260,8 +254,8 @@ palette = {
 def p(hue, shade):
     """
     Shorthand palette accessor.
-    p('purple', 500) -> '#732DD9'
-    p('red', 100)    -> '#FCEBEA'
+    p('jacaranda', 300) -> '#7A5C9E'
+    p('red', 100)       -> '#FCEBEA'
     """
     return palette[hue][shade]
 
@@ -290,13 +284,13 @@ def s(role):
 def gradient(hue, shades=None):
     """
     Return a list of hex colours for a gradient within one hue.
-    Default returns [200, 300, 400, 500, 600, 700] — good for bar charts.
+    Default returns [100, 200, 300, 400, 500] — good for bar charts.
 
     Usage:
-        bars = plt.bar(x, y, color=gradient('purple'))
+        bars = plt.bar(x, y, color=gradient('jacaranda'))
     """
     if shades is None:
-        shades = [200, 300, 400, 500, 600, 700]
+        shades = [100, 200, 300, 400, 500]
     return [palette[hue][s] for s in shades]
 
 
@@ -325,7 +319,7 @@ def multi_series():
     Return the three brand colours for multi-series charts.
     Usage: colors = multi_series()
     """
-    return [palette['primary'], palette['secondary'], palette['tertiary']]
+    return [palette['chart_primary'], palette['chart_secondary'], palette['chart_tertiary']]
 
 
 # ── CHART STYLE ───────────────────────────────────────────────────────────────
@@ -343,13 +337,13 @@ def set_style():
 
         # Axes
         'axes.facecolor':           'white',
-        'axes.edgecolor':           palette['grey'][300],
-        'axes.labelcolor':          palette['grey'][800],
+        'axes.edgecolor':           palette['charcoal'][100],
+        'axes.labelcolor':          palette['charcoal'][400],
         'axes.labelsize':           sizes['body'],
         'axes.labelpad':            8,
         'axes.titlesize':           sizes['title'],
         'axes.titleweight':         'bold',
-        'axes.titlecolor':          palette['grey'][900],
+        'axes.titlecolor':          palette['charcoal'][500],
         'axes.titlepad':            12,
         'axes.spines.top':          False,
         'axes.spines.right':        False,
@@ -357,13 +351,13 @@ def set_style():
         'axes.axisbelow':           True,
 
         # Grid
-        'grid.color':               palette['grey'][200],
+        'grid.color':               palette['charcoal'][100],
         'grid.linewidth':           0.8,
         'grid.linestyle':           '--',
 
         # Ticks
-        'xtick.color':              palette['grey'][600],
-        'ytick.color':              palette['grey'][600],
+        'xtick.color':              palette['charcoal'][200],
+        'ytick.color':              palette['charcoal'][200],
         'xtick.labelsize':          sizes['small'],
         'ytick.labelsize':          sizes['small'],
         'xtick.major.pad':          6,
@@ -372,7 +366,7 @@ def set_style():
         # Font — body font for all general text
         'font.family':              'sans-serif',
         'font.sans-serif':          [fonts['body']] + fonts['body_fallback'],
-        'text.color':               palette['grey'][800],
+        'text.color':               palette['charcoal'][400],
 
         # Legend
         'legend.frameon':           False,
@@ -380,11 +374,11 @@ def set_style():
         'legend.title_fontsize':    sizes['body'],
 
         # Bars
-        'patch.facecolor':          palette['purple'][500],
+        'patch.facecolor':          palette['jacaranda'][300],
 
         # Lines
         'lines.linewidth':          2.0,
-        'lines.color':              palette['purple'][500],
+        'lines.color':              palette['jacaranda'][300],
     })
 
 
@@ -403,7 +397,7 @@ def chart_title(ax, title, subtitle=None):
         fontfamily=fonts['heading'],
         fontsize=sizes['title'],
         fontweight='bold',
-        color=palette['grey'][900],
+        color=palette['charcoal'][500],
         pad=16 if subtitle else 12,
         loc='left'
     )
@@ -416,7 +410,7 @@ def chart_title(ax, title, subtitle=None):
             textcoords='axes fraction',
             fontfamily=fonts['body'],
             fontsize=sizes['small'],
-            color=palette['grey'][500],
+            color=palette['charcoal'][200],
             va='bottom'
         )
 
@@ -435,7 +429,7 @@ def annotate(ax, x, y, text, color=None, offset=(0, 8)):
         textcoords='offset points',
         fontfamily=fonts['mono'],
         fontsize=sizes['mono'],
-        color=color or palette['grey'][600],
+        color=color or palette['charcoal'][200],
         ha='center',
         va='bottom'
     )
@@ -447,13 +441,17 @@ def show_palette():
     """
     Render a visual swatch of the full colour palette.
     """
-    hues = ['purple', 'cyan', 'orange', 'red', 'green', 'yellow', 'grey']
-    shades = [100, 200, 300, 400, 500, 600, 700, 800, 900]
+    brand_hues = ['off_white', 'olive', 'jacaranda', 'gold', 'charcoal']
+    brand_shades = [100, 200, 300, 400, 500]
+    risk_hues = ['red', 'green', 'yellow']
+    risk_shades = [100, 200, 300, 400, 500, 600, 700, 800, 900]
 
-    fig, axes = plt.subplots(len(hues), 1, figsize=(13, len(hues) * 1.0))
+    rows = [(hue, brand_shades) for hue in brand_hues] + [(hue, risk_shades) for hue in risk_hues]
+
+    fig, axes = plt.subplots(len(rows), 1, figsize=(13, len(rows) * 1.0))
     fig.patch.set_facecolor('white')
 
-    for ax, hue in zip(axes, hues):
+    for ax, (hue, shades) in zip(axes, rows):
         colors = [palette[hue][s] for s in shades]
         for i, (shade, color) in enumerate(zip(shades, colors)):
             ax.add_patch(plt.Rectangle((i, 0), 1, 1, color=color))
@@ -465,20 +463,21 @@ def show_palette():
                     fontsize=8, color=text_color,
                     fontweight='bold',
                     fontfamily=fonts['mono'])
-        ax.set_xlim(0, 9)
+        ax.set_xlim(0, len(shades))
         ax.set_ylim(0, 1)
         ax.set_yticks([])
         ax.set_xticks([])
-        ax.set_ylabel(hue.capitalize(),
+        label_shade = 400 if hue in brand_hues else 600
+        ax.set_ylabel(hue.replace('_', ' ').title(),
                       rotation=0, labelpad=55, va='center',
                       fontsize=10, fontweight='bold',
-                      color=palette[hue][600],
+                      color=palette[hue][label_shade],
                       fontfamily=fonts['heading'])
         for spine in ax.spines.values():
             spine.set_visible(False)
 
     plt.suptitle('Colour Palette', fontsize=sizes['title'],
-                 fontweight='bold', color=palette['grey'][900],
+                 fontweight='bold', color=palette['charcoal'][500],
                  fontfamily=fonts['heading'], y=1.01)
     plt.tight_layout()
     plt.show()
@@ -497,15 +496,15 @@ def show_fonts():
     # Title
     ax.text(0, 9.6, 'Font Specimen',
             fontfamily=fonts['heading'], fontsize=sizes['display'],
-            fontweight='bold', color=palette['grey'][900], va='top')
+            fontweight='bold', color=palette['charcoal'][500], va='top')
 
     # Divider
-    ax.axhline(9.2, color=palette['purple'][300], linewidth=1.5, xmin=0, xmax=1)
+    ax.axhline(9.2, color=palette['jacaranda'][200], linewidth=1.5, xmin=0, xmax=1)
 
     font_specs = [
-        (fonts['heading'], 'Heading — Inter',     'HEADING / TITLES / SECTION LABELS',         palette['purple'][500]),
-        (fonts['body'],    'Body — DM Sans',       'Body text / Axis labels / Legend / Notes',  palette['cyan'][600]),
-        (fonts['mono'],    'Mono — JetBrains Mono','0123456789  |  Data labels / Numbers / Code', palette['orange'][500]),
+        (fonts['heading'], 'Heading — Inter',     'HEADING / TITLES / SECTION LABELS',         palette['jacaranda'][300]),
+        (fonts['body'],    'Body — DM Sans',       'Body text / Axis labels / Legend / Notes',  palette['gold'][400]),
+        (fonts['mono'],    'Mono — JetBrains Mono','0123456789  |  Data labels / Numbers / Code', palette['olive'][300]),
     ]
 
     y = 8.6
@@ -513,7 +512,7 @@ def show_fonts():
         # Font role label
         ax.text(0, y, label_text,
                 fontfamily=fonts['body'], fontsize=sizes['tiny'],
-                color=palette['grey'][500], va='top', fontstyle='italic')
+                color=palette['charcoal'][200], va='top', fontstyle='italic')
         y -= 0.4
 
         # Specimen text at display size
@@ -526,11 +525,11 @@ def show_fonts():
         for size_name, size_val in sizes.items():
             ax.text(0, y, f'{size_name} ({size_val}pt) — The quick brown fox',
                     fontfamily=font, fontsize=size_val,
-                    color=palette['grey'][700], va='top')
+                    color=palette['charcoal'][400], va='top')
             y -= (size_val / 10) * 0.38
 
         y -= 0.3
-        ax.axhline(y + 0.1, color=palette['grey'][200], linewidth=0.8, xmin=0, xmax=1)
+        ax.axhline(y + 0.1, color=palette['charcoal'][100], linewidth=0.8, xmin=0, xmax=1)
         y -= 0.2
 
     plt.tight_layout()
@@ -604,15 +603,17 @@ def show_style_guide():
     # ── Header ──
     fig.text(0.05, 0.97, 'Credit Risk ML — Design System',
              fontfamily=fonts['heading'], fontsize=sizes['display'],
-             fontweight='bold', color=palette['purple'][500], va='top')
+             fontweight='bold', color=palette['jacaranda'][300], va='top')
     fig.text(0.05, 0.955, 'Colour palette · Typography · Chart elements',
              fontfamily=fonts['body'], fontsize=sizes['body'],
-             color=palette['grey'][500], va='top')
+             color=palette['charcoal'][200], va='top')
 
     # ── Palette swatches ──
-    hues = ['purple', 'cyan', 'orange', 'red', 'green', 'yellow', 'grey']
-    shades = [100, 300, 500, 700, 900]
+    hues = ['off_white', 'olive', 'jacaranda', 'gold', 'charcoal', 'red', 'green', 'yellow']
+    risk_hues = ('red', 'green', 'yellow')
     for row, hue in enumerate(hues):
+        shades = [100, 300, 500, 700, 900] if hue in risk_hues else [100, 200, 300, 400, 500]
+        label_shade = 600 if hue in risk_hues else 400
         for col, shade in enumerate(shades):
             left = 0.05 + col * 0.085
             bottom = 0.845 - row * 0.038
@@ -630,21 +631,21 @@ def show_style_guide():
             ax_swatch.axis('off')
         # Hue label
         fig.text(0.05 + 5 * 0.085 + 0.005, 0.845 - row * 0.038 + 0.012,
-                 hue.capitalize(), fontfamily=fonts['heading'],
-                 fontsize=8, color=palette[hue][600], fontweight='bold', va='center')
+                 hue.replace('_', ' ').title(), fontfamily=fonts['heading'],
+                 fontsize=8, color=palette[hue][label_shade], fontweight='bold', va='center')
 
     # ── Example bar chart ──
     ax_bar = fig.add_axes([0.05, 0.49, 0.55, 0.22])
     categories = ['Car', 'Furniture', 'Education', 'Business', 'Repairs']
     default_rates = [0.24, 0.31, 0.38, 0.42, 0.18]
     bars = ax_bar.bar(categories, default_rates,
-                      color=gradient('purple', [300, 400, 500, 600, 700]),
+                      color=gradient('jacaranda'),
                       width=0.6, edgecolor='white', linewidth=0.8)
     ax_bar.set_ylim(0, 0.55)
     ax_bar.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f'{x:.0%}'))
     ax_bar.spines['top'].set_visible(False)
     ax_bar.spines['right'].set_visible(False)
-    ax_bar.grid(axis='y', color=palette['grey'][200], linestyle='--', linewidth=0.8)
+    ax_bar.grid(axis='y', color=palette['charcoal'][100], linestyle='--', linewidth=0.8)
     ax_bar.set_axisbelow(True)
     for bar in bars:
         ax_bar.text(bar.get_x() + bar.get_width()/2,
@@ -652,10 +653,10 @@ def show_style_guide():
                     f'{bar.get_height():.0%}',
                     ha='center', va='bottom',
                     fontfamily=fonts['mono'], fontsize=sizes['mono'],
-                    color=palette['grey'][700])
+                    color=palette['charcoal'][400])
     ax_bar.set_title('Default Rate by Loan Purpose',
                      fontfamily=fonts['heading'], fontsize=sizes['subtitle'],
-                     fontweight='bold', color=palette['grey'][900],
+                     fontweight='bold', color=palette['charcoal'][500],
                      loc='left', pad=10)
     ax_bar.tick_params(labelsize=sizes['small'])
     for label in ax_bar.get_xticklabels():
@@ -672,11 +673,11 @@ def show_style_guide():
               width=0.6, edgecolor='white', linewidth=0.8)
     ax_tl.spines['top'].set_visible(False)
     ax_tl.spines['right'].set_visible(False)
-    ax_tl.grid(axis='y', color=palette['grey'][200], linestyle='--', linewidth=0.8)
+    ax_tl.grid(axis='y', color=palette['charcoal'][100], linestyle='--', linewidth=0.8)
     ax_tl.set_axisbelow(True)
     ax_tl.set_title('Portfolio Risk Segmentation',
                     fontfamily=fonts['heading'], fontsize=sizes['subtitle'],
-                    fontweight='bold', color=palette['grey'][900],
+                    fontweight='bold', color=palette['charcoal'][500],
                     loc='left', pad=10)
     ax_tl.tick_params(labelsize=sizes['small'])
     for label in ax_tl.get_xticklabels():
@@ -690,18 +691,18 @@ def show_style_guide():
     ax_type.set_xlim(0, 10)
     ax_type.set_ylim(0, 10)
 
-    ax_type.axhline(9.7, color=palette['grey'][200], linewidth=1)
+    ax_type.axhline(9.7, color=palette['charcoal'][100], linewidth=1)
     ax_type.text(0, 9.4, 'Typography',
                  fontfamily=fonts['heading'], fontsize=sizes['subtitle'],
-                 fontweight='bold', color=palette['grey'][800], va='top')
+                 fontweight='bold', color=palette['charcoal'][400], va='top')
 
     type_specs = [
-        (fonts['heading'], sizes['title'],    'bold',  palette['purple'][500], f"Inter — {sizes['title']}pt Bold — Chart Titles & Headers"),
-        (fonts['heading'], sizes['subtitle'], 'bold',  palette['purple'][400], f"Inter — {sizes['subtitle']}pt Bold — Subtitles & Section Labels"),
-        (fonts['body'],    sizes['body'],     'normal',palette['grey'][700],   f"DM Sans — {sizes['body']}pt — Axis Labels, Legend, Body Text"),
-        (fonts['body'],    sizes['small'],    'normal',palette['grey'][600],   f"DM Sans — {sizes['small']}pt — Tick Labels, Secondary Annotations"),
-        (fonts['mono'],    sizes['mono'],     'normal',palette['grey'][700],   f"JetBrains Mono — {sizes['mono']}pt — 0123456789  |  Data Labels & Numbers"),
-        (fonts['mono'],    sizes['tiny'],     'normal',palette['grey'][500],   f"JetBrains Mono — {sizes['tiny']}pt — Dense Tables, Footnotes"),
+        (fonts['heading'], sizes['title'],    'bold',  palette['jacaranda'][300], f"Inter — {sizes['title']}pt Bold — Chart Titles & Headers"),
+        (fonts['heading'], sizes['subtitle'], 'bold',  palette['jacaranda'][200], f"Inter — {sizes['subtitle']}pt Bold — Subtitles & Section Labels"),
+        (fonts['body'],    sizes['body'],     'normal',palette['charcoal'][400],  f"DM Sans — {sizes['body']}pt — Axis Labels, Legend, Body Text"),
+        (fonts['body'],    sizes['small'],    'normal',palette['charcoal'][200],  f"DM Sans — {sizes['small']}pt — Tick Labels, Secondary Annotations"),
+        (fonts['mono'],    sizes['mono'],     'normal',palette['charcoal'][400],  f"JetBrains Mono — {sizes['mono']}pt — 0123456789  |  Data Labels & Numbers"),
+        (fonts['mono'],    sizes['tiny'],     'normal',palette['charcoal'][200],  f"JetBrains Mono — {sizes['tiny']}pt — Dense Tables, Footnotes"),
     ]
 
     y = 8.6
@@ -746,7 +747,7 @@ def show_tokens():
                 ('text_tertiary',    'Hints, placeholders, annotations'),
                 ('text_disabled',    'Disabled state text'),
                 ('text_inverse',     'Text on dark/coloured backgrounds'),
-                ('text_on_primary',  'Text on purple backgrounds'),
+                ('text_on_primary',  'Text on jacaranda backgrounds'),
                 ('text_on_danger',   'Text on red backgrounds'),
                 ('text_link',        'Hyperlinks, clickable elements'),
             ]
@@ -760,7 +761,7 @@ def show_tokens():
                 ('bg_subtle',        'Table stripes, input fills'),
                 ('bg_primary',       'Primary buttons, headers'),
                 ('bg_primary_hover', 'Primary button hover state'),
-                ('bg_primary_light', 'Light purple tint backgrounds'),
+                ('bg_primary_light', 'Light jacaranda tint backgrounds'),
                 ('bg_danger',        'Error / alert backgrounds'),
                 ('bg_danger_strong', 'Strong danger fills'),
                 ('bg_safe',          'Success backgrounds'),
@@ -831,18 +832,18 @@ def show_tokens():
     ax.text(0, total_plot_h + 0.3,
             'Semantic Token Reference',
             fontfamily=fonts['heading'], fontsize=sizes['title'],
-            fontweight='bold', color=palette['grey'][900], va='top')
+            fontweight='bold', color=palette['charcoal'][500], va='top')
 
     # ── Column headers ────────────────────────────────────────────────────────
     header_y = total_plot_h - 0.1
     for x, label in [(1.5, 'Token'), (5.2, 'Hex'), (6.4, 'Usage')]:
         ax.text(x, header_y, label,
                 fontfamily=fonts['body'], fontsize=sizes['small'],
-                color=palette['grey'][500], va='top',
+                color=palette['charcoal'][200], va='top',
                 fontstyle='italic')
 
     ax.axhline(header_y - 0.25,
-               color=palette['grey'][300], linewidth=0.8,
+               color=palette['charcoal'][100], linewidth=0.8,
                xmin=0, xmax=1)
 
     # ── Render groups ─────────────────────────────────────────────────────────
@@ -853,18 +854,18 @@ def show_tokens():
         # Group header band
         ax.add_patch(plt.Rectangle(
             (0, y - 0.05), 10, row_h * 0.85,
-            color=palette['purple'][100],
+            color=palette['jacaranda'][100],
             clip_on=False, zorder=1
         ))
         ax.text(0.15, y + row_h * 0.35,
                 group['label'],
                 fontfamily=fonts['heading'], fontsize=sizes['body'],
-                fontweight='bold', color=palette['purple'][700],
+                fontweight='bold', color=palette['jacaranda'][400],
                 va='center', zorder=2)
         ax.text(5.2, y + row_h * 0.35,
                 group['desc'],
                 fontfamily=fonts['body'], fontsize=sizes['small'],
-                color=palette['purple'][500],
+                color=palette['jacaranda'][300],
                 va='center', fontstyle='italic', zorder=2)
 
         y -= row_h
@@ -879,7 +880,7 @@ def show_tokens():
             if i % 2 == 0:
                 ax.add_patch(plt.Rectangle(
                     (0, y - 0.04), 10, row_h * 0.88,
-                    color=palette['grey'][100],
+                    color=palette['off_white'][200],
                     clip_on=False, zorder=1
                 ))
 
@@ -890,7 +891,7 @@ def show_tokens():
                     color=hex_val,
                     clip_on=False, zorder=2,
                     linewidth=0.5,
-                    edgecolor=palette['grey'][300]
+                    edgecolor=palette['charcoal'][100]
                 ))
             except Exception:
                 pass
@@ -899,21 +900,21 @@ def show_tokens():
             ax.text(1.3, y + row_h * 0.4,
                     token,
                     fontfamily=fonts['mono'], fontsize=sizes['mono'],
-                    color=palette['grey'][800],
+                    color=palette['charcoal'][400],
                     va='center', zorder=2)
 
             # Hex value
             ax.text(5.2, y + row_h * 0.4,
                     hex_val,
                     fontfamily=fonts['mono'], fontsize=sizes['mono'] - 0.5,
-                    color=palette['grey'][500],
+                    color=palette['charcoal'][200],
                     va='center', zorder=2)
 
             # Usage description
             ax.text(6.4, y + row_h * 0.4,
                     desc,
                     fontfamily=fonts['body'], fontsize=sizes['small'],
-                    color=palette['grey'][600],
+                    color=palette['charcoal'][200],
                     va='center', zorder=2)
 
             y -= row_h
@@ -933,13 +934,13 @@ def show_tokens():
 #  set_style()
 #
 #  SINGLE COLOUR
-#  plt.bar(x, y, color=p('purple', 500))
+#  plt.bar(x, y, color=p('jacaranda', 300))
 #
 #  GRADIENT BARS
-#  plt.bar(x, y, color=gradient('purple'))
+#  plt.bar(x, y, color=gradient('jacaranda'))
 #
 #  MULTI-SERIES
-#  colors = multi_series()   # [purple, cyan, orange]
+#  colors = multi_series()   # [jacaranda, gold, olive]
 #
 #  TRAFFIC LIGHT
 #  colors = traffic_light(3)
