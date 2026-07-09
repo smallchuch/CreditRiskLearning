@@ -528,15 +528,6 @@
       "hrs": "8-10 hrs",
       "isNew": true,
       "key": "cloud_basics"
-    },
-    {
-      "id": "id_2ijmlz9fusvmqlseqnj",
-      "cat": "Statistics Foundations",
-      "topic": "New concept",
-      "status": "Not Started",
-      "priority": "Medium",
-      "hrs": "",
-      "isNew": false
     }
   ],
   "levels": [
