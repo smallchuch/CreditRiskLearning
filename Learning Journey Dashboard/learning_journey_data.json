@@ -5,529 +5,610 @@
     "Machine Learning Core",
     "Evaluation Metrics",
     "Credit Risk Specific",
+    "Portfolio Monitoring",
     "Explainability",
     "Tools"
   ],
   "concepts": [
     {
-      "id": "id_fojzf85tercmqlqcozg",
+      "id": "id_cml6hp7eu0dmrodas3c",
+      "key": "prob_basics",
       "cat": "Statistics Foundations",
       "topic": "Probability basics (distributions, conditional probability)",
       "status": "Completed",
       "priority": "High",
       "hrs": "6-8 hrs",
-      "isNew": false,
-      "key": "prob_basics"
+      "isNew": false
     },
     {
-      "id": "id_fkvy0brhnyamqlqcozg",
+      "id": "id_tsqdla0ht28mrodas3c",
+      "key": "hyp_testing",
       "cat": "Statistics Foundations",
       "topic": "Hypothesis testing and p-values",
-      "status": "Not Started",
+      "status": "In Progress",
       "priority": "High",
       "hrs": "4-6 hrs",
-      "isNew": false,
-      "key": "hyp_testing"
+      "isNew": false
     },
     {
-      "id": "id_rv96q7nb6lmmqlqcozg",
+      "id": "id_yfp0enhvd8jmrodas3c",
+      "key": "corr_causation",
       "cat": "Statistics Foundations",
       "topic": "Correlation vs causation",
       "status": "Not Started",
       "priority": "High",
       "hrs": "2-3 hrs",
-      "isNew": false,
-      "key": "corr_causation"
+      "isNew": false
     },
     {
-      "id": "id_sa3laoukl6mqlqcozg",
+      "id": "id_suy102mviqgmrodas3c",
+      "key": "conf_intervals",
       "cat": "Statistics Foundations",
       "topic": "Confidence intervals",
-      "status": "Not Started",
+      "status": "In Progress",
       "priority": "Medium",
       "hrs": "3-4 hrs",
-      "isNew": false,
-      "key": "conf_intervals"
+      "isNew": false
     },
     {
-      "id": "id_fho1o9n3m8imqlqcozg",
+      "id": "id_cuuxo94wgpgmrodas3c",
+      "key": "clt",
       "cat": "Statistics Foundations",
       "topic": "Central limit theorem",
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "3-4 hrs",
-      "isNew": false,
-      "key": "clt"
+      "isNew": false
     },
     {
-      "id": "id_zusyyoxxj1mqlqcozg",
+      "id": "id_v9r5zgedmc8mrodas3c",
+      "key": "mle",
       "cat": "Statistics Foundations",
       "topic": "Maximum likelihood estimation (MLE)",
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "4-5 hrs",
-      "isNew": true,
-      "key": "mle"
+      "isNew": true
     },
     {
-      "id": "id_z4e4bfghsvsmqlqcozg",
+      "id": "id_3nt8yqcuda5mrodas3c",
+      "key": "mle_depth",
+      "cat": "Statistics Foundations",
+      "topic": "Maximum likelihood estimation — full mathematical derivation",
+      "status": "Not Started",
+      "priority": "Lower",
+      "hrs": "4-5 hrs",
+      "isNew": true
+    },
+    {
+      "id": "id_3o06l210dhgmrodas3c",
+      "key": "linear_algebra",
       "cat": "Statistics Foundations",
       "topic": "Linear algebra basics (matrix ops, dot products)",
       "status": "Not Started",
       "priority": "Lower",
       "hrs": "6-8 hrs",
-      "isNew": true,
-      "key": "linear_algebra"
+      "isNew": true
     },
     {
-      "id": "id_ucq5ak1cl6mmqlqcozg",
+      "id": "id_7hgsaahej6umrodas3c",
+      "key": "data_types",
       "cat": "Data Fundamentals",
       "topic": "Types of data (continuous, categorical, ordinal)",
       "status": "Completed",
       "priority": "High",
       "hrs": "1-2 hrs",
-      "isNew": false,
-      "key": "data_types"
+      "isNew": false
     },
     {
-      "id": "id_j23qml6hbmmqlqcozg",
+      "id": "id_kkmpal52femrodas3c",
+      "key": "missing_values",
       "cat": "Data Fundamentals",
       "topic": "Handling missing values",
       "status": "Completed",
       "priority": "High",
       "hrs": "3-4 hrs",
-      "isNew": false,
-      "key": "missing_values"
+      "isNew": false
     },
     {
-      "id": "id_dj4u4cl5r99mqlqcozg",
+      "id": "id_2m4928n3z63mrodas3c",
+      "key": "train_test_split",
       "cat": "Data Fundamentals",
       "topic": "Train/test split and data leakage",
       "status": "Not Started",
       "priority": "High",
       "hrs": "2-3 hrs",
-      "isNew": false,
-      "key": "train_test_split"
+      "isNew": false
     },
     {
-      "id": "id_bn7lodxy8mqmqlqcozg",
+      "id": "id_bjlzdgwjj5mrodas3c",
+      "key": "class_imbalance",
       "cat": "Data Fundamentals",
       "topic": "Class imbalance (very important in credit)",
       "status": "Not Started",
       "priority": "High",
       "hrs": "3-4 hrs",
-      "isNew": false,
-      "key": "class_imbalance"
+      "isNew": false
     },
     {
-      "id": "id_wwc75ul9ldrmqlqcozg",
+      "id": "id_9u6awm41q9qmrodas3c",
+      "key": "class_imbalance_techniques",
       "cat": "Data Fundamentals",
       "topic": "Class imbalance handling techniques (SMOTE, weights, threshold tuning)",
       "status": "Not Started",
       "priority": "High",
       "hrs": "4-5 hrs",
-      "isNew": true,
-      "key": "class_imbalance_techniques"
+      "isNew": true
     },
     {
-      "id": "id_jcxrjpk437mqlqcozg",
+      "id": "id_aehz1nk1836mrodas3c",
+      "key": "outlier_detection",
       "cat": "Data Fundamentals",
       "topic": "Outlier detection and treatment",
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "3-4 hrs",
-      "isNew": false,
-      "key": "outlier_detection"
+      "isNew": false
     },
     {
-      "id": "id_e9rxutxqa3mqlqcozg",
+      "id": "id_hx07wxfc5m7mrodas3c",
+      "key": "logreg",
       "cat": "Machine Learning Core",
       "topic": "Logistic regression deeply",
       "status": "Not Started",
       "priority": "High",
       "hrs": "4-5 hrs",
-      "isNew": false,
-      "key": "logreg"
+      "isNew": false
     },
     {
-      "id": "id_u24znnanbwcmqlqcozg",
+      "id": "id_bti75elfwqwmrodas3c",
+      "key": "bias_variance",
       "cat": "Machine Learning Core",
       "topic": "Bias-variance tradeoff",
       "status": "Not Started",
       "priority": "High",
       "hrs": "3-4 hrs",
-      "isNew": false,
-      "key": "bias_variance"
+      "isNew": false
     },
     {
-      "id": "id_w15hh9genmqlqcozg",
+      "id": "id_3lnr60rh3h3mrodas3c",
+      "key": "overfitting",
       "cat": "Machine Learning Core",
       "topic": "Overfitting and underfitting",
       "status": "Not Started",
       "priority": "High",
       "hrs": "2-3 hrs",
-      "isNew": false,
-      "key": "overfitting"
+      "isNew": false
     },
     {
-      "id": "id_vu0uwjk558mqlqcozg",
+      "id": "id_tp22vw4akrgmrodas3c",
+      "key": "cross_validation",
       "cat": "Machine Learning Core",
       "topic": "Cross validation",
       "status": "Not Started",
       "priority": "High",
       "hrs": "3-4 hrs",
-      "isNew": false,
-      "key": "cross_validation"
+      "isNew": false
     },
     {
-      "id": "id_kbfjmz1ajcnmqlqcozg",
+      "id": "id_25totq0oyfmrodas3c",
+      "key": "feature_selection",
       "cat": "Machine Learning Core",
       "topic": "Feature selection and engineering",
       "status": "Not Started",
       "priority": "High",
       "hrs": "5-7 hrs",
-      "isNew": false,
-      "key": "feature_selection"
+      "isNew": false
     },
     {
-      "id": "id_zmxom7ng1akmqlqcozg",
+      "id": "id_gm9l228ddxmrodas3c",
+      "key": "decision_trees",
       "cat": "Machine Learning Core",
       "topic": "Decision trees",
       "status": "Not Started",
       "priority": "High",
       "hrs": "3-4 hrs",
-      "isNew": false,
-      "key": "decision_trees"
+      "isNew": false
     },
     {
-      "id": "id_68i7men3c3pmqlqcozg",
+      "id": "id_avr89w0zi3fmrodas3c",
+      "key": "random_forests",
       "cat": "Machine Learning Core",
       "topic": "Random forests",
       "status": "Not Started",
       "priority": "High",
       "hrs": "3-4 hrs",
-      "isNew": false,
-      "key": "random_forests"
+      "isNew": false
     },
     {
-      "id": "id_i9qk3m0n6emqlqcozg",
+      "id": "id_j13bcw6fzkdmrodas3c",
+      "key": "xgboost",
       "cat": "Machine Learning Core",
       "topic": "XGBoost / LightGBM",
       "status": "Not Started",
-      "priority": "High",
+      "priority": "Medium",
       "hrs": "5-6 hrs",
-      "isNew": false,
-      "key": "xgboost"
+      "isNew": false
     },
     {
-      "id": "id_a9wfwkmfjj9mqlqcozg",
+      "id": "id_irk3mfheyfmrodas3c",
+      "key": "regularisation",
       "cat": "Machine Learning Core",
       "topic": "Regularisation (L1/L2)",
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "3-4 hrs",
-      "isNew": false,
-      "key": "regularisation"
+      "isNew": false
     },
     {
-      "id": "id_5skmsxzdk0kmqlqcozg",
+      "id": "id_hk4dabpvj2amrodas3c",
+      "key": "model_calibration",
       "cat": "Machine Learning Core",
       "topic": "Model calibration",
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "3-4 hrs",
-      "isNew": false,
-      "key": "model_calibration"
+      "isNew": false
     },
     {
-      "id": "id_dw9vczs5snlmqlqcozg",
+      "id": "id_zvhtlwrvmlsmrodas3c",
+      "key": "confusion_matrix",
       "cat": "Evaluation Metrics",
       "topic": "Confusion matrix",
       "status": "Not Started",
       "priority": "High",
       "hrs": "2-3 hrs",
-      "isNew": false,
-      "key": "confusion_matrix"
+      "isNew": false
     },
     {
-      "id": "id_1g5gezjpxmmmqlqcozg",
+      "id": "id_gvybvh3mfx6mrodas3c",
+      "key": "precision_recall_f1",
       "cat": "Evaluation Metrics",
       "topic": "Precision, recall, F1",
       "status": "Not Started",
       "priority": "High",
       "hrs": "2-3 hrs",
-      "isNew": false,
-      "key": "precision_recall_f1"
+      "isNew": false
     },
     {
-      "id": "id_mowjheos2hmqlqcozg",
+      "id": "id_yja61l53d6cmrodas3c",
+      "key": "auc_roc",
       "cat": "Evaluation Metrics",
       "topic": "AUC-ROC",
       "status": "Not Started",
       "priority": "High",
       "hrs": "3-4 hrs",
-      "isNew": false,
-      "key": "auc_roc"
+      "isNew": false
     },
     {
-      "id": "id_u8k5881p6h8mqlqcozg",
+      "id": "id_2481qaku2ivimrodas3c",
+      "key": "gini",
       "cat": "Evaluation Metrics",
       "topic": "Gini coefficient",
       "status": "Not Started",
       "priority": "High",
       "hrs": "2-3 hrs",
-      "isNew": false,
-      "key": "gini"
+      "isNew": false
     },
     {
-      "id": "id_afjceey0sjdmqlqcozg",
+      "id": "id_bev95qo92jmrodas3c",
+      "key": "ks_statistic",
       "cat": "Evaluation Metrics",
       "topic": "KS statistic",
       "status": "Not Started",
       "priority": "High",
       "hrs": "2-3 hrs",
-      "isNew": false,
-      "key": "ks_statistic"
+      "isNew": false
     },
     {
-      "id": "id_k3mr8c4duqbmqlqcozg",
+      "id": "id_htk81kaq7crmrodas3c",
+      "key": "lift_curves",
       "cat": "Evaluation Metrics",
       "topic": "Lift curves",
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "2-3 hrs",
-      "isNew": true,
-      "key": "lift_curves"
+      "isNew": true
     },
     {
-      "id": "id_f12nq1bmggjmqlqcozg",
+      "id": "id_ng9bzfw00fmrodas3c",
+      "key": "profit_cost_matrix",
       "cat": "Evaluation Metrics",
       "topic": "Profit / cost matrix",
       "status": "Not Started",
-      "priority": "Medium",
+      "priority": "High",
       "hrs": "3-4 hrs",
-      "isNew": true,
-      "key": "profit_cost_matrix"
+      "isNew": true
     },
     {
-      "id": "id_f12pkenyv5smqlqcozg",
+      "id": "id_t7abdjiu28mrodas3c",
+      "key": "pd_lgd_ead",
       "cat": "Credit Risk Specific",
       "topic": "What PD, LGD, EAD mean",
       "status": "Not Started",
       "priority": "High",
       "hrs": "2-3 hrs",
-      "isNew": false,
-      "key": "pd_lgd_ead"
+      "isNew": false
     },
     {
-      "id": "id_5vsix2rjiabmqlqcozg",
+      "id": "id_w327xuzeglfmrodas3c",
+      "key": "el_ul",
       "cat": "Credit Risk Specific",
       "topic": "Expected Loss vs Unexpected Loss (EL/UL)",
       "status": "Not Started",
       "priority": "High",
       "hrs": "3-4 hrs",
-      "isNew": true,
-      "key": "el_ul"
+      "isNew": true
     },
     {
-      "id": "id_6ldl2gz7ogcmqlqcozg",
+      "id": "id_sgt9jk8uepmrodas3c",
+      "key": "scorecard_dev",
       "cat": "Credit Risk Specific",
       "topic": "Scorecard development",
       "status": "Not Started",
       "priority": "High",
       "hrs": "6-8 hrs",
-      "isNew": false,
-      "key": "scorecard_dev"
+      "isNew": false
     },
     {
-      "id": "id_ditmxhsy3omqlqcozg",
+      "id": "id_s4b3n8yb8bmrodas3c",
+      "key": "woe_iv",
       "cat": "Credit Risk Specific",
       "topic": "Weight of Evidence and Information Value",
       "status": "Not Started",
       "priority": "High",
       "hrs": "4-5 hrs",
-      "isNew": false,
-      "key": "woe_iv"
+      "isNew": false
     },
     {
-      "id": "id_kekwbycevkbmqlqcozg",
-      "cat": "Credit Risk Specific",
-      "topic": "Vintage analysis",
-      "status": "Not Started",
-      "priority": "Medium",
-      "hrs": "4-5 hrs",
-      "isNew": true,
-      "key": "vintage_analysis"
-    },
-    {
-      "id": "id_dw2chpq1rgmmqlqcozg",
-      "cat": "Credit Risk Specific",
-      "topic": "Champion/challenger framework",
-      "status": "Not Started",
-      "priority": "Medium",
-      "hrs": "3-4 hrs",
-      "isNew": false,
-      "key": "champion_challenger"
-    },
-    {
-      "id": "id_ykq39itr7qgmqlqcozg",
+      "id": "id_4t7m66w4mq3mrodas3c",
+      "key": "stress_testing",
       "cat": "Credit Risk Specific",
       "topic": "Stress testing basics",
       "status": "Not Started",
-      "priority": "Medium",
+      "priority": "High",
       "hrs": "4-5 hrs",
-      "isNew": true,
-      "key": "stress_testing"
+      "isNew": true
     },
     {
-      "id": "id_xz9ilt474bsmqlqcozg",
-      "cat": "Credit Risk Specific",
-      "topic": "Portfolio concentration risk",
-      "status": "Not Started",
-      "priority": "Medium",
-      "hrs": "3-4 hrs",
-      "isNew": true,
-      "key": "portfolio_concentration"
-    },
-    {
-      "id": "id_x08sofeno5kmqlqcozg",
+      "id": "id_2yf4esmv2zvmrodas3c",
+      "key": "ifrs9",
       "cat": "Credit Risk Specific",
       "topic": "IFRS 9 basics",
       "status": "Not Started",
-      "priority": "Medium",
+      "priority": "High",
       "hrs": "4-5 hrs",
-      "isNew": false,
-      "key": "ifrs9"
+      "isNew": false
     },
     {
-      "id": "id_hht5wj27m1bmqlqcozg",
+      "id": "id_nrztz38rzmmrodas3c",
+      "key": "sr11_7",
       "cat": "Credit Risk Specific",
       "topic": "SR 11-7 / model governance concepts",
       "status": "Not Started",
       "priority": "Lower",
       "hrs": "3-4 hrs",
-      "isNew": false,
-      "key": "sr11_7"
+      "isNew": false
     },
     {
-      "id": "id_95jnkh31rmqlqcozg",
+      "id": "id_twd5i48c54mrodas3c",
+      "key": "basel_apra",
       "cat": "Credit Risk Specific",
       "topic": "Basel III / APRA capital framework basics",
       "status": "Not Started",
       "priority": "Lower",
       "hrs": "4-5 hrs",
-      "isNew": true,
-      "key": "basel_apra"
+      "isNew": true
     },
     {
-      "id": "id_mga9iqr07wmqlqcozg",
+      "id": "id_qe12y3r10usmrodas3c",
+      "key": "vintage_analysis",
+      "cat": "Portfolio Monitoring",
+      "topic": "Vintage analysis",
+      "status": "Not Started",
+      "priority": "High",
+      "hrs": "4-5 hrs",
+      "isNew": true
+    },
+    {
+      "id": "id_9n7wdwki1fmrodas3c",
+      "key": "transition_matrix",
+      "cat": "Portfolio Monitoring",
+      "topic": "Roll-rate & delinquency transition matrices",
+      "status": "Not Started",
+      "priority": "High",
+      "hrs": "3-4 hrs",
+      "isNew": true
+    },
+    {
+      "id": "id_xaaz4h22o9fmrodas3c",
+      "key": "psi",
+      "cat": "Portfolio Monitoring",
+      "topic": "PSI / Population Stability Index (drift monitoring)",
+      "status": "Not Started",
+      "priority": "High",
+      "hrs": "2-3 hrs",
+      "isNew": true
+    },
+    {
+      "id": "id_zuugu1xfgwmrodas3c",
+      "key": "portfolio_concentration",
+      "cat": "Portfolio Monitoring",
+      "topic": "Portfolio concentration risk",
+      "status": "Not Started",
+      "priority": "High",
+      "hrs": "3-4 hrs",
+      "isNew": true
+    },
+    {
+      "id": "id_0ybcyvuh4vlmrodas3c",
+      "key": "champion_challenger",
+      "cat": "Portfolio Monitoring",
+      "topic": "Champion/challenger framework",
+      "status": "Not Started",
+      "priority": "High",
+      "hrs": "3-4 hrs",
+      "isNew": false
+    },
+    {
+      "id": "id_1bq2czes077mrodas3c",
+      "key": "cohort_segmentation",
+      "cat": "Portfolio Monitoring",
+      "topic": "Cohort / segmentation reporting",
+      "status": "Not Started",
+      "priority": "Medium",
+      "hrs": "2-3 hrs",
+      "isNew": true
+    },
+    {
+      "id": "id_5g1sk0k5bi9mrodas3c",
+      "key": "ecl_staging",
+      "cat": "Portfolio Monitoring",
+      "topic": "ECL staging (IFRS 9 Stage 1/2/3)",
+      "status": "Not Started",
+      "priority": "Medium",
+      "hrs": "2-3 hrs",
+      "isNew": true
+    },
+    {
+      "id": "id_s3t2tkh65ksmrodas3c",
+      "key": "risk_reporting",
+      "cat": "Portfolio Monitoring",
+      "topic": "Risk reporting & data storytelling",
+      "status": "Not Started",
+      "priority": "Medium",
+      "hrs": "3-4 hrs",
+      "isNew": true
+    },
+    {
+      "id": "id_5ih686ir2ximrodas3c",
+      "key": "feature_importance",
       "cat": "Explainability",
       "topic": "Feature importance",
       "status": "Not Started",
       "priority": "High",
       "hrs": "2-3 hrs",
-      "isNew": false,
-      "key": "feature_importance"
+      "isNew": false
     },
     {
-      "id": "id_0agrf5ihgv3mqlqcozg",
+      "id": "id_mzi2n4odf2jmrodas3c",
+      "key": "shap",
       "cat": "Explainability",
       "topic": "SHAP values",
       "status": "Not Started",
-      "priority": "High",
+      "priority": "Medium",
       "hrs": "4-5 hrs",
-      "isNew": false,
-      "key": "shap"
+      "isNew": false
     },
     {
-      "id": "id_k7nhzmg2nymqlqcozg",
+      "id": "id_q93ax3mcjxmrodas3c",
+      "key": "pdp",
       "cat": "Explainability",
       "topic": "Partial dependence plots",
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "2-3 hrs",
-      "isNew": false,
-      "key": "pdp"
+      "isNew": false
     },
     {
-      "id": "id_cypn2g7v3rnmqlqcozg",
+      "id": "id_rvntuefsgijmrodas3c",
+      "key": "pandas",
       "cat": "Tools",
       "topic": "Pandas proficiently",
       "status": "Completed",
       "priority": "High",
       "hrs": "8-10 hrs",
-      "isNew": false,
-      "key": "pandas"
+      "isNew": false
     },
     {
-      "id": "id_bsoqa7hrgtumqlqcozg",
+      "id": "id_dqbkoigta3nmrodas3c",
+      "key": "matplotlib_seaborn",
       "cat": "Tools",
       "topic": "Matplotlib / Seaborn",
       "status": "Not Started",
       "priority": "High",
       "hrs": "4-5 hrs",
-      "isNew": false,
-      "key": "matplotlib_seaborn"
+      "isNew": false
     },
     {
-      "id": "id_ciqp32zzqfmmqlqcozg",
+      "id": "id_fiu0jegphxbmrodas3c",
+      "key": "sklearn_pipelines",
       "cat": "Tools",
       "topic": "Scikit-learn pipelines",
       "status": "Not Started",
       "priority": "High",
       "hrs": "4-5 hrs",
-      "isNew": false,
-      "key": "sklearn_pipelines"
+      "isNew": false
     },
     {
-      "id": "id_jdls7c5rlemqlqcozg",
+      "id": "id_q94c717t2snmrodas3c",
+      "key": "git_basics",
       "cat": "Tools",
       "topic": "Git basics",
       "status": "Not Started",
       "priority": "High",
       "hrs": "3-4 hrs",
-      "isNew": false,
-      "key": "git_basics"
+      "isNew": false
     },
     {
-      "id": "id_emtq8qrj2wgmqlqcozg",
+      "id": "id_ebmil4jr0fpmrodas3c",
+      "key": "sql_basics",
       "cat": "Tools",
       "topic": "SQL basics",
       "status": "Not Started",
-      "priority": "Medium",
+      "priority": "High",
       "hrs": "6-8 hrs",
-      "isNew": false,
-      "key": "sql_basics"
+      "isNew": false
     },
     {
-      "id": "id_vw1cxf5nujmqlqcozg",
+      "id": "id_wzsml0arfyemrodas3c",
+      "key": "excel_reporting",
+      "cat": "Tools",
+      "topic": "Excel for reporting (pivot tables, dashboards)",
+      "status": "Not Started",
+      "priority": "Medium",
+      "hrs": "4-5 hrs",
+      "isNew": true
+    },
+    {
+      "id": "id_zuw2fhi0jwbmrodas3c",
+      "key": "power_bi",
+      "cat": "Tools",
+      "topic": "Power BI",
+      "status": "Not Started",
+      "priority": "High",
+      "hrs": "6-8 hrs",
+      "isNew": false
+    },
+    {
+      "id": "id_tpqaayay67dmrodas3c",
+      "key": "plotly",
       "cat": "Tools",
       "topic": "Plotly",
       "status": "Not Started",
       "priority": "Medium",
       "hrs": "4-5 hrs",
-      "isNew": true,
-      "key": "plotly"
+      "isNew": true
     },
     {
-      "id": "id_e4xehwyd2upmqlqcozg",
+      "id": "id_368fmm2927kmrodas3c",
+      "key": "sas_basics",
       "cat": "Tools",
-      "topic": "Power BI",
+      "topic": "SAS basics (still common in legacy bank risk stacks -- listed as a key resume skill alongside SQL)",
       "status": "Not Started",
-      "priority": "Medium",
-      "hrs": "6-8 hrs",
-      "isNew": false,
-      "key": "power_bi"
+      "priority": "Lower",
+      "hrs": "4-5 hrs",
+      "isNew": true
     },
     {
-      "id": "id_9zv2vkhz2kmqlqcozg",
+      "id": "id_wijsjy6wjssmrodas3c",
+      "key": "cloud_basics",
       "cat": "Tools",
       "topic": "Cloud basics (AWS/Azure)",
       "status": "Not Started",
       "priority": "Lower",
       "hrs": "8-10 hrs",
-      "isNew": true,
-      "key": "cloud_basics"
+      "isNew": true
     }
   ],
   "levels": [
@@ -538,171 +619,117 @@
   ],
   "projects": [
     {
-      "id": "id_ji36g0n6d4pmqlqcozg",
+      "id": "id_0mahg6mn7t2mrodas3c",
+      "pkey": "driver_scan",
       "level": "Foundational",
-      "name": "German Credit Dataset — logistic regression end to end",
-      "source": "UCI ML Repository",
-      "status": "In Progress",
+      "name": "Project 1 — Default-rate driver scan (rescue the Home Credit EDA)",
+      "source": "Home Credit Default Risk (Kaggle)",
+      "status": "Not Started",
       "priority": "High"
     },
     {
-      "id": "id_4o02sx9jz5dmqlqcozg",
+      "id": "id_5zd26qu9tbimrodas3c",
+      "pkey": "woe_binning",
       "level": "Foundational",
-      "name": "Any dataset — EDA and visualisation only, no modelling",
-      "source": "Any",
+      "name": "Project 2 — WOE binning from scratch (reusable function)",
+      "source": "Home Credit or German Credit",
       "status": "Not Started",
-      "priority": "Medium"
+      "priority": "High"
     },
     {
-      "id": "id_xkzri1qo0bmmqlqcozg",
+      "id": "id_yo5bte8ndibmrodas3c",
+      "pkey": "scorecard",
       "level": "Foundational",
-      "name": "Titanic — practice classification cleanly outside credit",
-      "source": "Kaggle",
-      "status": "Not Started",
-      "priority": "Medium"
-    },
-    {
-      "id": "id_8kowk7jaryamqlqcozg",
-      "level": "Intermediate",
-      "name": "Give Me Some Credit — imbalanced classes, missing data",
-      "source": "Kaggle",
+      "name": "Project 3 ⭐ — Logistic-regression scorecard, end to end",
+      "source": "German Credit (UCI)",
       "status": "Not Started",
       "priority": "High"
     },
     {
-      "id": "id_5pusj5x01armqlqcozg",
+      "id": "id_8q53b5irdlsmrodas3c",
+      "pkey": "vintage",
       "level": "Intermediate",
-      "name": "Build a basic scorecard with WoE binning from scratch",
-      "source": "German Credit or Lending Club",
+      "name": "Project 4 ⭐ — Vintage / cohort default curves",
+      "source": "Lending Club (Kaggle)",
       "status": "Not Started",
       "priority": "High"
     },
     {
-      "id": "id_xbaiu9cu82mqlqcozg",
+      "id": "id_7io8d95grjtmrodas3c",
+      "pkey": "rollrate",
       "level": "Intermediate",
-      "name": "Lending Club loan data — large dataset, rich features",
-      "source": "Kaggle / LendingClub",
-      "status": "Not Started",
-      "priority": "Medium"
-    },
-    {
-      "id": "id_8pkeunnocumqlqcozg",
-      "level": "Intermediate",
-      "name": "Home Credit Default Risk SQL exploration (DBeaver + SQLite)",
-      "source": "Kaggle",
-      "status": "Not Started",
-      "priority": "Medium"
-    },
-    {
-      "id": "id_8ki3yok71ojmqlqcozg",
-      "level": "Intermediate",
-      "name": "Vintage analysis — track cohort default rates over time",
-      "source": "Lending Club",
-      "status": "Not Started",
-      "priority": "Medium"
-    },
-    {
-      "id": "id_zcjcwvypq4dmqlqcozg",
-      "level": "Advanced",
-      "name": "Home Credit Default Risk — full pipeline, multiple linked tables",
-      "source": "Kaggle",
+      "name": "Project 5 ⭐ — Roll-rate / delinquency transition matrix",
+      "source": "Lending Club / loan-status panel",
       "status": "Not Started",
       "priority": "High"
     },
     {
-      "id": "id_fxz8o7cdj3mqlqcozg",
-      "level": "Advanced",
-      "name": "Champion/challenger model comparison writeup",
-      "source": "Any prior project",
-      "status": "Not Started",
-      "priority": "Medium"
-    },
-    {
-      "id": "id_zu1mm5bvf2mqlqcozg",
-      "level": "Advanced",
-      "name": "SHAP explainability deep dive — global and local explanations",
-      "source": "Any prior project",
+      "id": "id_hv8s9mzljldmrodas3c",
+      "pkey": "psi",
+      "level": "Intermediate",
+      "name": "Project 6 ⭐ — PSI drift monitor",
+      "source": "Any two-period time split",
       "status": "Not Started",
       "priority": "High"
     },
     {
-      "id": "id_w6192h9px9mqlqcozg",
+      "id": "id_43cmtl2hsr7mrodas3c",
+      "pkey": "cutoff",
       "level": "Advanced",
-      "name": "Expected Loss model — PD x LGD x EAD with stress scenarios",
-      "source": "Any prior project",
+      "name": "Project 7 — Cost-based cutoff optimisation",
+      "source": "Any prior scorecard output",
+      "status": "Not Started",
+      "priority": "Medium"
+    },
+    {
+      "id": "id_l4vash0hu8mrodas3c",
+      "pkey": "el_model",
+      "level": "Advanced",
+      "name": "Project 8 ⭐ — Expected Loss mini-model + stress scenario",
+      "source": "Your scorecard PDs + assumed LGD/EAD",
       "status": "Not Started",
       "priority": "High"
     },
     {
-      "id": "id_1mfqeyxu073mqlqcozg",
+      "id": "id_iicc7oj1edrmrodas3c",
+      "pkey": "champ_challenge",
       "level": "Advanced",
-      "name": "Model monitoring dashboard — track drift over time",
-      "source": "Any prior project",
+      "name": "Project 9 — Champion/challenger model comparison",
+      "source": "Any prior project dataset",
       "status": "Not Started",
       "priority": "Medium"
     },
     {
-      "id": "id_nfd76nmckkfmqlqcozg",
-      "level": "Advanced",
-      "name": "Power BI portfolio dashboard — visualise model outputs",
-      "source": "Any prior project",
-      "status": "Not Started",
-      "priority": "Medium"
-    },
-    {
-      "id": "id_1ikvp07yqi2mqlqcozg",
+      "id": "id_vkf8y0ajtzmrodas3c",
+      "pkey": "dashboard",
       "level": "Stretch",
-      "name": "Write up one project as a proper model documentation doc",
-      "source": "Any prior project",
-      "status": "Not Started",
-      "priority": "High"
-    },
-    {
-      "id": "id_dz9ku7oytcgmqlqcozg",
-      "level": "Stretch",
-      "name": "Publish a walkthrough on GitHub or Medium",
-      "source": "Any prior project",
+      "name": "Project 10 — Portfolio monitoring dashboard (Power BI)",
+      "source": "Outputs of projects 3-8",
       "status": "Not Started",
       "priority": "Medium"
-    },
-    {
-      "id": "id_5ia6vagy2almqlqcozg",
-      "level": "Stretch",
-      "name": "Stress test a credit portfolio under macro shock scenarios",
-      "source": "Home Credit or Lending Club",
-      "status": "Not Started",
-      "priority": "Medium"
-    },
-    {
-      "id": "id_lya1540g7bqmqlqcozg",
-      "level": "Stretch",
-      "name": "Reproduce a credit risk research paper end to end",
-      "source": "Google Scholar / arXiv",
-      "status": "Not Started",
-      "priority": "Lower"
     }
   ],
   "quizzes": [
     {
-      "id": "id_81swkebc7ipmqlqcozg",
+      "id": "id_jq0l9icyoymrodas3d",
       "topic": "1.1 Probability Basics",
-      "total": "170",
-      "score": "117",
-      "notes": "Binomial Distributions, Bayes Theorem, Collinearity"
+      "total": 170,
+      "score": "110",
+      "notes": ""
     },
     {
-      "id": "id_k6579g7pntamqlqcozg",
+      "id": "id_gxtjmz3jsznmrodas3d",
       "topic": "1.2 Data Types + Missing Values",
-      "total": "170",
-      "score": "85",
-      "notes": "Data Leakage Pipeline Order and Explanation, OneHotEncoder/SimpleImputer/ColumnTransformer syntax, X/Y Train/Test splitting"
+      "total": 170,
+      "score": "89",
+      "notes": ""
     },
     {
-      "id": "id_8sr2xykg37lmqlxxfxy",
-      "topic": "1.3 Pandas",
-      "total": "150",
-      "score": "117",
-      "notes": "Three things worth revisiting before the next topic:\n\naggfunc= in pivot_table() — came up twice (Q18 and embedded in Q21's describe suggestion)\nThe 1.5×IQR formula for outlier bounds — Q25 had the right instinct but missed the standard boundary calculation\nLeakage-specific operations — fillna() with dataset-wide stats, groupby().mean() feature engineering, and get_dummies() on full data before splitting"
+      "id": "id_xydrzxvgx2hmroddew2",
+      "topic": "New quiz",
+      "total": "170",
+      "score": "134",
+      "notes": ""
     }
   ]
 }

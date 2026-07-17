@@ -904,7 +904,7 @@
     }
 
     const DEFAULT_STATE = {
-      categories: ["Statistics Foundations", "Data Fundamentals", "Machine Learning Core", "Evaluation Metrics", "Credit Risk Specific", "Explainability", "Tools"],
+      categories: ["Statistics Foundations", "Data Fundamentals", "Machine Learning Core", "Evaluation Metrics", "Credit Risk Specific", "Portfolio Monitoring", "Explainability", "Tools"],
       concepts: [
         { key: "prob_basics", cat: "Statistics Foundations", topic: "Probability basics (distributions, conditional probability)", status: "Completed", priority: "High", hrs: "6-8 hrs", isNew: false },
         { key: "hyp_testing", cat: "Statistics Foundations", topic: "Hypothesis testing and p-values", status: "Not Started", priority: "High", hrs: "4-6 hrs", isNew: false },
@@ -912,7 +912,7 @@
         { key: "conf_intervals", cat: "Statistics Foundations", topic: "Confidence intervals", status: "Not Started", priority: "Medium", hrs: "3-4 hrs", isNew: false },
         { key: "clt", cat: "Statistics Foundations", topic: "Central limit theorem", status: "Not Started", priority: "Medium", hrs: "3-4 hrs", isNew: false },
         { key: "mle", cat: "Statistics Foundations", topic: "Maximum likelihood estimation (MLE)", status: "Not Started", priority: "Medium", hrs: "4-5 hrs", isNew: true },
-        { key: "mle_depth", cat: "Statistics Foundations", topic: "Maximum likelihood estimation — full mathematical derivation", status: "Not Started", priority: "Lower", hrs: "4-5 hrs", isNew: true },
+        { key: "mle_depth", cat: "Statistics Foundations", topic: "Maximum likelihood estimation \u2014 full mathematical derivation", status: "Not Started", priority: "Lower", hrs: "4-5 hrs", isNew: true },
         { key: "linear_algebra", cat: "Statistics Foundations", topic: "Linear algebra basics (matrix ops, dot products)", status: "Not Started", priority: "Lower", hrs: "6-8 hrs", isNew: true },
 
         { key: "data_types", cat: "Data Fundamentals", topic: "Types of data (continuous, categorical, ordinal)", status: "In Progress", priority: "High", hrs: "1-2 hrs", isNew: false },
@@ -929,7 +929,7 @@
         { key: "feature_selection", cat: "Machine Learning Core", topic: "Feature selection and engineering", status: "Not Started", priority: "High", hrs: "5-7 hrs", isNew: false },
         { key: "decision_trees", cat: "Machine Learning Core", topic: "Decision trees", status: "Not Started", priority: "High", hrs: "3-4 hrs", isNew: false },
         { key: "random_forests", cat: "Machine Learning Core", topic: "Random forests", status: "Not Started", priority: "High", hrs: "3-4 hrs", isNew: false },
-        { key: "xgboost", cat: "Machine Learning Core", topic: "XGBoost / LightGBM", status: "Not Started", priority: "High", hrs: "5-6 hrs", isNew: false },
+        { key: "xgboost", cat: "Machine Learning Core", topic: "XGBoost / LightGBM", status: "Not Started", priority: "Medium", hrs: "5-6 hrs", isNew: false },
         { key: "regularisation", cat: "Machine Learning Core", topic: "Regularisation (L1/L2)", status: "Not Started", priority: "Medium", hrs: "3-4 hrs", isNew: false },
         { key: "model_calibration", cat: "Machine Learning Core", topic: "Model calibration", status: "Not Started", priority: "Medium", hrs: "3-4 hrs", isNew: false },
 
@@ -939,58 +939,57 @@
         { key: "gini", cat: "Evaluation Metrics", topic: "Gini coefficient", status: "Not Started", priority: "High", hrs: "2-3 hrs", isNew: false },
         { key: "ks_statistic", cat: "Evaluation Metrics", topic: "KS statistic", status: "Not Started", priority: "High", hrs: "2-3 hrs", isNew: false },
         { key: "lift_curves", cat: "Evaluation Metrics", topic: "Lift curves", status: "Not Started", priority: "Medium", hrs: "2-3 hrs", isNew: true },
-        { key: "profit_cost_matrix", cat: "Evaluation Metrics", topic: "Profit / cost matrix", status: "Not Started", priority: "Medium", hrs: "3-4 hrs", isNew: true },
+        { key: "profit_cost_matrix", cat: "Evaluation Metrics", topic: "Profit / cost matrix", status: "Not Started", priority: "High", hrs: "3-4 hrs", isNew: true },
 
         { key: "pd_lgd_ead", cat: "Credit Risk Specific", topic: "What PD, LGD, EAD mean", status: "Not Started", priority: "High", hrs: "2-3 hrs", isNew: false },
         { key: "el_ul", cat: "Credit Risk Specific", topic: "Expected Loss vs Unexpected Loss (EL/UL)", status: "Not Started", priority: "High", hrs: "3-4 hrs", isNew: true },
         { key: "scorecard_dev", cat: "Credit Risk Specific", topic: "Scorecard development", status: "Not Started", priority: "High", hrs: "6-8 hrs", isNew: false },
         { key: "woe_iv", cat: "Credit Risk Specific", topic: "Weight of Evidence and Information Value", status: "Not Started", priority: "High", hrs: "4-5 hrs", isNew: false },
-        { key: "vintage_analysis", cat: "Credit Risk Specific", topic: "Vintage analysis", status: "Not Started", priority: "Medium", hrs: "4-5 hrs", isNew: true },
-        { key: "champion_challenger", cat: "Credit Risk Specific", topic: "Champion/challenger framework", status: "Not Started", priority: "Medium", hrs: "3-4 hrs", isNew: false },
-        { key: "stress_testing", cat: "Credit Risk Specific", topic: "Stress testing basics", status: "Not Started", priority: "Medium", hrs: "4-5 hrs", isNew: true },
-        { key: "portfolio_concentration", cat: "Credit Risk Specific", topic: "Portfolio concentration risk", status: "Not Started", priority: "Medium", hrs: "3-4 hrs", isNew: true },
-        { key: "ifrs9", cat: "Credit Risk Specific", topic: "IFRS 9 basics", status: "Not Started", priority: "Medium", hrs: "4-5 hrs", isNew: false },
+        { key: "stress_testing", cat: "Credit Risk Specific", topic: "Stress testing basics", status: "Not Started", priority: "High", hrs: "4-5 hrs", isNew: true },
+        { key: "ifrs9", cat: "Credit Risk Specific", topic: "IFRS 9 basics", status: "Not Started", priority: "High", hrs: "4-5 hrs", isNew: false },
         { key: "sr11_7", cat: "Credit Risk Specific", topic: "SR 11-7 / model governance concepts", status: "Not Started", priority: "Lower", hrs: "3-4 hrs", isNew: false },
         { key: "basel_apra", cat: "Credit Risk Specific", topic: "Basel III / APRA capital framework basics", status: "Not Started", priority: "Lower", hrs: "4-5 hrs", isNew: true },
 
+        { key: "vintage_analysis", cat: "Portfolio Monitoring", topic: "Vintage analysis", status: "Not Started", priority: "High", hrs: "4-5 hrs", isNew: true },
+        { key: "transition_matrix", cat: "Portfolio Monitoring", topic: "Roll-rate & delinquency transition matrices", status: "Not Started", priority: "High", hrs: "3-4 hrs", isNew: true },
+        { key: "psi", cat: "Portfolio Monitoring", topic: "PSI / Population Stability Index (drift monitoring)", status: "Not Started", priority: "High", hrs: "2-3 hrs", isNew: true },
+        { key: "portfolio_concentration", cat: "Portfolio Monitoring", topic: "Portfolio concentration risk", status: "Not Started", priority: "High", hrs: "3-4 hrs", isNew: true },
+        { key: "champion_challenger", cat: "Portfolio Monitoring", topic: "Champion/challenger framework", status: "Not Started", priority: "High", hrs: "3-4 hrs", isNew: false },
+        { key: "cohort_segmentation", cat: "Portfolio Monitoring", topic: "Cohort / segmentation reporting", status: "Not Started", priority: "Medium", hrs: "2-3 hrs", isNew: true },
+        { key: "ecl_staging", cat: "Portfolio Monitoring", topic: "ECL staging (IFRS 9 Stage 1/2/3)", status: "Not Started", priority: "Medium", hrs: "2-3 hrs", isNew: true },
+        { key: "risk_reporting", cat: "Portfolio Monitoring", topic: "Risk reporting & data storytelling", status: "Not Started", priority: "Medium", hrs: "3-4 hrs", isNew: true },
+
         { key: "feature_importance", cat: "Explainability", topic: "Feature importance", status: "In Progress", priority: "High", hrs: "2-3 hrs", isNew: false },
-        { key: "shap", cat: "Explainability", topic: "SHAP values", status: "Not Started", priority: "High", hrs: "4-5 hrs", isNew: false },
+        { key: "shap", cat: "Explainability", topic: "SHAP values", status: "Not Started", priority: "Medium", hrs: "4-5 hrs", isNew: false },
         { key: "pdp", cat: "Explainability", topic: "Partial dependence plots", status: "Not Started", priority: "Medium", hrs: "2-3 hrs", isNew: false },
 
         { key: "pandas", cat: "Tools", topic: "Pandas proficiently", status: "In Progress", priority: "High", hrs: "8-10 hrs", isNew: false },
         { key: "matplotlib_seaborn", cat: "Tools", topic: "Matplotlib / Seaborn", status: "In Progress", priority: "High", hrs: "4-5 hrs", isNew: false },
         { key: "sklearn_pipelines", cat: "Tools", topic: "Scikit-learn pipelines", status: "Not Started", priority: "High", hrs: "4-5 hrs", isNew: false },
         { key: "git_basics", cat: "Tools", topic: "Git basics", status: "In Progress", priority: "High", hrs: "3-4 hrs", isNew: false },
-        { key: "sql_basics", cat: "Tools", topic: "SQL basics", status: "Not Started", priority: "Medium", hrs: "6-8 hrs", isNew: false },
+        { key: "sql_basics", cat: "Tools", topic: "SQL basics", status: "Not Started", priority: "High", hrs: "6-8 hrs", isNew: false },
+        { key: "excel_reporting", cat: "Tools", topic: "Excel for reporting (pivot tables, dashboards)", status: "Not Started", priority: "Medium", hrs: "4-5 hrs", isNew: true },
+        { key: "power_bi", cat: "Tools", topic: "Power BI", status: "Not Started", priority: "High", hrs: "6-8 hrs", isNew: false },
         { key: "plotly", cat: "Tools", topic: "Plotly", status: "Not Started", priority: "Medium", hrs: "4-5 hrs", isNew: true },
-        { key: "power_bi", cat: "Tools", topic: "Power BI", status: "Not Started", priority: "Medium", hrs: "6-8 hrs", isNew: false },
-        { key: "cloud_basics", cat: "Tools", topic: "Cloud basics (AWS/Azure)", status: "Not Started", priority: "Lower", hrs: "8-10 hrs", isNew: true },
         { key: "sas_basics", cat: "Tools", topic: "SAS basics (still common in legacy bank risk stacks -- listed as a key resume skill alongside SQL)", status: "Not Started", priority: "Lower", hrs: "4-5 hrs", isNew: true },
+        { key: "cloud_basics", cat: "Tools", topic: "Cloud basics (AWS/Azure)", status: "Not Started", priority: "Lower", hrs: "8-10 hrs", isNew: true },
       ].map(c => ({ id: uid(), ...c })),
 
       levels: ["Foundational", "Intermediate", "Advanced", "Stretch"],
       projects: [
-        { level: "Foundational", name: "German Credit Dataset — logistic regression end to end", source: "UCI ML Repository", status: "In Progress", priority: "High" },
-        { level: "Foundational", name: "Any dataset — EDA and visualisation only, no modelling", source: "Any", status: "Not Started", priority: "Medium" },
-        { level: "Foundational", name: "Titanic — practice classification cleanly outside credit", source: "Kaggle", status: "Not Started", priority: "Medium" },
+        { pkey: "driver_scan", level: "Foundational", name: "Project 1 \u2014 Default-rate driver scan (rescue the Home Credit EDA)", source: "Home Credit Default Risk (Kaggle)", status: "Not Started", priority: "High" },
+        { pkey: "woe_binning", level: "Foundational", name: "Project 2 \u2014 WOE binning from scratch (reusable function)", source: "Home Credit or German Credit", status: "Not Started", priority: "High" },
+        { pkey: "scorecard", level: "Foundational", name: "Project 3 \u2b50 \u2014 Logistic-regression scorecard, end to end", source: "German Credit (UCI)", status: "Not Started", priority: "High" },
 
-        { level: "Intermediate", name: "Give Me Some Credit — imbalanced classes, missing data", source: "Kaggle", status: "Not Started", priority: "High" },
-        { level: "Intermediate", name: "Build a basic scorecard with WoE binning from scratch", source: "German Credit or Lending Club", status: "Not Started", priority: "High" },
-        { level: "Intermediate", name: "Lending Club loan data — large dataset, rich features", source: "Kaggle / LendingClub", status: "Not Started", priority: "Medium" },
-        { level: "Intermediate", name: "Home Credit Default Risk SQL exploration (DBeaver + SQLite)", source: "Kaggle", status: "Not Started", priority: "Medium" },
-        { level: "Intermediate", name: "Vintage analysis — track cohort default rates over time", source: "Lending Club", status: "Not Started", priority: "Medium" },
+        { pkey: "vintage", level: "Intermediate", name: "Project 4 \u2b50 \u2014 Vintage / cohort default curves", source: "Lending Club (Kaggle)", status: "Not Started", priority: "High" },
+        { pkey: "rollrate", level: "Intermediate", name: "Project 5 \u2b50 \u2014 Roll-rate / delinquency transition matrix", source: "Lending Club / loan-status panel", status: "Not Started", priority: "High" },
+        { pkey: "psi", level: "Intermediate", name: "Project 6 \u2b50 \u2014 PSI drift monitor", source: "Any two-period time split", status: "Not Started", priority: "High" },
 
-        { level: "Advanced", name: "Home Credit Default Risk — full pipeline, multiple linked tables", source: "Kaggle", status: "Not Started", priority: "High" },
-        { level: "Advanced", name: "Champion/challenger model comparison writeup", source: "Any prior project", status: "Not Started", priority: "Medium" },
-        { level: "Advanced", name: "SHAP explainability deep dive — global and local explanations", source: "Any prior project", status: "Not Started", priority: "High" },
-        { level: "Advanced", name: "Expected Loss model — PD x LGD x EAD with stress scenarios", source: "Any prior project", status: "Not Started", priority: "High" },
-        { level: "Advanced", name: "Model monitoring dashboard — track drift over time", source: "Any prior project", status: "Not Started", priority: "Medium" },
-        { level: "Advanced", name: "Power BI portfolio dashboard — visualise model outputs", source: "Any prior project", status: "Not Started", priority: "Medium" },
+        { pkey: "cutoff", level: "Advanced", name: "Project 7 \u2014 Cost-based cutoff optimisation", source: "Any prior scorecard output", status: "Not Started", priority: "Medium" },
+        { pkey: "el_model", level: "Advanced", name: "Project 8 \u2b50 \u2014 Expected Loss mini-model + stress scenario", source: "Your scorecard PDs + assumed LGD/EAD", status: "Not Started", priority: "High" },
+        { pkey: "champ_challenge", level: "Advanced", name: "Project 9 \u2014 Champion/challenger model comparison", source: "Any prior project dataset", status: "Not Started", priority: "Medium" },
 
-        { level: "Stretch", name: "Write up one project as a proper model documentation doc", source: "Any prior project", status: "Not Started", priority: "High" },
-        { level: "Stretch", name: "Publish a walkthrough on GitHub or Medium", source: "Any prior project", status: "Not Started", priority: "Medium" },
-        { level: "Stretch", name: "Stress test a credit portfolio under macro shock scenarios", source: "Home Credit or Lending Club", status: "Not Started", priority: "Medium" },
-        { level: "Stretch", name: "Reproduce a credit risk research paper end to end", source: "Google Scholar / arXiv", status: "Not Started", priority: "Lower" },
+        { pkey: "dashboard", level: "Stretch", name: "Project 10 \u2014 Portfolio monitoring dashboard (Power BI)", source: "Outputs of projects 3-8", status: "Not Started", priority: "Medium" },
       ].map(p => ({ id: uid(), ...p })),
 
       quizzes: [
@@ -1006,57 +1005,83 @@
     // to maintain by hand anymore; it's derived as the first not-yet-completed step.
     const sequence = [
       {
-        phase: "Phase 1 — Foundation (Do These First)", items: [
+        phase: "Phase 1 \u2014 Foundations & your first deliverable", items: [
           { n: 1, title: "Probability basics", why: "Everything else builds on this", hrs: "6-8 hrs", keys: ["prob_basics"] },
-          { n: 2, title: "Types of data + handling missing values", why: "First practical data skill — needed for every project", hrs: "4-6 hrs", keys: ["data_types", "missing_values"] },
-          { n: 3, title: "Pandas proficiently", why: "Your primary tool — learn it while doing projects", hrs: "8-10 hrs", keys: ["pandas"] },
-          { n: 4, title: "Hypothesis testing and p-values", why: "Needed to understand model output and feature selection", hrs: "4-6 hrs", keys: ["hyp_testing"] },
-          { n: 5, title: "Train/test split and data leakage", why: "Critical before building any model", hrs: "2-3 hrs", keys: ["train_test_split"] },
-          { n: 6, title: "Correlation vs causation", why: "Foundational for feature analysis", hrs: "2-3 hrs", keys: ["corr_causation"] },
-          { n: 7, title: "Class imbalance", why: "German Credit dataset is imbalanced — need this now", hrs: "3-4 hrs", keys: ["class_imbalance"] },
-          { n: 8, title: "Logistic regression deeply + sklearn pipelines", why: "Your first model — understand it fully", hrs: "8-10 hrs", keys: ["logreg", "sklearn_pipelines"] },
-          { n: 9, title: "Bias-variance tradeoff + overfitting", why: "Explains why models fail — needed before tree models", hrs: "5-7 hrs", keys: ["bias_variance", "overfitting"] },
-          { n: 10, title: "Confusion matrix + Precision/Recall/AUC-ROC", why: "Core evaluation — finish German Credit project", hrs: "9-12 hrs", keys: ["confusion_matrix", "precision_recall_f1", "auc_roc"] },
+          { n: 2, title: "Types of data + handling missing values", why: "First practical data skill \u2014 needed for every project", hrs: "4-6 hrs", keys: ["data_types", "missing_values"] },
+          { n: 3, title: "Pandas + Matplotlib/Seaborn + Git", why: "Your daily tools \u2014 learn while doing projects", hrs: "15-19 hrs", keys: ["pandas", "matplotlib_seaborn", "git_basics"] },
+          { n: 4, title: "Hypothesis testing, confidence intervals & significance", why: "Your 1.4 notebook cluster \u2014 do t-tests, CIs, chi-square, effect size together", hrs: "7-10 hrs", keys: ["hyp_testing", "conf_intervals"] },
+          { n: 5, title: "\u25b6 START \u2014 Project 1: Default-rate driver scan", why: "Gives your current Home Credit EDA a spine \u2014 turn it into a ranked IV driver table", hrs: "\u2248 2 evenings", proj: "driver_scan" },
+          { n: 6, title: "Correlation vs causation + train/test split & leakage", why: "Foundational before any modelling", hrs: "4-6 hrs", keys: ["corr_causation", "train_test_split"] },
+          { n: 7, title: "Class imbalance + outlier detection", why: "Credit data is imbalanced and messy \u2014 handle it before modelling", hrs: "6-8 hrs", keys: ["class_imbalance", "outlier_detection"] },
+          { n: 8, title: "\u2714 FINISH \u2014 Project 1 before moving on", why: "Ship the driver-scan memo \u2014 don't leave the EDA open-ended", hrs: "gate", proj: "driver_scan" },
         ]
       },
       {
-        phase: "Phase 2 — Building Depth", items: [
-          { n: 11, title: "PD, LGD, EAD + Expected vs Unexpected Loss", why: "Core credit risk theory — connects ML to business", hrs: "5-7 hrs", keys: ["pd_lgd_ead", "el_ul"] },
-          { n: 12, title: "Decision trees", why: "Foundation for random forests and boosting", hrs: "3-4 hrs", keys: ["decision_trees"] },
-          { n: 13, title: "Random forests + Feature importance + SHAP", why: "Natural next model after logistic regression", hrs: "9-12 hrs", keys: ["random_forests", "feature_importance", "shap"] },
-          { n: 14, title: "Cross validation", why: "Needed before hyperparameter tuning", hrs: "3-4 hrs", keys: ["cross_validation"] },
-          { n: 15, title: "Class imbalance handling techniques", why: "SMOTE, weights, threshold tuning — needed for Give Me Some Credit", hrs: "4-5 hrs", keys: ["class_imbalance_techniques"] },
-          { n: 16, title: "XGBoost / LightGBM", why: "Industry standard models — build on tree knowledge", hrs: "5-6 hrs", keys: ["xgboost"] },
-          { n: 17, title: "Gini coefficient + KS statistic + Lift curves", why: "Credit-specific evaluation metrics", hrs: "6-8 hrs", keys: ["gini", "ks_statistic", "lift_curves"] },
-          { n: 18, title: "Feature selection and engineering", why: "Improves every model you build from here", hrs: "5-7 hrs", keys: ["feature_selection"] },
-          { n: 19, title: "SQL basics", why: "Needed for Home Credit multi-table project", hrs: "6-8 hrs", keys: ["sql_basics"] },
-          { n: 20, title: "Weight of Evidence and Information Value", why: "Scorecard development foundation", hrs: "4-5 hrs", keys: ["woe_iv"] },
+        phase: "Phase 2 \u2014 Build your first scorecard", items: [
+          { n: 9, title: "Weight of Evidence & Information Value", why: "The credit-industry way to screen features", hrs: "4-5 hrs", keys: ["woe_iv"] },
+          { n: 10, title: "\u25b6 START \u2014 Project 2: WOE binning from scratch", why: "Build the reusable woe_bin() function you'll lean on later", hrs: "\u2248 2 evenings", proj: "woe_binning" },
+          { n: 11, title: "Logistic regression deeply + sklearn pipelines", why: "Your first model \u2014 the backbone of every scorecard", hrs: "8-10 hrs", keys: ["logreg", "sklearn_pipelines"] },
+          { n: 12, title: "\u2714 FINISH \u2014 Project 2", why: "You now have a tested WOE function to feed the scorecard", hrs: "gate", proj: "woe_binning" },
+          { n: 13, title: "Confusion matrix + Precision/Recall + AUC-ROC", why: "Core evaluation \u2014 how you'll judge the scorecard", hrs: "7-9 hrs", keys: ["confusion_matrix", "precision_recall_f1", "auc_roc"] },
+          { n: 14, title: "Gini + KS statistic + Lift curves", why: "Credit-specific performance metrics", hrs: "6-8 hrs", keys: ["gini", "ks_statistic", "lift_curves"] },
+          { n: 15, title: "PD, LGD, EAD + Expected/Unexpected Loss", why: "The credit theory that connects your model to money", hrs: "5-7 hrs", keys: ["pd_lgd_ead", "el_ul"] },
+          { n: 16, title: "Scorecard development", why: "The classic, highly employable credit deliverable", hrs: "6-8 hrs", keys: ["scorecard_dev"] },
+          { n: 17, title: "\u25b6 START \u2014 Project 3 \u2b50: Scorecard end to end (German Credit)", why: "Your portfolio centrepiece \u2014 WOE \u2192 logreg \u2192 scaled points \u2192 KS/Gini", hrs: "\u2248 3-4 evenings", proj: "scorecard" },
+          { n: 18, title: "Bias-variance + overfitting + cross validation", why: "Why models fail, and how to validate honestly \u2014 apply it to the scorecard", hrs: "8-11 hrs", keys: ["bias_variance", "overfitting", "cross_validation"] },
+          { n: 19, title: "\u2714 FINISH \u2014 Project 3 \u2b50", why: "You now have a real, presentable scorecard with a performance write-up", hrs: "gate", proj: "scorecard" },
+          { n: 20, title: "Feature selection & engineering + imbalance techniques", why: "Improves every model from here (SMOTE, weights, threshold tuning)", hrs: "9-12 hrs", keys: ["feature_selection", "class_imbalance_techniques"] },
+          { n: 21, title: "SQL basics", why: "In almost every posting \u2014 portfolio analysts live in SQL", hrs: "6-8 hrs", keys: ["sql_basics"] },
         ]
       },
       {
-        phase: "Phase 3 — Professional Depth", items: [
-          { n: 21, title: "Scorecard development", why: "Classic credit risk deliverable — highly employable skill", hrs: "6-8 hrs", keys: ["scorecard_dev"] },
-          { n: 22, title: "Maximum likelihood estimation", why: "Understand what logistic regression actually optimises", hrs: "4-5 hrs", keys: ["mle"] },
-          { n: 23, title: "Vintage analysis", why: "Core credit risk analytical skill rarely taught in ML courses", hrs: "4-5 hrs", keys: ["vintage_analysis"] },
-          { n: 24, title: "Regularisation (L1/L2)", why: "Needed for production-grade logistic regression", hrs: "3-4 hrs", keys: ["regularisation"] },
-          { n: 25, title: "Profit / cost matrix", why: "Translate model performance into business value", hrs: "3-4 hrs", keys: ["profit_cost_matrix"] },
-          { n: 26, title: "Stress testing + Portfolio concentration risk", why: "Connect ML outputs to macro risk — your mortgage background helps", hrs: "7-9 hrs", keys: ["stress_testing", "portfolio_concentration"] },
-          { n: 27, title: "Model calibration", why: "Essential for regulatory-grade PD models", hrs: "3-4 hrs", keys: ["model_calibration"] },
-          { n: 28, title: "Partial dependence plots", why: "Rounds out explainability toolkit alongside SHAP", hrs: "2-3 hrs", keys: ["pdp"] },
-          { n: 29, title: "IFRS 9 basics + Champion/challenger framework", why: "Regulatory context for production models", hrs: "7-9 hrs", keys: ["ifrs9", "champion_challenger"] },
-          { n: 30, title: "Confidence intervals", why: "Needed for stress scenario best/worst case modelling", hrs: "3-4 hrs", keys: ["conf_intervals"] },
+        phase: "Phase 3 \u2014 Portfolio monitoring (the analyst core)", items: [
+          { n: 22, title: "Vintage analysis + cohort/segmentation reporting", why: "The signature portfolio-monitoring lens", hrs: "6-8 hrs", keys: ["vintage_analysis", "cohort_segmentation"] },
+          { n: 23, title: "\u25b6 START \u2014 Project 4 \u2b50: Vintage / cohort default curves", why: "Cumulative default by months-on-book, per origination cohort", hrs: "\u2248 2-3 evenings", proj: "vintage" },
+          { n: 24, title: "Roll-rate & delinquency transition matrices", why: "How a book moves current \u2192 30 \u2192 60 \u2192 90 \u2192 default", hrs: "3-4 hrs", keys: ["transition_matrix"] },
+          { n: 25, title: "\u2714 FINISH \u2014 Project 4 \u2b50", why: "Vintage curves + commentary on underperforming cohorts", hrs: "gate", proj: "vintage" },
+          { n: 26, title: "\u25b6 START \u2014 Project 5 \u2b50: Roll-rate / transition matrix", why: "Build the transition-matrix heatmap from a loan-status panel", hrs: "\u2248 2-3 evenings", proj: "rollrate" },
+          { n: 27, title: "Portfolio concentration risk", why: "Portfolio-level risk view to pair with the roll-rate read", hrs: "3-4 hrs", keys: ["portfolio_concentration"] },
+          { n: 28, title: "\u2714 FINISH \u2014 Project 5 \u2b50", why: "Transition matrix + read on where the book is leaking", hrs: "gate", proj: "rollrate" },
+          { n: 29, title: "PSI / Population Stability Index", why: "The standard drift metric \u2014 rare skill, high interview signal", hrs: "2-3 hrs", keys: ["psi"] },
+          { n: 30, title: "\u25b6 START \u2014 Project 6 \u2b50: PSI drift monitor", why: "PSI per feature across two time periods, with traffic-light flags", hrs: "\u2248 1-2 evenings", proj: "psi" },
+          { n: 31, title: "Champion/challenger framework", why: "Ongoing model monitoring \u2014 squarely the analyst's seat", hrs: "3-4 hrs", keys: ["champion_challenger"] },
+          { n: 32, title: "\u2714 FINISH \u2014 Project 6 \u2b50", why: "A working drift monitor \u2014 disproportionately impressive", hrs: "gate", proj: "psi" },
         ]
       },
       {
-        phase: "Phase 4 — Long Term", items: [
-          { n: 31, title: "Plotly", why: "Better charts for portfolio and presentations", hrs: "4-5 hrs", keys: ["plotly"] },
-          { n: 32, title: "Power BI", why: "Common in Adelaide job ads — Python knowledge helps", hrs: "6-8 hrs", keys: ["power_bi"] },
-          { n: 33, title: "Central limit theorem", why: "Deepens statistical intuition", hrs: "3-4 hrs", keys: ["clt"] },
-          { n: 34, title: "Linear algebra basics", why: "Underpins how models work under the hood", hrs: "6-8 hrs", keys: ["linear_algebra"] },
-          { n: 35, title: "Maximum likelihood estimation (depth)", why: "Full mathematical derivation", hrs: "4-5 hrs", keys: ["mle_depth"] },
-          { n: 36, title: "SR 11-7 / Model governance + Basel III/APRA", why: "Regulatory knowledge for senior roles", hrs: "7-9 hrs", keys: ["sr11_7", "basel_apra"] },
-          { n: 37, title: "Cloud basics (AWS/Azure)", why: "Increasingly expected at mid-senior level", hrs: "8-10 hrs", keys: ["cloud_basics"] },
-          { n: 38, title: "SAS basics", why: "Still common in legacy bank risk stacks -- worth a baseline if targeting larger/older institutions", hrs: "4-5 hrs", keys: ["sas_basics"] },
+        phase: "Phase 4 \u2014 Tie ML back to the business", items: [
+          { n: 33, title: "Profit / cost matrix", why: "In credit, a missed defaulter costs far more than a declined good customer", hrs: "3-4 hrs", keys: ["profit_cost_matrix"] },
+          { n: 34, title: "\u25b6 START \u2014 Project 7: Cost-based cutoff optimisation", why: "Find the cutoff that minimises expected cost vs the naive 0.5", hrs: "\u2248 1-2 evenings", proj: "cutoff" },
+          { n: 35, title: "Stress testing basics", why: "Ties into your APRA reading list and the finance track", hrs: "4-5 hrs", keys: ["stress_testing"] },
+          { n: 36, title: "\u2714 FINISH \u2014 Project 7", why: "Cost curve + a recommended threshold with business justification", hrs: "gate", proj: "cutoff" },
+          { n: 37, title: "\u25b6 START \u2014 Project 8 \u2b50: Expected Loss mini-model + stress", why: "PD \u00d7 LGD \u00d7 EAD \u2192 portfolio EL, then stress PD \u00d7 1.5", hrs: "\u2248 2-3 evenings", proj: "el_model" },
+          { n: 38, title: "IFRS 9 basics + ECL staging", why: "Provisioning context \u2014 Stage 1/2/3 under IFRS 9", hrs: "6-8 hrs", keys: ["ifrs9", "ecl_staging"] },
+          { n: 39, title: "\u2714 FINISH \u2014 Project 8 \u2b50", why: "EL base vs stressed + a note on capital/provisioning implications", hrs: "gate", proj: "el_model" },
+          { n: 40, title: "Decision trees + random forests + feature importance", why: "The natural next models after logistic regression", hrs: "8-11 hrs", keys: ["decision_trees", "random_forests", "feature_importance"] },
+          { n: 41, title: "XGBoost / LightGBM + SHAP", why: "Industry-standard models + explainability (know them, don't over-invest)", hrs: "9-11 hrs", keys: ["xgboost", "shap"] },
+          { n: 42, title: "\u25b6 START \u2014 Project 9: Champion/challenger comparison", why: "Logreg vs XGBoost \u2014 performance AND interpretability trade-off", hrs: "\u2248 2-3 evenings", proj: "champ_challenge" },
+          { n: 43, title: "\u2714 FINISH \u2014 Project 9", why: "Comparison table + the recommendation a risk team would accept", hrs: "gate", proj: "champ_challenge" },
+        ]
+      },
+      {
+        phase: "Phase 5 \u2014 Reporting & presentation", items: [
+          { n: 44, title: "Excel for reporting + Power BI + Plotly", why: "Portfolio monitoring IS reporting \u2014 common in AU job ads", hrs: "14-18 hrs", keys: ["excel_reporting", "power_bi", "plotly"] },
+          { n: 45, title: "Risk reporting & data storytelling", why: "Turning numbers into a risk-committee-ready narrative", hrs: "3-4 hrs", keys: ["risk_reporting"] },
+          { n: 46, title: "\u25b6 START \u2014 Project 10: Portfolio monitoring dashboard", why: "Pull default rate by segment, vintage curves & PSI into one view", hrs: "\u2248 3-4 evenings", proj: "dashboard" },
+          { n: 47, title: "\u2714 FINISH \u2014 Project 10", why: "Your closest artifact to the actual day-job \u2014 great portfolio capstone", hrs: "gate", proj: "dashboard" },
+        ]
+      },
+      {
+        phase: "Phase 6 \u2014 Depth & long-term (lower priority)", items: [
+          { n: 48, title: "Regularisation (L1/L2) + model calibration", why: "Production-grade logistic regression and PD outputs", hrs: "6-8 hrs", keys: ["regularisation", "model_calibration"] },
+          { n: 49, title: "Partial dependence plots", why: "Rounds out explainability alongside SHAP", hrs: "2-3 hrs", keys: ["pdp"] },
+          { n: 50, title: "Maximum likelihood estimation", why: "Understand what logistic regression actually optimises", hrs: "4-5 hrs", keys: ["mle"] },
+          { n: 51, title: "SR 11-7 / model governance + Basel III/APRA", why: "Regulatory context for senior roles", hrs: "7-9 hrs", keys: ["sr11_7", "basel_apra"] },
+          { n: 52, title: "Central limit theorem", why: "Deepens statistical intuition", hrs: "3-4 hrs", keys: ["clt"] },
+          { n: 53, title: "Maximum likelihood estimation (full derivation)", why: "The full mathematical treatment", hrs: "4-5 hrs", keys: ["mle_depth"] },
+          { n: 54, title: "Linear algebra basics", why: "Underpins how models work under the hood", hrs: "6-8 hrs", keys: ["linear_algebra"] },
+          { n: 55, title: "SAS basics", why: "Still common in legacy bank risk stacks \u2014 baseline if targeting larger institutions", hrs: "4-5 hrs", keys: ["sas_basics"] },
+          { n: 56, title: "Cloud basics (AWS/Azure)", why: "Increasingly expected at mid-senior level", hrs: "8-10 hrs", keys: ["cloud_basics"] },
         ]
       },
     ];
@@ -1124,7 +1149,7 @@
         { label: "In Progress", value: inProgress, sub: "actively studying" },
         { label: "Est. Hours Remaining", value: Math.round(hrsRemaining), sub: "concepts not yet completed" },
         { label: "Projects Active", value: `${projActive} / ${projects.length}`, sub: `${projDone} completed` },
-        { label: "Current Phase", value: "Phase 1", sub: "item 2 of 10 — Data Types + Missing Values" },
+        { label: "Roadmap", value: "See Sequence tab", sub: "your live you-are-here marker" },
       ];
       document.getElementById("summaryCards").innerHTML = cards.map(c => `
     <div class="card">
@@ -1459,6 +1484,10 @@
     // linked concept is started; otherwise Not Started. Steps with no linked
     // concepts found (e.g. you deleted that concept) fall back to Not Started.
     function seqItemStatus(item) {
+      if (item.proj) {
+        const p = state.projects.find(x => x.pkey === item.proj);
+        return p ? p.status : "Not Started";
+      }
       if (!item.keys || !item.keys.length) return "Not Started";
       const statuses = item.keys.map(k => { const c = conceptByKey(k); return c ? c.status : null; }).filter(s => s !== null);
       if (!statuses.length) return "Not Started";
@@ -1475,6 +1504,7 @@
       // automatically as you complete concepts in the Checklist tab.
       let currentN = null;
       for (const it of flatItems) {
+        if (it.proj) continue;
         if (statusByN[it.n] !== "Completed") { currentN = it.n; break; }
       }
       const doneCount = flatItems.filter(it => statusByN[it.n] === "Completed").length;

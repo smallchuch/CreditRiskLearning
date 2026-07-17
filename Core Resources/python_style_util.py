@@ -25,6 +25,7 @@ import matplotlib.colors as mcolors
 import matplotlib.font_manager as fm
 import matplotlib.patches as mpatches
 import numpy as np
+import seaborn as sns
 
 
 # ── FONT REGISTRATION ─────────────────────────────────────────────────────────
@@ -308,10 +309,24 @@ def traffic_light(n_segments=3):
 def diverging(n=9):
     """
     Green-to-red diverging scale — useful for risk heatmaps.
+    Returns a discrete list of n hex colours.
     """
     colors = [palette['green'][400], palette['yellow'][400], palette['red'][400]]
     cmap = mcolors.LinearSegmentedColormap.from_list('diverging', colors)
     return [mcolors.to_hex(cmap(i / (n - 1))) for i in range(n)]
+
+
+def diverging_cmap():
+    """
+    Same green-to-red scale as diverging(), but returned as a continuous
+    matplotlib Colormap object — pass this directly to sns.heatmap(cmap=...)
+    or plt.imshow(cmap=...) instead of a discrete list.
+
+    Usage:
+        sns.heatmap(corr_matrix, cmap=diverging_cmap(), center=0)
+    """
+    colors = [palette['green'][400], palette['yellow'][400], palette['red'][400]]
+    return mcolors.LinearSegmentedColormap.from_list('diverging', colors)
 
 
 def multi_series():
@@ -322,11 +337,39 @@ def multi_series():
     return [palette['chart_primary'], palette['chart_secondary'], palette['chart_tertiary']]
 
 
+def binary_palette(labels=(0, 1)):
+    """
+    Map a two-class target (e.g. default flag) to semantic colours.
+    Default order is [non-default -> green, default -> red].
+
+    Usage:
+        sns.barplot(data=df, x='purpose', y='count', hue='default',
+                    palette=binary_palette())
+
+        # with string labels instead of 0/1:
+        sns.countplot(data=df, x='default_flag',
+                      palette=binary_palette(labels=('Non-Default', 'Default')))
+    """
+    return {labels[0]: palette['safe_colour'], labels[1]: palette['default_colour']}
+
+
 # ── CHART STYLE ───────────────────────────────────────────────────────────────
 
 def set_style():
     """
-    Apply global matplotlib defaults. Call once at the top of each notebook.
+    Apply global matplotlib AND seaborn defaults. Call once at the top of each
+    notebook — every matplotlib or seaborn chart drawn afterwards (bar, hist,
+    box, scatter, line, heatmap...) picks up the brand fonts, colours and
+    spine/grid style automatically.
+
+    Seaborn draws through matplotlib, so it inherits the rcParams set below
+    (spines, grid, fonts, ticks) with no extra call needed. The one thing
+    rcParams can't cover is seaborn's default colour cycle, so that's set
+    explicitly at the end via sns.set_palette().
+
+    Override within a notebook by passing palette=/color= directly to a
+    seaborn call, or plt.rcParams[...] = ... after calling this.
+
     Swap fonts or sizes here by editing the fonts/sizes dicts above.
     """
     plt.rcParams.update({
@@ -380,6 +423,12 @@ def set_style():
         'lines.linewidth':          2.0,
         'lines.color':              palette['jacaranda'][300],
     })
+
+    # Seaborn — sets the default colour cycle so any sns plot without an
+    # explicit palette=/color= argument uses brand colours (jacaranda, gold,
+    # olive) instead of seaborn's default blue/orange cycle. Spines, grid,
+    # fonts and ticks are already inherited from the rcParams above.
+    sns.set_palette(multi_series())
 
 
 # ── TEXT HELPERS ──────────────────────────────────────────────────────────────
@@ -952,6 +1001,14 @@ def show_tokens():
 #  plt.bar(x, defaults,   color=palette['default_colour'])
 #  plt.bar(x, performing, color=palette['safe_colour'])
 #  plt.bar(x, watch,      color=palette['watch_colour'])
+#
+#  SEABORN — set_style() already sets sns.set_palette(multi_series()), so
+#  charts drawn with no palette=/color= argument use brand colours by default.
+#  sns.barplot(data=df, x='col', y='val')                        # brand default
+#  sns.barplot(data=df, x='col', y='val', palette=gradient('jacaranda'))
+#  sns.countplot(data=df, x='default_flag', palette=binary_palette())
+#  sns.barplot(data=df, x='purpose', y='pd', hue='default', palette=binary_palette())
+#  sns.heatmap(corr_matrix, cmap=diverging_cmap())  # see diverging() for stops
 #
 #  FONTS
 #  ax.set_title('Chart', fontfamily=f('heading'), fontsize=s('title'))
