@@ -11,7 +11,10 @@
   ],
   "concepts": [
     {
-      "id": "id_cml6hp7eu0dmrodas3c",
+      "id": "id_a0fdykter6mrt41sve",
+      "started": "2026-06-11",
+      "deadline": "2026-06-17",
+      "completed": "2026-06-18",
       "key": "prob_basics",
       "cat": "Statistics Foundations",
       "topic": "Probability basics (distributions, conditional probability)",
@@ -21,7 +24,10 @@
       "isNew": false
     },
     {
-      "id": "id_tsqdla0ht28mrodas3c",
+      "id": "id_fbng4dtqmj5mrt41sve",
+      "started": "2026-07-13",
+      "deadline": "2026-07-26",
+      "completed": "",
       "key": "hyp_testing",
       "cat": "Statistics Foundations",
       "topic": "Hypothesis testing and p-values",
@@ -31,7 +37,10 @@
       "isNew": false
     },
     {
-      "id": "id_yfp0enhvd8jmrodas3c",
+      "id": "id_p164s340ydnmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "corr_causation",
       "cat": "Statistics Foundations",
       "topic": "Correlation vs causation",
@@ -41,7 +50,10 @@
       "isNew": false
     },
     {
-      "id": "id_suy102mviqgmrodas3c",
+      "id": "id_po4cj0byscmrt41sve",
+      "started": "2026-07-13",
+      "deadline": "2026-07-26",
+      "completed": "",
       "key": "conf_intervals",
       "cat": "Statistics Foundations",
       "topic": "Confidence intervals",
@@ -51,7 +63,10 @@
       "isNew": false
     },
     {
-      "id": "id_cuuxo94wgpgmrodas3c",
+      "id": "id_o5n5xvh1p0rmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "clt",
       "cat": "Statistics Foundations",
       "topic": "Central limit theorem",
@@ -61,7 +76,10 @@
       "isNew": false
     },
     {
-      "id": "id_v9r5zgedmc8mrodas3c",
+      "id": "id_du6eqmhjf9smrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "mle",
       "cat": "Statistics Foundations",
       "topic": "Maximum likelihood estimation (MLE)",
@@ -71,7 +89,10 @@
       "isNew": true
     },
     {
-      "id": "id_3nt8yqcuda5mrodas3c",
+      "id": "id_n6mhtgbt7agmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "mle_depth",
       "cat": "Statistics Foundations",
       "topic": "Maximum likelihood estimation — full mathematical derivation",
@@ -81,7 +102,10 @@
       "isNew": true
     },
     {
-      "id": "id_3o06l210dhgmrodas3c",
+      "id": "id_xjzcigvafoamrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "linear_algebra",
       "cat": "Statistics Foundations",
       "topic": "Linear algebra basics (matrix ops, dot products)",
@@ -91,7 +115,10 @@
       "isNew": true
     },
     {
-      "id": "id_7hgsaahej6umrodas3c",
+      "id": "id_uh9oti829bmrt41sve",
+      "started": "2026-06-15",
+      "deadline": "2026-06-24",
+      "completed": "2026-06-24",
       "key": "data_types",
       "cat": "Data Fundamentals",
       "topic": "Types of data (continuous, categorical, ordinal)",
@@ -101,7 +128,10 @@
       "isNew": false
     },
     {
-      "id": "id_kkmpal52femrodas3c",
+      "id": "id_jwtjiq0bemdmrt41sve",
+      "started": "2026-06-15",
+      "deadline": "2026-06-24",
+      "completed": "2026-06-24",
       "key": "missing_values",
       "cat": "Data Fundamentals",
       "topic": "Handling missing values",
@@ -111,7 +141,10 @@
       "isNew": false
     },
     {
-      "id": "id_2m4928n3z63mrodas3c",
+      "id": "id_0b3rjuzzyarmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "train_test_split",
       "cat": "Data Fundamentals",
       "topic": "Train/test split and data leakage",
@@ -121,7 +154,10 @@
       "isNew": false
     },
     {
-      "id": "id_bjlzdgwjj5mrodas3c",
+      "id": "id_4i0lhjz5eqlmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "class_imbalance",
       "cat": "Data Fundamentals",
       "topic": "Class imbalance (very important in credit)",
@@ -131,7 +167,10 @@
       "isNew": false
     },
     {
-      "id": "id_9u6awm41q9qmrodas3c",
+      "id": "id_ymrsh0uogibmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "class_imbalance_techniques",
       "cat": "Data Fundamentals",
       "topic": "Class imbalance handling techniques (SMOTE, weights, threshold tuning)",
@@ -141,7 +180,10 @@
       "isNew": true
     },
     {
-      "id": "id_aehz1nk1836mrodas3c",
+      "id": "id_3s907jx5zbgmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "outlier_detection",
       "cat": "Data Fundamentals",
       "topic": "Outlier detection and treatment",
@@ -151,7 +193,10 @@
       "isNew": false
     },
     {
-      "id": "id_hx07wxfc5m7mrodas3c",
+      "id": "id_vot27566bpmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "logreg",
       "cat": "Machine Learning Core",
       "topic": "Logistic regression deeply",
@@ -161,7 +206,10 @@
       "isNew": false
     },
     {
-      "id": "id_bti75elfwqwmrodas3c",
+      "id": "id_vr3j2te7prgmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "bias_variance",
       "cat": "Machine Learning Core",
       "topic": "Bias-variance tradeoff",
@@ -171,7 +219,10 @@
       "isNew": false
     },
     {
-      "id": "id_3lnr60rh3h3mrodas3c",
+      "id": "id_jnoqxr5qbk8mrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "overfitting",
       "cat": "Machine Learning Core",
       "topic": "Overfitting and underfitting",
@@ -181,7 +232,10 @@
       "isNew": false
     },
     {
-      "id": "id_tp22vw4akrgmrodas3c",
+      "id": "id_t7hsr1dabtmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "cross_validation",
       "cat": "Machine Learning Core",
       "topic": "Cross validation",
@@ -191,7 +245,10 @@
       "isNew": false
     },
     {
-      "id": "id_25totq0oyfmrodas3c",
+      "id": "id_pqijsrw7qdmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "feature_selection",
       "cat": "Machine Learning Core",
       "topic": "Feature selection and engineering",
@@ -201,7 +258,10 @@
       "isNew": false
     },
     {
-      "id": "id_gm9l228ddxmrodas3c",
+      "id": "id_ybauogfp3tmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "decision_trees",
       "cat": "Machine Learning Core",
       "topic": "Decision trees",
@@ -211,7 +271,10 @@
       "isNew": false
     },
     {
-      "id": "id_avr89w0zi3fmrodas3c",
+      "id": "id_cvoeli3fo3wmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "random_forests",
       "cat": "Machine Learning Core",
       "topic": "Random forests",
@@ -221,7 +284,10 @@
       "isNew": false
     },
     {
-      "id": "id_j13bcw6fzkdmrodas3c",
+      "id": "id_xg5jurs3lanmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "xgboost",
       "cat": "Machine Learning Core",
       "topic": "XGBoost / LightGBM",
@@ -231,7 +297,10 @@
       "isNew": false
     },
     {
-      "id": "id_irk3mfheyfmrodas3c",
+      "id": "id_qojb9c7c3ibmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "regularisation",
       "cat": "Machine Learning Core",
       "topic": "Regularisation (L1/L2)",
@@ -241,7 +310,10 @@
       "isNew": false
     },
     {
-      "id": "id_hk4dabpvj2amrodas3c",
+      "id": "id_dhq7oucpoymrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "model_calibration",
       "cat": "Machine Learning Core",
       "topic": "Model calibration",
@@ -251,7 +323,10 @@
       "isNew": false
     },
     {
-      "id": "id_zvhtlwrvmlsmrodas3c",
+      "id": "id_3t2w2vccdjfmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "confusion_matrix",
       "cat": "Evaluation Metrics",
       "topic": "Confusion matrix",
@@ -261,7 +336,10 @@
       "isNew": false
     },
     {
-      "id": "id_gvybvh3mfx6mrodas3c",
+      "id": "id_fqg15llovdmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "precision_recall_f1",
       "cat": "Evaluation Metrics",
       "topic": "Precision, recall, F1",
@@ -271,7 +349,10 @@
       "isNew": false
     },
     {
-      "id": "id_yja61l53d6cmrodas3c",
+      "id": "id_l3ztut0onpqmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "auc_roc",
       "cat": "Evaluation Metrics",
       "topic": "AUC-ROC",
@@ -281,7 +362,10 @@
       "isNew": false
     },
     {
-      "id": "id_2481qaku2ivimrodas3c",
+      "id": "id_sr3zh1r17tdmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "gini",
       "cat": "Evaluation Metrics",
       "topic": "Gini coefficient",
@@ -291,7 +375,10 @@
       "isNew": false
     },
     {
-      "id": "id_bev95qo92jmrodas3c",
+      "id": "id_fpazdc1k72vmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "ks_statistic",
       "cat": "Evaluation Metrics",
       "topic": "KS statistic",
@@ -301,7 +388,10 @@
       "isNew": false
     },
     {
-      "id": "id_htk81kaq7crmrodas3c",
+      "id": "id_1ys5mq1mifsmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "lift_curves",
       "cat": "Evaluation Metrics",
       "topic": "Lift curves",
@@ -311,7 +401,10 @@
       "isNew": true
     },
     {
-      "id": "id_ng9bzfw00fmrodas3c",
+      "id": "id_943kv9hz2wmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "profit_cost_matrix",
       "cat": "Evaluation Metrics",
       "topic": "Profit / cost matrix",
@@ -321,7 +414,10 @@
       "isNew": true
     },
     {
-      "id": "id_t7abdjiu28mrodas3c",
+      "id": "id_6fxh0qva86tmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "pd_lgd_ead",
       "cat": "Credit Risk Specific",
       "topic": "What PD, LGD, EAD mean",
@@ -331,7 +427,10 @@
       "isNew": false
     },
     {
-      "id": "id_w327xuzeglfmrodas3c",
+      "id": "id_jycy4ckzermrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "el_ul",
       "cat": "Credit Risk Specific",
       "topic": "Expected Loss vs Unexpected Loss (EL/UL)",
@@ -341,7 +440,10 @@
       "isNew": true
     },
     {
-      "id": "id_sgt9jk8uepmrodas3c",
+      "id": "id_20z1ax4339bmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "scorecard_dev",
       "cat": "Credit Risk Specific",
       "topic": "Scorecard development",
@@ -351,7 +453,10 @@
       "isNew": false
     },
     {
-      "id": "id_s4b3n8yb8bmrodas3c",
+      "id": "id_2abk8sm6aa1mrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "woe_iv",
       "cat": "Credit Risk Specific",
       "topic": "Weight of Evidence and Information Value",
@@ -361,7 +466,10 @@
       "isNew": false
     },
     {
-      "id": "id_4t7m66w4mq3mrodas3c",
+      "id": "id_zmtdxkixwzgmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "stress_testing",
       "cat": "Credit Risk Specific",
       "topic": "Stress testing basics",
@@ -371,7 +479,10 @@
       "isNew": true
     },
     {
-      "id": "id_2yf4esmv2zvmrodas3c",
+      "id": "id_r3pgurya66nmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "ifrs9",
       "cat": "Credit Risk Specific",
       "topic": "IFRS 9 basics",
@@ -381,7 +492,10 @@
       "isNew": false
     },
     {
-      "id": "id_nrztz38rzmmrodas3c",
+      "id": "id_diuvq5qj1h4mrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "sr11_7",
       "cat": "Credit Risk Specific",
       "topic": "SR 11-7 / model governance concepts",
@@ -391,7 +505,10 @@
       "isNew": false
     },
     {
-      "id": "id_twd5i48c54mrodas3c",
+      "id": "id_weqfoyiu0acmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "basel_apra",
       "cat": "Credit Risk Specific",
       "topic": "Basel III / APRA capital framework basics",
@@ -401,7 +518,10 @@
       "isNew": true
     },
     {
-      "id": "id_qe12y3r10usmrodas3c",
+      "id": "id_zc7fixbzmq7mrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "vintage_analysis",
       "cat": "Portfolio Monitoring",
       "topic": "Vintage analysis",
@@ -411,7 +531,10 @@
       "isNew": true
     },
     {
-      "id": "id_9n7wdwki1fmrodas3c",
+      "id": "id_u4ro358lqzhmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "transition_matrix",
       "cat": "Portfolio Monitoring",
       "topic": "Roll-rate & delinquency transition matrices",
@@ -421,7 +544,10 @@
       "isNew": true
     },
     {
-      "id": "id_xaaz4h22o9fmrodas3c",
+      "id": "id_y8hgz6f6c9lmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "psi",
       "cat": "Portfolio Monitoring",
       "topic": "PSI / Population Stability Index (drift monitoring)",
@@ -431,7 +557,10 @@
       "isNew": true
     },
     {
-      "id": "id_zuugu1xfgwmrodas3c",
+      "id": "id_kwd0ubc5mjmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "portfolio_concentration",
       "cat": "Portfolio Monitoring",
       "topic": "Portfolio concentration risk",
@@ -441,7 +570,10 @@
       "isNew": true
     },
     {
-      "id": "id_0ybcyvuh4vlmrodas3c",
+      "id": "id_p98odou27jqmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "champion_challenger",
       "cat": "Portfolio Monitoring",
       "topic": "Champion/challenger framework",
@@ -451,7 +583,10 @@
       "isNew": false
     },
     {
-      "id": "id_1bq2czes077mrodas3c",
+      "id": "id_wg66peycv7lmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "cohort_segmentation",
       "cat": "Portfolio Monitoring",
       "topic": "Cohort / segmentation reporting",
@@ -461,7 +596,10 @@
       "isNew": true
     },
     {
-      "id": "id_5g1sk0k5bi9mrodas3c",
+      "id": "id_gncuuukum5kmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "ecl_staging",
       "cat": "Portfolio Monitoring",
       "topic": "ECL staging (IFRS 9 Stage 1/2/3)",
@@ -471,7 +609,10 @@
       "isNew": true
     },
     {
-      "id": "id_s3t2tkh65ksmrodas3c",
+      "id": "id_lj4fqihoi5amrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "risk_reporting",
       "cat": "Portfolio Monitoring",
       "topic": "Risk reporting & data storytelling",
@@ -481,7 +622,10 @@
       "isNew": true
     },
     {
-      "id": "id_5ih686ir2ximrodas3c",
+      "id": "id_jjj38nfixzmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "feature_importance",
       "cat": "Explainability",
       "topic": "Feature importance",
@@ -491,7 +635,10 @@
       "isNew": false
     },
     {
-      "id": "id_mzi2n4odf2jmrodas3c",
+      "id": "id_s4j5ek3jhplmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "shap",
       "cat": "Explainability",
       "topic": "SHAP values",
@@ -501,7 +648,10 @@
       "isNew": false
     },
     {
-      "id": "id_q93ax3mcjxmrodas3c",
+      "id": "id_6lmdc41ozl6mrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "pdp",
       "cat": "Explainability",
       "topic": "Partial dependence plots",
@@ -511,7 +661,10 @@
       "isNew": false
     },
     {
-      "id": "id_rvntuefsgijmrodas3c",
+      "id": "id_p93pq9ouhpmrt41sve",
+      "started": "2026-06-29",
+      "deadline": "2026-07-12",
+      "completed": "2026-07-10",
       "key": "pandas",
       "cat": "Tools",
       "topic": "Pandas proficiently",
@@ -521,17 +674,23 @@
       "isNew": false
     },
     {
-      "id": "id_dqbkoigta3nmrodas3c",
+      "id": "id_ge9tc01b0eemrt41sve",
+      "started": "2026-07-22",
+      "deadline": "2026-08-02",
+      "completed": "",
       "key": "matplotlib_seaborn",
       "cat": "Tools",
       "topic": "Matplotlib / Seaborn",
-      "status": "Not Started",
+      "status": "In Progress",
       "priority": "High",
       "hrs": "4-5 hrs",
       "isNew": false
     },
     {
-      "id": "id_fiu0jegphxbmrodas3c",
+      "id": "id_r3dixoi704mrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "sklearn_pipelines",
       "cat": "Tools",
       "topic": "Scikit-learn pipelines",
@@ -541,17 +700,23 @@
       "isNew": false
     },
     {
-      "id": "id_q94c717t2snmrodas3c",
+      "id": "id_3mcnksq0drdmrt41sve",
+      "started": "2026-07-22",
+      "deadline": "2026-08-02",
+      "completed": "",
       "key": "git_basics",
       "cat": "Tools",
       "topic": "Git basics",
-      "status": "Not Started",
+      "status": "In Progress",
       "priority": "High",
       "hrs": "3-4 hrs",
       "isNew": false
     },
     {
-      "id": "id_ebmil4jr0fpmrodas3c",
+      "id": "id_a8s1n140fanmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "sql_basics",
       "cat": "Tools",
       "topic": "SQL basics",
@@ -561,7 +726,10 @@
       "isNew": false
     },
     {
-      "id": "id_wzsml0arfyemrodas3c",
+      "id": "id_ssugdjuyh8mrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "excel_reporting",
       "cat": "Tools",
       "topic": "Excel for reporting (pivot tables, dashboards)",
@@ -571,7 +739,10 @@
       "isNew": true
     },
     {
-      "id": "id_zuw2fhi0jwbmrodas3c",
+      "id": "id_33g5alvestkmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "power_bi",
       "cat": "Tools",
       "topic": "Power BI",
@@ -581,7 +752,10 @@
       "isNew": false
     },
     {
-      "id": "id_tpqaayay67dmrodas3c",
+      "id": "id_92yhi5tbvbpmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "plotly",
       "cat": "Tools",
       "topic": "Plotly",
@@ -591,7 +765,10 @@
       "isNew": true
     },
     {
-      "id": "id_368fmm2927kmrodas3c",
+      "id": "id_l5efh5t850qmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "sas_basics",
       "cat": "Tools",
       "topic": "SAS basics (still common in legacy bank risk stacks -- listed as a key resume skill alongside SQL)",
@@ -601,7 +778,10 @@
       "isNew": true
     },
     {
-      "id": "id_wijsjy6wjssmrodas3c",
+      "id": "id_byxcwaoj15mrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "key": "cloud_basics",
       "cat": "Tools",
       "topic": "Cloud basics (AWS/Azure)",
@@ -619,16 +799,22 @@
   ],
   "projects": [
     {
-      "id": "id_0mahg6mn7t2mrodas3c",
+      "id": "id_pqz6xkro5akmrt41sve",
+      "started": "2026-07-20",
+      "deadline": "2026-08-09",
+      "completed": "",
       "pkey": "driver_scan",
       "level": "Foundational",
       "name": "Project 1 — Default-rate driver scan (rescue the Home Credit EDA)",
       "source": "Home Credit Default Risk (Kaggle)",
-      "status": "Not Started",
+      "status": "In Progress",
       "priority": "High"
     },
     {
-      "id": "id_5zd26qu9tbimrodas3c",
+      "id": "id_g8tk24u940emrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "pkey": "woe_binning",
       "level": "Foundational",
       "name": "Project 2 — WOE binning from scratch (reusable function)",
@@ -637,7 +823,10 @@
       "priority": "High"
     },
     {
-      "id": "id_yo5bte8ndibmrodas3c",
+      "id": "id_p7zo7sqh4fmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "pkey": "scorecard",
       "level": "Foundational",
       "name": "Project 3 ⭐ — Logistic-regression scorecard, end to end",
@@ -646,7 +835,10 @@
       "priority": "High"
     },
     {
-      "id": "id_8q53b5irdlsmrodas3c",
+      "id": "id_zvuk6jmlqgcmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "pkey": "vintage",
       "level": "Intermediate",
       "name": "Project 4 ⭐ — Vintage / cohort default curves",
@@ -655,7 +847,10 @@
       "priority": "High"
     },
     {
-      "id": "id_7io8d95grjtmrodas3c",
+      "id": "id_1n5fqz5gk9gmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "pkey": "rollrate",
       "level": "Intermediate",
       "name": "Project 5 ⭐ — Roll-rate / delinquency transition matrix",
@@ -664,7 +859,10 @@
       "priority": "High"
     },
     {
-      "id": "id_hv8s9mzljldmrodas3c",
+      "id": "id_7y3y23n64w5mrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "pkey": "psi",
       "level": "Intermediate",
       "name": "Project 6 ⭐ — PSI drift monitor",
@@ -673,7 +871,10 @@
       "priority": "High"
     },
     {
-      "id": "id_43cmtl2hsr7mrodas3c",
+      "id": "id_r2qwwwru63hmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "pkey": "cutoff",
       "level": "Advanced",
       "name": "Project 7 — Cost-based cutoff optimisation",
@@ -682,7 +883,10 @@
       "priority": "Medium"
     },
     {
-      "id": "id_l4vash0hu8mrodas3c",
+      "id": "id_kh8c84hhuamrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "pkey": "el_model",
       "level": "Advanced",
       "name": "Project 8 ⭐ — Expected Loss mini-model + stress scenario",
@@ -691,7 +895,10 @@
       "priority": "High"
     },
     {
-      "id": "id_iicc7oj1edrmrodas3c",
+      "id": "id_zv8odrtc16rmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "pkey": "champ_challenge",
       "level": "Advanced",
       "name": "Project 9 — Champion/challenger model comparison",
@@ -700,7 +907,10 @@
       "priority": "Medium"
     },
     {
-      "id": "id_vkf8y0ajtzmrodas3c",
+      "id": "id_ft6cdsv8psmrt41sve",
+      "started": "",
+      "deadline": "",
+      "completed": "",
       "pkey": "dashboard",
       "level": "Stretch",
       "name": "Project 10 — Portfolio monitoring dashboard (Power BI)",
@@ -711,25 +921,29 @@
   ],
   "quizzes": [
     {
-      "id": "id_jq0l9icyoymrodas3d",
+      "id": "id_nhmj270id4mrt41sve",
       "topic": "1.1 Probability Basics",
       "total": 170,
-      "score": "110",
+      "score": "",
       "notes": ""
     },
     {
-      "id": "id_gxtjmz3jsznmrodas3d",
+      "id": "id_7p9pw5oupjmmrt41sve",
       "topic": "1.2 Data Types + Missing Values",
       "total": 170,
-      "score": "89",
-      "notes": ""
-    },
-    {
-      "id": "id_xydrzxvgx2hmroddew2",
-      "topic": "New quiz",
-      "total": "170",
-      "score": "134",
+      "score": "",
       "notes": ""
     }
-  ]
+  ],
+  "sessions": [],
+  "timer": {
+    "running": false,
+    "startedAt": null,
+    "firstStartedAt": null,
+    "accumulatedMs": 0,
+    "projects": [],
+    "topics": [],
+    "notes": "",
+    "nextTime": ""
+  }
 }

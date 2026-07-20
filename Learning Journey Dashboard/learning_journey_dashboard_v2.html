@@ -641,6 +641,182 @@
       font-size: 12.5px;
       padding: 10px 0;
     }
+
+    .col-date {
+      width: 128px;
+    }
+
+    input[type=date] {
+      color-scheme: dark;
+    }
+
+    input.deadline-overdue {
+      border-color: var(--red);
+      color: #ffb4b4;
+    }
+
+    .deadline-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, .04);
+      font-size: 13px;
+    }
+
+    .deadline-type {
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: .3px;
+      color: var(--muted);
+      width: 58px;
+      flex-shrink: 0;
+    }
+
+    .deadline-name {
+      flex: 1;
+    }
+
+    .deadline-date {
+      color: var(--muted);
+      font-size: 12px;
+      width: 90px;
+      flex-shrink: 0;
+    }
+
+    .timer-panel .timer-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .timer-display {
+      font-size: 38px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: .5px;
+    }
+
+    .timer-controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .timer-controls .btn:disabled {
+      opacity: .35;
+      cursor: not-allowed;
+    }
+
+    .timer-controls .btn:disabled:hover {
+      border-color: var(--border);
+    }
+
+    .timer-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width:760px) {
+      .timer-fields {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .field-group label {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      margin-bottom: 6px;
+    }
+
+    .field-group textarea {
+      min-height: 70px;
+      resize: vertical;
+    }
+
+    .tag-picker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 8px;
+    }
+
+    .tag-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(124, 158, 255, .15);
+      color: var(--accent);
+      border-radius: 14px;
+      padding: 3px 9px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .tag-remove {
+      background: none;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      font-size: 12px;
+      padding: 0;
+      line-height: 1;
+    }
+
+    .tag-remove:hover {
+      color: var(--red);
+    }
+
+    .tag-input {
+      border: none;
+      background: transparent;
+      flex: 1;
+      min-width: 130px;
+      padding: 3px 2px;
+      width: auto;
+    }
+
+    .tag-input:focus {
+      outline: none;
+    }
+
+    .session-card {
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .session-row1 {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .session-date {
+      width: 150px;
+    }
+
+    .session-duration {
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 14px;
+      margin-right: auto;
+    }
   </style>
 </head>
 
@@ -688,12 +864,18 @@
     </div>
   </div>
 
+  <div class="panel" style="margin-bottom:26px;">
+    <h3>Deadlines &amp; Targets</h3>
+    <div id="deadlinesList"></div>
+  </div>
+
   <div class="panel">
     <div class="tabs">
       <button class="tab-btn active" data-tab="concepts">Concepts Checklist</button>
       <button class="tab-btn" data-tab="projects">Projects Checklist</button>
       <button class="tab-btn" data-tab="sequence">Recommended Sequence</button>
       <button class="tab-btn" data-tab="quizzes">Quizzes</button>
+      <button class="tab-btn" data-tab="sessions">Session Log</button>
     </div>
 
     <div class="tab-content active" id="tab-concepts">
@@ -716,6 +898,14 @@
     <div class="tab-content" id="tab-quizzes">
       <div id="quizCards"></div>
       <button class="btn primary" id="addQuizBtn">+ Add Quiz</button>
+    </div>
+
+    <div class="tab-content" id="tab-sessions">
+      <div class="panel timer-panel" id="timerPanel"></div>
+      <datalist id="projectNamesList"></datalist>
+      <datalist id="topicNamesList"></datalist>
+      <h3 style="margin-top:24px;">Session History</h3>
+      <div id="sessionHistory"></div>
     </div>
   </div>
 
@@ -973,7 +1163,7 @@
         { key: "plotly", cat: "Tools", topic: "Plotly", status: "Not Started", priority: "Medium", hrs: "4-5 hrs", isNew: true },
         { key: "sas_basics", cat: "Tools", topic: "SAS basics (still common in legacy bank risk stacks -- listed as a key resume skill alongside SQL)", status: "Not Started", priority: "Lower", hrs: "4-5 hrs", isNew: true },
         { key: "cloud_basics", cat: "Tools", topic: "Cloud basics (AWS/Azure)", status: "Not Started", priority: "Lower", hrs: "8-10 hrs", isNew: true },
-      ].map(c => ({ id: uid(), ...c })),
+      ].map(c => ({ id: uid(), started: "", deadline: "", completed: "", ...c })),
 
       levels: ["Foundational", "Intermediate", "Advanced", "Stretch"],
       projects: [
@@ -990,12 +1180,19 @@
         { pkey: "champ_challenge", level: "Advanced", name: "Project 9 \u2014 Champion/challenger model comparison", source: "Any prior project dataset", status: "Not Started", priority: "Medium" },
 
         { pkey: "dashboard", level: "Stretch", name: "Project 10 \u2014 Portfolio monitoring dashboard (Power BI)", source: "Outputs of projects 3-8", status: "Not Started", priority: "Medium" },
-      ].map(p => ({ id: uid(), ...p })),
+      ].map(p => ({ id: uid(), started: "", deadline: "", completed: "", ...p })),
 
       quizzes: [
         { topic: "1.1 Probability Basics", total: 170, score: "", notes: "" },
         { topic: "1.2 Data Types + Missing Values", total: 170, score: "", notes: "" },
       ].map(q => ({ id: uid(), ...q })),
+
+      // Session log: one entry per logged study session (created via the timer
+      // in the Session Log tab). `timer` is the live in-progress draft \u2014 kept in
+      // state (not a plain variable) so a running/paused timer and any notes
+      // typed so far survive a page reload.
+      sessions: [],
+      timer: { running: false, startedAt: null, firstStartedAt: null, accumulatedMs: 0, projects: [], topics: [], notes: "", nextTime: "" },
     };
 
     // Read-only roadmap reference (not part of editable state)
@@ -1099,7 +1296,29 @@
             const match = defaultByTopic[(c.topic || "").trim().toLowerCase()];
             if (match) c.key = match;
           }
+          if (c.started === undefined) c.started = "";
+          if (c.deadline === undefined) c.deadline = "";
+          if (c.completed === undefined) c.completed = "";
         });
+        (parsed.projects || []).forEach(p => {
+          if (p.started === undefined) p.started = "";
+          if (p.deadline === undefined) p.deadline = "";
+          if (p.completed === undefined) p.completed = "";
+        });
+        if (!Array.isArray(parsed.sessions)) parsed.sessions = [];
+        const t = parsed.timer;
+        if (!t || typeof t !== "object") {
+          parsed.timer = { running: false, startedAt: null, firstStartedAt: null, accumulatedMs: 0, projects: [], topics: [], notes: "", nextTime: "" };
+        } else {
+          t.projects = Array.isArray(t.projects) ? t.projects : [];
+          t.topics = Array.isArray(t.topics) ? t.topics : [];
+          t.notes = t.notes || "";
+          t.nextTime = t.nextTime || "";
+          t.accumulatedMs = t.accumulatedMs || 0;
+          t.running = !!t.running;
+          t.startedAt = t.startedAt || null;
+          t.firstStartedAt = t.firstStartedAt || null;
+        }
       } catch (e) { console.warn("Could not migrate concept keys", e); }
       return parsed;
     }
@@ -1128,6 +1347,18 @@
     const statusClass = s => "status-" + s.replace(/\s+/g, "");
     const priorityDot = p => ({ High: "🔴", Medium: "🟡", Lower: "🟢" }[p] || "⚪");
 
+    const todayStr = () => new Date().toISOString().slice(0, 10);
+    // An item is overdue once its self-assigned deadline has passed and it's
+    // not yet marked Completed. Deadlines are only ever set by hand (see
+    // wireConceptEvents/wireProjectEvents) — never auto-populated — so
+    // starting something never silently commits you to a date.
+    const isOverdue = item => !!(item.deadline && item.status !== "Completed" && item.deadline < todayStr());
+    function daysUntil(dateStr) {
+      const d = new Date(dateStr + "T00:00:00");
+      const t = new Date(todayStr() + "T00:00:00");
+      return Math.round((d - t) / 86400000);
+    }
+
     function avgHrs(str) {
       const m = (str || "").match(/(\d+)\D+(\d+)/);
       if (!m) return 0;
@@ -1144,11 +1375,17 @@
       const projDone = projects.filter(p => p.status === "Completed").length;
       const projActive = projects.filter(p => p.status === "In Progress").length;
 
+      const sessions = state.sessions || [];
+      const totalLoggedSec = sessions.reduce((a, s) => a + (s.durationSec || 0), 0);
+      const weekAgoStr = new Date(Date.now() - 7 * 86400000).toISOString().slice(0, 10);
+      const weekLoggedSec = sessions.filter(s => (s.date || "") >= weekAgoStr).reduce((a, s) => a + (s.durationSec || 0), 0);
+
       const cards = [
         { label: "Concepts Completed", value: `${completed} / ${concepts.length}`, sub: `${Math.round(completed / total * 100)}% of checklist` },
         { label: "In Progress", value: inProgress, sub: "actively studying" },
         { label: "Est. Hours Remaining", value: Math.round(hrsRemaining), sub: "concepts not yet completed" },
         { label: "Projects Active", value: `${projActive} / ${projects.length}`, sub: `${projDone} completed` },
+        { label: "Logged This Week", value: `${(weekLoggedSec / 3600).toFixed(1)}h`, sub: `${(totalLoggedSec / 3600).toFixed(1)}h all-time · ${sessions.length} session(s)` },
         { label: "Roadmap", value: "See Sequence tab", sub: "your live you-are-here marker" },
       ];
       document.getElementById("summaryCards").innerHTML = cards.map(c => `
@@ -1208,6 +1445,37 @@
       renderStatusChart();
       renderCategoryBars();
       renderSequence();
+      renderDeadlinesPanel();
+    }
+
+    // ============== DEADLINES PANEL ==============
+    // Pulls together every concept/project that has a self-assigned deadline
+    // and isn't Completed yet, sorted soonest-first, with overdue ones flagged.
+    function renderDeadlinesPanel() {
+      const items = [];
+      state.concepts.forEach(c => { if (c.deadline && c.status !== "Completed") items.push({ name: c.topic, deadline: c.deadline, type: "Concept" }); });
+      state.projects.forEach(p => { if (p.deadline && p.status !== "Completed") items.push({ name: p.name, deadline: p.deadline, type: "Project" }); });
+      items.sort((a, b) => a.deadline.localeCompare(b.deadline));
+      const el = document.getElementById("deadlinesList");
+      if (!el) return;
+      if (!items.length) {
+        el.innerHTML = `<p class="empty-hint">No deadlines set yet. Mark a topic or project "In Progress" in its checklist, then add a target date in the Deadline column.</p>`;
+        return;
+      }
+      el.innerHTML = items.map(it => {
+        const days = daysUntil(it.deadline);
+        let cls = "pill", label;
+        if (days < 0) { cls = "pill warn"; label = `${-days}d overdue`; }
+        else if (days === 0) { cls = "pill warn"; label = "due today"; }
+        else if (days <= 3) { cls = "pill warn"; label = `${days}d left`; }
+        else { label = `${days}d left`; }
+        return `<div class="deadline-row">
+          <span class="deadline-type">${it.type}</span>
+          <span class="deadline-name">${escapeHtml(it.name)}</span>
+          <span class="deadline-date">${it.deadline}</span>
+          <span class="${cls}">${label}</span>
+        </div>`;
+      }).join("");
     }
 
     function escapeHtml(s) {
@@ -1229,6 +1497,15 @@
     function updateConcept(id, field, value) {
       const c = state.concepts.find(x => x.id === id);
       if (!c) return;
+      if (field === "status") {
+        // Starting something stamps today's date automatically (once); the
+        // deadline itself is never auto-set — you assign that by hand once you
+        // actually know your schedule, which was the whole point of splitting
+        // "started" from "deadline" instead of dating everything up front.
+        if (value === "In Progress" && !c.started) c.started = todayStr();
+        if (value === "Completed" && !c.completed) c.completed = todayStr();
+        if (value !== "Completed") c.completed = "";
+      }
       c[field] = value;
       saveState();
       refreshSummary();
@@ -1303,7 +1580,8 @@
         } else {
           html += `<table><thead><tr>
         <th class="col-topic">Topic</th><th class="col-narrow">Status</th><th class="col-narrow">Priority</th>
-        <th class="col-hrs">Est. Hours</th><th class="col-xnarrow">New?</th><th></th>
+        <th class="col-hrs">Est. Hours</th><th class="col-date">Started</th><th class="col-date">Deadline</th><th class="col-date">Completed</th>
+        <th class="col-xnarrow">New?</th><th></th>
       </tr></thead><tbody>`;
           items.forEach(c => {
             html += `<tr data-concept-id="${c.id}">
@@ -1315,6 +1593,9 @@
             ${["High", "Medium", "Lower"].map(p => `<option value="${p}" ${p === c.priority ? 'selected' : ''}>${priorityDot(p)} ${p}</option>`).join("")}
           </select></td>
           <td><input type="text" value="${escapeHtml(c.hrs)}" placeholder="e.g. 3-4 hrs" data-id="${c.id}" data-field="hrs"></td>
+          <td><input type="date" value="${escapeHtml(c.started || "")}" data-id="${c.id}" data-field="started"></td>
+          <td><input type="date" class="${isOverdue(c) ? 'deadline-overdue' : ''}" value="${escapeHtml(c.deadline || "")}" data-id="${c.id}" data-field="deadline"></td>
+          <td><input type="date" value="${escapeHtml(c.completed || "")}" data-id="${c.id}" data-field="completed"></td>
           <td><div class="new-toggle"><input type="checkbox" ${c.isNew ? 'checked' : ''} data-id="${c.id}" data-field="isNew"> ★</div></td>
           <td><button class="icon-btn delete-concept-btn" data-id="${c.id}" title="Delete">✕</button></td>
         </tr>`;
@@ -1333,7 +1614,23 @@
         const handler = () => {
           const val = el.type === "checkbox" ? el.checked : el.value;
           updateConcept(id, field, val);
-          if (field === "status") el.className = statusClass(val);
+          const c = state.concepts.find(x => x.id === id);
+          if (field === "status") {
+            el.className = statusClass(val);
+            // Reflect any auto-stamped started/completed dates straight into
+            // the row's date inputs without a full table re-render (keeps
+            // focus/scroll position stable, same as the rest of this table).
+            const row = el.closest("tr");
+            if (row && c) {
+              const startedEl = row.querySelector('[data-field="started"]');
+              const completedEl = row.querySelector('[data-field="completed"]');
+              const deadlineEl = row.querySelector('[data-field="deadline"]');
+              if (startedEl) startedEl.value = c.started || "";
+              if (completedEl) completedEl.value = c.completed || "";
+              if (deadlineEl) deadlineEl.classList.toggle("deadline-overdue", isOverdue(c));
+            }
+          }
+          if (field === "deadline" && c) el.classList.toggle("deadline-overdue", isOverdue(c));
         };
         if (el.tagName === "SELECT" || el.type === "checkbox") { el.onchange = handler; }
         else { el.oninput = handler; }
@@ -1357,6 +1654,11 @@
     function updateProject(id, field, value) {
       const p = state.projects.find(x => x.id === id);
       if (!p) return;
+      if (field === "status") {
+        if (value === "In Progress" && !p.started) p.started = todayStr();
+        if (value === "Completed" && !p.completed) p.completed = todayStr();
+        if (value !== "Completed") p.completed = "";
+      }
       p[field] = value;
       saveState();
       refreshSummary();
@@ -1427,7 +1729,8 @@
         } else {
           html += `<table><thead><tr>
         <th class="col-topic">Project</th><th class="col-narrow">Dataset / Source</th>
-        <th class="col-narrow">Status</th><th class="col-narrow">Priority</th><th></th>
+        <th class="col-narrow">Status</th><th class="col-narrow">Priority</th>
+        <th class="col-date">Started</th><th class="col-date">Deadline</th><th class="col-date">Completed</th><th></th>
       </tr></thead><tbody>`;
           items.forEach(p => {
             html += `<tr data-project-id="${p.id}">
@@ -1439,6 +1742,9 @@
           <td><select data-id="${p.id}" data-field="priority">
             ${["High", "Medium", "Lower"].map(pr => `<option value="${pr}" ${pr === p.priority ? 'selected' : ''}>${priorityDot(pr)} ${pr}</option>`).join("")}
           </select></td>
+          <td><input type="date" value="${escapeHtml(p.started || "")}" data-id="${p.id}" data-field="started"></td>
+          <td><input type="date" class="${isOverdue(p) ? 'deadline-overdue' : ''}" value="${escapeHtml(p.deadline || "")}" data-id="${p.id}" data-field="deadline"></td>
+          <td><input type="date" value="${escapeHtml(p.completed || "")}" data-id="${p.id}" data-field="completed"></td>
           <td><button class="icon-btn delete-project-btn" data-id="${p.id}" title="Delete">✕</button></td>
         </tr>`;
           });
@@ -1455,7 +1761,20 @@
         const id = el.dataset.id, field = el.dataset.field;
         const handler = () => {
           updateProject(id, field, el.value);
-          if (field === "status") el.className = statusClass(el.value);
+          const p = state.projects.find(x => x.id === id);
+          if (field === "status") {
+            el.className = statusClass(el.value);
+            const row = el.closest("tr");
+            if (row && p) {
+              const startedEl = row.querySelector('[data-field="started"]');
+              const completedEl = row.querySelector('[data-field="completed"]');
+              const deadlineEl = row.querySelector('[data-field="deadline"]');
+              if (startedEl) startedEl.value = p.started || "";
+              if (completedEl) completedEl.value = p.completed || "";
+              if (deadlineEl) deadlineEl.classList.toggle("deadline-overdue", isOverdue(p));
+            }
+          }
+          if (field === "deadline" && p) el.classList.toggle("deadline-overdue", isOverdue(p));
         };
         if (el.tagName === "SELECT") { el.onchange = handler; } else { el.oninput = handler; }
       });
@@ -1603,6 +1922,240 @@
       });
     }
 
+    // ============== SESSION LOG TAB ==============
+    // A small in-state "draft" timer (state.timer) lives alongside the
+    // permanent state.sessions log. Keeping the draft in state — not a plain
+    // JS variable — means a running/paused timer plus any tags/notes typed so
+    // far survive a page reload (autosave already writes state on every
+    // change, same mechanism as everything else on this page).
+    let timerTickInterval = null;
+    function timerElapsedMs() {
+      const t = state.timer;
+      return t.accumulatedMs + (t.running && t.startedAt ? (Date.now() - t.startedAt) : 0);
+    }
+    function formatDuration(ms) {
+      const totalSec = Math.max(0, Math.round(ms / 1000));
+      const h = Math.floor(totalSec / 3600);
+      const m = Math.floor((totalSec % 3600) / 60);
+      const s = totalSec % 60;
+      return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+    }
+    function formatDurationShort(sec) {
+      sec = sec || 0;
+      const h = Math.floor(sec / 3600), m = Math.round((sec % 3600) / 60);
+      if (h > 0) return `${h}h ${m}m`;
+      return `${m}m`;
+    }
+    function startTimerTick() {
+      stopTimerTick();
+      timerTickInterval = setInterval(() => {
+        const el = document.getElementById("timerDisplay");
+        if (el) el.textContent = formatDuration(timerElapsedMs());
+      }, 1000);
+    }
+    function stopTimerTick() {
+      clearInterval(timerTickInterval);
+      timerTickInterval = null;
+    }
+    function resetTimer() {
+      state.timer = { running: false, startedAt: null, firstStartedAt: null, accumulatedMs: 0, projects: [], topics: [], notes: "", nextTime: "" };
+    }
+    function timerStart() {
+      if (state.timer.running) return;
+      if (state.timer.firstStartedAt == null) state.timer.firstStartedAt = Date.now();
+      state.timer.startedAt = Date.now();
+      state.timer.running = true;
+      saveState();
+      startTimerTick();
+      renderTimerDraft();
+    }
+    function timerPause() {
+      if (!state.timer.running) return;
+      state.timer.accumulatedMs += Date.now() - state.timer.startedAt;
+      state.timer.running = false;
+      state.timer.startedAt = null;
+      saveState();
+      stopTimerTick();
+      renderTimerDraft();
+    }
+    function timerStopSave() {
+      const ms = timerElapsedMs();
+      if (ms < 1000 && !confirm("This session is under a second — save it anyway?")) return;
+      const entry = {
+        id: uid(),
+        date: new Date(state.timer.firstStartedAt || Date.now()).toISOString().slice(0, 10),
+        durationSec: Math.round(ms / 1000),
+        projects: [...state.timer.projects],
+        topics: [...state.timer.topics],
+        notes: state.timer.notes,
+        nextTime: state.timer.nextTime,
+      };
+      state.sessions.unshift(entry);
+      resetTimer();
+      saveState();
+      stopTimerTick();
+      renderTimerDraft();
+      renderSessionHistory();
+      refreshSummary();
+    }
+    function timerDiscard() {
+      if (!confirm("Discard the current timer and any notes entered? This can't be undone.")) return;
+      resetTimer();
+      saveState();
+      stopTimerTick();
+      renderTimerDraft();
+    }
+
+    // ---- Tag pickers (shared between the live draft and saved session cards) ----
+    function getTagArray(owner, kind) {
+      if (owner === "draft") return state.timer[kind];
+      const s = state.sessions.find(x => x.id === owner);
+      return s ? s[kind] : null;
+    }
+    function addTag(owner, kind, value) {
+      const arr = getTagArray(owner, kind);
+      value = (value || "").trim();
+      if (!arr || !value || arr.includes(value)) return;
+      arr.push(value);
+      saveState();
+      if (owner === "draft") renderTimerDraft(); else renderSessionHistory();
+    }
+    function removeTag(owner, kind, value) {
+      const arr = getTagArray(owner, kind);
+      if (!arr) return;
+      const idx = arr.indexOf(value);
+      if (idx > -1) arr.splice(idx, 1);
+      saveState();
+      if (owner === "draft") renderTimerDraft(); else renderSessionHistory();
+    }
+    function tagPickerHtml(owner, kind, arr) {
+      const listId = kind === "projects" ? "projectNamesList" : "topicNamesList";
+      return `<div class="tag-picker" data-owner="${owner}" data-kind="${kind}">
+        <div class="tag-chips">${(arr || []).map(t => `<span class="tag-chip">${escapeHtml(t)}<button type="button" class="tag-remove" data-tag="${escapeHtml(t)}">×</button></span>`).join("")}</div>
+        <input type="text" class="tag-input" list="${listId}" placeholder="Type, press Enter...">
+      </div>`;
+    }
+    function wireTagPickers(root) {
+      root.querySelectorAll(".tag-picker").forEach(tp => {
+        const owner = tp.dataset.owner, kind = tp.dataset.kind;
+        tp.querySelectorAll(".tag-remove").forEach(btn => { btn.onclick = () => removeTag(owner, kind, btn.dataset.tag); });
+        const inp = tp.querySelector(".tag-input");
+        if (inp) inp.onkeydown = (e) => { if (e.key === "Enter") { e.preventDefault(); addTag(owner, kind, inp.value); } };
+      });
+    }
+    function refreshDatalists() {
+      const pl = document.getElementById("projectNamesList");
+      const tl = document.getElementById("topicNamesList");
+      if (pl) pl.innerHTML = state.projects.map(p => `<option value="${escapeHtml(p.name)}">`).join("");
+      if (tl) tl.innerHTML = state.concepts.map(c => `<option value="${escapeHtml(c.topic)}">`).join("");
+    }
+
+    function renderTimerDraft() {
+      const t = state.timer;
+      const running = t.running;
+      const hasTime = running || t.accumulatedMs > 0;
+      const panel = document.getElementById("timerPanel");
+      if (!panel) return;
+      panel.innerHTML = `
+        <div class="timer-top">
+          <div class="timer-display" id="timerDisplay">${formatDuration(timerElapsedMs())}</div>
+          <div class="timer-controls">
+            <button class="btn primary" id="timerStartBtn" ${running ? "disabled" : ""}>${(t.accumulatedMs > 0 && !running) ? "▶ Resume" : "▶ Start"}</button>
+            <button class="btn" id="timerPauseBtn" ${running ? "" : "disabled"}>⏸ Pause</button>
+            <button class="btn" id="timerStopBtn" ${hasTime ? "" : "disabled"}>⏹ Stop &amp; Save</button>
+            <button class="btn danger" id="timerDiscardBtn" ${hasTime ? "" : "disabled"}>✕ Discard</button>
+          </div>
+        </div>
+        <div class="timer-fields">
+          <div class="field-group">
+            <label>Projects</label>
+            ${tagPickerHtml("draft", "projects", t.projects)}
+          </div>
+          <div class="field-group">
+            <label>Topics</label>
+            ${tagPickerHtml("draft", "topics", t.topics)}
+          </div>
+          <div class="field-group">
+            <label>Session notes</label>
+            <textarea id="draftNotes" placeholder="What did you work on / learn?">${escapeHtml(t.notes)}</textarea>
+          </div>
+          <div class="field-group">
+            <label>What to do next time</label>
+            <textarea id="draftNextTime" placeholder="Pick up here next session...">${escapeHtml(t.nextTime)}</textarea>
+          </div>
+        </div>`;
+      refreshDatalists();
+      wireTagPickers(panel);
+      document.getElementById("draftNotes").oninput = e => { state.timer.notes = e.target.value; saveState(); };
+      document.getElementById("draftNextTime").oninput = e => { state.timer.nextTime = e.target.value; saveState(); };
+      document.getElementById("timerStartBtn").onclick = timerStart;
+      document.getElementById("timerPauseBtn").onclick = timerPause;
+      document.getElementById("timerStopBtn").onclick = timerStopSave;
+      document.getElementById("timerDiscardBtn").onclick = timerDiscard;
+    }
+
+    function renderSessionHistory() {
+      const el = document.getElementById("sessionHistory");
+      if (!el) return;
+      if (!state.sessions.length) {
+        el.innerHTML = `<p class="empty-hint">No sessions logged yet — start the timer above to begin your first entry.</p>`;
+        return;
+      }
+      const sorted = [...state.sessions].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+      el.innerHTML = sorted.map(s => `
+        <div class="session-card" data-session-id="${s.id}">
+          <div class="session-row1">
+            <input type="date" class="session-date" value="${escapeHtml(s.date || "")}" data-id="${s.id}">
+            <span class="session-duration">${formatDurationShort(s.durationSec)}</span>
+            <button class="icon-btn delete-session-btn" data-id="${s.id}" title="Delete">✕</button>
+          </div>
+          <div class="field-group">
+            <label>Projects</label>
+            ${tagPickerHtml(s.id, "projects", s.projects)}
+          </div>
+          <div class="field-group">
+            <label>Topics</label>
+            ${tagPickerHtml(s.id, "topics", s.topics)}
+          </div>
+          <div class="field-group">
+            <label>Session notes</label>
+            <textarea data-id="${s.id}" data-field="notes" placeholder="No notes">${escapeHtml(s.notes || "")}</textarea>
+          </div>
+          <div class="field-group">
+            <label>What to do next time</label>
+            <textarea data-id="${s.id}" data-field="nextTime" placeholder="No notes">${escapeHtml(s.nextTime || "")}</textarea>
+          </div>
+        </div>`).join("");
+      refreshDatalists();
+      wireTagPickers(el);
+      el.querySelectorAll("textarea[data-field]").forEach(ta => {
+        ta.oninput = () => {
+          const s = state.sessions.find(x => x.id === ta.dataset.id);
+          if (s) { s[ta.dataset.field] = ta.value; saveState(); }
+        };
+      });
+      el.querySelectorAll("input.session-date").forEach(inp => {
+        inp.onchange = () => {
+          const s = state.sessions.find(x => x.id === inp.dataset.id);
+          if (s) { s.date = inp.value; saveState(); }
+        };
+      });
+      el.querySelectorAll(".delete-session-btn").forEach(btn => {
+        btn.onclick = () => {
+          if (!confirm("Delete this session log entry?")) return;
+          state.sessions = state.sessions.filter(x => x.id !== btn.dataset.id);
+          saveState();
+          renderSessionHistory();
+          refreshSummary();
+        };
+      });
+    }
+
+    function renderSessionTab() {
+      renderTimerDraft();
+      renderSessionHistory();
+    }
+
     // ============== TABS ==============
     document.querySelectorAll(".tab-btn").forEach(btn => {
       btn.onclick = () => {
@@ -1666,10 +2219,16 @@
       renderConceptTables();
       renderProjectTables();
       renderQuizzes();
+      renderSessionTab();
     }
 
     renderAll();
     tryReconnectFile();
+    // If the timer was left running (e.g. tab was closed mid-session), pick the
+    // live tick back up now that the DOM/state are ready. The elapsed time
+    // itself is always correct even without this — it's computed from
+    // startedAt vs Date.now() — this just resumes the once-a-second display refresh.
+    if (state.timer.running) startTimerTick();
   </script>
 </body>
 
