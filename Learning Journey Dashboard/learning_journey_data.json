@@ -935,7 +935,17 @@
       "notes": ""
     }
   ],
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "id_jdgiermfs4smruntbo0",
+      "date": "2026-07-21",
+      "durationSec": 13,
+      "projects": [],
+      "topics": [],
+      "notes": "Created matplotlib/seaborn notebook to work on and a github commands reference sheet",
+      "nextTime": "Complete hypothesis testing and confidence intervals "
+    }
+  ],
   "timer": {
     "running": false,
     "startedAt": null,
