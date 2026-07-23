@@ -947,10 +947,10 @@
     }
   ],
   "timer": {
-    "running": false,
-    "startedAt": null,
-    "firstStartedAt": null,
-    "accumulatedMs": 0,
+    "running": true,
+    "startedAt": 1784703669595,
+    "firstStartedAt": 1784701261787,
+    "accumulatedMs": 1665154,
     "projects": [],
     "topics": [],
     "notes": "",
