@@ -937,6 +937,15 @@
   ],
   "sessions": [
     {
+      "id": "id_64th7vbory3mrxi95nn",
+      "date": "2026-07-23",
+      "durationSec": 6381,
+      "projects": [],
+      "topics": [],
+      "notes": "Got through section 3 of the notebook and started section 4",
+      "nextTime": "pick up at 4.2. of the matplotlib/seaborn notebook"
+    },
+    {
       "id": "id_jdgiermfs4smruntbo0",
       "date": "2026-07-21",
       "durationSec": 13,
@@ -947,10 +956,10 @@
     }
   ],
   "timer": {
-    "running": true,
-    "startedAt": 1784808518547,
-    "firstStartedAt": 1784803559898,
-    "accumulatedMs": 4265519,
+    "running": false,
+    "startedAt": null,
+    "firstStartedAt": null,
+    "accumulatedMs": 0,
     "projects": [],
     "topics": [],
     "notes": "",
