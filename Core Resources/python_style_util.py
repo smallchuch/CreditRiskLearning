@@ -26,6 +26,16 @@ import matplotlib.font_manager as fm
 import matplotlib.patches as mpatches
 import numpy as np
 import seaborn as sns
+from enum import Enum
+from typing import Literal
+
+
+# ── TYPE ALIASES (editor autocomplete for p()/f()/s() arguments) ──────────────
+# Pylance suggests these exact string values the moment you type p('...') etc.
+Hue = Literal['off_white', 'olive', 'jacaranda', 'gold', 'charcoal',
+              'red', 'green', 'yellow']
+FontRole = Literal['heading', 'body', 'mono']
+SizeRole = Literal['display', 'title', 'subtitle', 'body', 'small', 'tiny', 'mono']
 
 
 # ── FONT REGISTRATION ─────────────────────────────────────────────────────────
@@ -252,18 +262,18 @@ palette = {
 
 # ── SHORTHAND HELPERS ─────────────────────────────────────────────────────────
 
-def p(hue, shade):
+def p(hue: Hue, shade: int) -> str:
     """
-    Shorthand palette accessor.
+    Shorthand palette accessor. Type p(' and the editor lists every hue.
     p('jacaranda', 300) -> '#7A5C9E'
     p('red', 100)       -> '#FCEBEA'
     """
     return palette[hue][shade]
 
 
-def f(role):
+def f(role: FontRole) -> str:
     """
-    Shorthand font accessor.
+    Shorthand font accessor. Type f(' and the editor lists the roles.
     f('heading') -> 'Inter'
     f('body')    -> 'DM Sans'
     f('mono')    -> 'JetBrains Mono'
@@ -271,13 +281,113 @@ def f(role):
     return fonts[role]
 
 
-def s(role):
+def s(role: SizeRole) -> int:
     """
-    Shorthand size accessor.
+    Shorthand size accessor. Type s(' and the editor lists the roles.
     s('title') -> 15
     s('body')  -> 10
     """
     return sizes[role]
+
+
+# ── TYPED ACCESSORS — VS CODE AUTOCOMPLETE ────────────────────────────────────
+# Type "C." or "Size." inside any matplotlib call to get a dropdown of every
+# brand colour / size. Each member subclasses str/int, so it drops straight
+# into color=/fontsize= with no .value needed:
+#
+#     ax.bar(x, y, color=C.default)              # renders as '#E53935'
+#     ax.set_title('t', fontsize=Size.title)     # renders as 15
+#     ax.axhline(y, color=Shade.jacaranda_200)   # any specific tint
+#
+# Values are pulled from the palette/sizes dicts above, so those dicts remain
+# the single source of truth — change a hex there and the enum follows. Member
+# NAMES are written out statically on purpose: that's what the editor reads for
+# autocomplete (a dynamically-built Enum would show nothing in the dropdown).
+
+class C(str, Enum):
+    """Everyday semantic colours. Type `C.` for the dropdown."""
+    # Data-viz / chart series
+    default   = palette['default_colour']     # red    — default / loss
+    safe      = palette['safe_colour']        # green  — performing / approve
+    watch     = palette['watch_colour']       # yellow — watch / caution
+    primary   = palette['chart_primary']      # jacaranda — main series
+    secondary = palette['chart_secondary']    # gold      — 2nd series
+    tertiary  = palette['chart_tertiary']     # olive     — 3rd series
+    fourth    = palette['chart_fourth']       # jacaranda 200 — 4th series
+    # Text
+    text         = palette['text_primary']    # headlines, body text
+    text_muted   = palette['text_secondary']  # subheadings, axis labels
+    text_faint   = palette['text_tertiary']   # hints, annotations
+    text_inverse = palette['text_inverse']    # text on dark / coloured fills
+
+
+class Shade(str, Enum):
+    """Full brand + risk scale for granular picks. Type `Shade.` then a hue."""
+    # Brand / neutral hues (100 lightest -> 500 darkest)
+    off_white_100 = palette['off_white'][100]
+    off_white_200 = palette['off_white'][200]
+    off_white_300 = palette['off_white'][300]
+    off_white_400 = palette['off_white'][400]
+    off_white_500 = palette['off_white'][500]
+    olive_100 = palette['olive'][100]
+    olive_200 = palette['olive'][200]
+    olive_300 = palette['olive'][300]
+    olive_400 = palette['olive'][400]
+    olive_500 = palette['olive'][500]
+    jacaranda_100 = palette['jacaranda'][100]
+    jacaranda_200 = palette['jacaranda'][200]
+    jacaranda_300 = palette['jacaranda'][300]
+    jacaranda_400 = palette['jacaranda'][400]
+    jacaranda_500 = palette['jacaranda'][500]
+    gold_100 = palette['gold'][100]
+    gold_200 = palette['gold'][200]
+    gold_300 = palette['gold'][300]
+    gold_400 = palette['gold'][400]
+    gold_500 = palette['gold'][500]
+    charcoal_100 = palette['charcoal'][100]
+    charcoal_200 = palette['charcoal'][200]
+    charcoal_300 = palette['charcoal'][300]
+    charcoal_400 = palette['charcoal'][400]
+    charcoal_500 = palette['charcoal'][500]
+    # Risk-semantic hues (fuller 100 -> 900 scale)
+    red_100 = palette['red'][100]
+    red_200 = palette['red'][200]
+    red_300 = palette['red'][300]
+    red_400 = palette['red'][400]
+    red_500 = palette['red'][500]
+    red_600 = palette['red'][600]
+    red_700 = palette['red'][700]
+    red_800 = palette['red'][800]
+    red_900 = palette['red'][900]
+    green_100 = palette['green'][100]
+    green_200 = palette['green'][200]
+    green_300 = palette['green'][300]
+    green_400 = palette['green'][400]
+    green_500 = palette['green'][500]
+    green_600 = palette['green'][600]
+    green_700 = palette['green'][700]
+    green_800 = palette['green'][800]
+    green_900 = palette['green'][900]
+    yellow_100 = palette['yellow'][100]
+    yellow_200 = palette['yellow'][200]
+    yellow_300 = palette['yellow'][300]
+    yellow_400 = palette['yellow'][400]
+    yellow_500 = palette['yellow'][500]
+    yellow_600 = palette['yellow'][600]
+    yellow_700 = palette['yellow'][700]
+    yellow_800 = palette['yellow'][800]
+    yellow_900 = palette['yellow'][900]
+
+
+class Size(int, Enum):
+    """Type-scale sizes. Type `Size.` for the dropdown; drops into fontsize=."""
+    display  = sizes['display']    # 20 — supertitles, hero numbers
+    title    = sizes['title']      # 15 — chart titles
+    subtitle = sizes['subtitle']   # 12 — subtitles, section labels
+    body     = sizes['body']       # 10 — axis labels, legend
+    small    = sizes['small']      #  9 — tick labels
+    tiny     = sizes['tiny']       #  8 — footnotes, dense tables
+    mono     = sizes['mono']       #  9 — numbers, code callouts
 
 
 # ── GRADIENT HELPERS ──────────────────────────────────────────────────────────
@@ -974,6 +1084,83 @@ def show_tokens():
     plt.tight_layout()
     plt.show()
 
+
+def show_colormaps(extra=None):
+    """
+    Render a reference sheet of matplotlib/seaborn colormaps as labelled
+    gradient bars, grouped by type. A keep-open cheat sheet for picking the
+    RIGHT KIND of colormap (sequential vs diverging vs cyclical), not just a
+    good-looking one.
+
+    All names shown are always available after `import matplotlib` (seaborn's
+    rocket/mako/flare/crest/icefire/vlag register on `import seaborn`, already
+    imported by this module). Append '_r' to any name to reverse it, e.g.
+    'RdYlGn_r' so red flags the high/risky end — the reversal used for
+    default-rate charts.
+
+    Args:
+        extra: optional dict {group_name: [cmap_names]} to append your own
+               rows — handy after installing cmocean/colorcet/cmasher, e.g.
+               show_colormaps(extra={'cmocean': ['cmo.thermal', 'cmo.deep']}).
+
+    Usage:
+        show_colormaps()
+    """
+    gradient_strip = np.linspace(0, 1, 256)
+    gradient_strip = np.vstack([gradient_strip, gradient_strip])
+
+    groups = {
+        'Perceptually uniform (sequential)': ['viridis', 'plasma', 'inferno', 'magma', 'cividis'],
+        'Sequential':                        ['Blues', 'Greens', 'Oranges', 'Purples', 'YlOrRd', 'YlGnBu', 'Greys'],
+        'Diverging (centred data — corr, above/below benchmark)':
+                                             ['RdYlGn', 'RdYlGn_r', 'RdBu', 'coolwarm', 'Spectral', 'PiYG', 'BrBG'],
+        'Cyclical (angles / time-of-day)':   ['twilight', 'twilight_shifted', 'hsv'],
+        'Seaborn palettes':                  ['rocket', 'mako', 'flare', 'crest', 'icefire', 'vlag'],
+        'High-contrast (use with care)':     ['turbo', 'cubehelix', 'gist_earth', 'nipy_spectral'],
+    }
+    if extra:
+        groups.update(extra)
+
+    # Keep only colormaps actually registered in this environment
+    groups = {
+        header: [n for n in names if n in plt.colormaps()]
+        for header, names in groups.items()
+    }
+    groups = {h: names for h, names in groups.items() if names}
+
+    n_rows = sum(len(v) for v in groups.values()) + len(groups)
+
+    fig, axes = plt.subplots(n_rows, 1, figsize=(13, n_rows * 0.34))
+    fig.patch.set_facecolor('white')
+    fig.subplots_adjust(top=0.99, bottom=0.01, left=0.26, right=0.99, hspace=0.35)
+
+    i = 0
+    for header, names in groups.items():
+        ax = axes[i]
+        ax.set_axis_off()
+        ax.text(0, 0.35, header,
+                fontfamily=fonts['heading'], fontsize=sizes['subtitle'],
+                fontweight='bold', color=palette['charcoal'][500], va='center')
+        i += 1
+        for name in names:
+            ax = axes[i]
+            ax.imshow(gradient_strip, aspect='auto', cmap=name)
+            ax.text(-0.01, 0.5, name,
+                    transform=ax.transAxes, ha='right', va='center',
+                    fontfamily=fonts['mono'], fontsize=sizes['mono'],
+                    color=palette['charcoal'][400])
+            ax.set_xticks([])
+            ax.set_yticks([])
+            for spine in ax.spines.values():
+                spine.set_visible(False)
+            i += 1
+
+    plt.suptitle('Colormap Reference', fontsize=sizes['title'],
+                 fontweight='bold', color=palette['charcoal'][500],
+                 fontfamily=fonts['heading'], y=1.005)
+    plt.show()
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 # QUICK REFERENCE
 # ══════════════════════════════════════════════════════════════════════════════
@@ -984,6 +1171,13 @@ def show_tokens():
 #
 #  SINGLE COLOUR
 #  plt.bar(x, y, color=p('jacaranda', 300))
+#
+#  AUTOCOMPLETE (VS Code) — type the dot to get a dropdown of options
+#  from python_style_util import C, Shade, Size
+#  ax.bar(x, y, color=C.default)              # semantic — C. lists them
+#  ax.axhline(y, color=Shade.jacaranda_200)   # any tint — Shade. lists them
+#  ax.set_title('t', fontsize=Size.title)     # sizes   — Size. lists them
+#  p('jacaranda', 300)  # p('/f('/s(' also autocomplete their string args
 #
 #  GRADIENT BARS
 #  plt.bar(x, y, color=gradient('jacaranda'))
@@ -1023,6 +1217,8 @@ def show_tokens():
 #  PREVIEW
 #  show_palette()       # colour swatches
 #  show_fonts()         # font specimen
+#  show_tokens()        # semantic token reference
+#  show_colormaps()     # matplotlib/seaborn colormap reference (add '_r' to reverse)
 #  show_style_guide()   # everything together
 #
 # ══════════════════════════════════════════════════════════════════════════════
