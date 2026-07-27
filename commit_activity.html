@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Commit Activity — CreditRiskLearning</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root{--bg:#0d1117;--panel:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--accent:#2ea043;--accent2:#58a6ff;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;padding:32px 24px;}
+  .wrap{max-width:980px;margin:0 auto}
+  h1{font-size:22px;margin:0 0 4px}
+  .sub{color:var(--muted);font-size:14px;margin-bottom:24px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+  .stat{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px}
+  .stat .n{font-size:26px;font-weight:700}
+  .stat .l{color:var(--muted);font-size:12px;margin-top:4px;text-transform:uppercase;letter-spacing:.04em}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px}
+  .card h2{font-size:15px;margin:0 0 2px}
+  .card p{color:var(--muted);font-size:13px;margin:0 0 14px}
+  .row{display:grid;grid-template-columns:1.6fr 1fr;gap:20px}
+  .chartbox{position:relative;height:300px}
+  .chartbox.sm{height:260px}
+  @media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}.row{grid-template-columns:1fr}}
+  .foot{color:var(--muted);font-size:12px;text-align:center;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Commit Activity</h1>
+  <div class="sub" id="sub"></div>
+  <div class="stats" id="stats"></div>
+  <div class="card">
+    <h2>Commits over time</h2>
+    <p>Daily commits (bars) and cumulative total (line).</p>
+    <div class="chartbox"><canvas id="timeline"></canvas></div>
+  </div>
+  <div class="row">
+    <div class="card">
+      <h2>Commits per week</h2>
+      <p>ISO week totals.</p>
+      <div class="chartbox sm"><canvas id="weekly"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>% of days active</h2>
+      <p>Days with &ge;1 commit vs idle days.</p>
+      <div class="chartbox sm"><canvas id="active"></canvas></div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Commits by day of week</h2>
+    <p>Which weekdays you commit most.</p>
+    <div class="chartbox sm"><canvas id="dow"></canvas></div>
+  </div>
+  <div class="foot" id="foot"></div>
+</div>
+<script>
+const D = {
+  "total": 61,
+  "start": "2026-05-30",
+  "end": "2026-07-26",
+  "span_days": 58,
+  "active_days": 30,
+  "pct_active": 51.7,
+  "daily": [
+    [
+      "2026-05-30",
+      7
+    ],
+    [
+      "2026-05-31",
+      3
+    ],
+    [
+      "2026-06-01",
+      0
+    ],
+    [
+      "2026-06-02",
+      2
+    ],
+    [
+      "2026-06-03",
+      1
+    ],
+    [
+      "2026-06-04",
+      0
+    ],
+    [
+      "2026-06-05",
+      0
+    ],
+    [
+      "2026-06-06",
+      1
+    ],
+    [
+      "2026-06-07",
+      0
+    ],
+    [
+      "2026-06-08",
+      2
+    ],
+    [
+      "2026-06-09",
+      0
+    ],
+    [
+      "2026-06-10",
+      2
+    ],
+    [
+      "2026-06-11",
+      0
+    ],
+    [
+      "2026-06-12",
+      2
+    ],
+    [
+      "2026-06-13",
+      0
+    ],
+    [
+      "2026-06-14",
+      1
+    ],
+    [
+      "2026-06-15",
+      0
+    ],
+    [
+      "2026-06-16",
+      3
+    ],
+    [
+      "2026-06-17",
+      0
+    ],
+    [
+      "2026-06-18",
+      0
+    ],
+    [
+      "2026-06-19",
+      0
+    ],
+    [
+      "2026-06-20",
+      3
+    ],
+    [
+      "2026-06-21",
+      0
+    ],
+    [
+      "2026-06-22",
+      0
+    ],
+    [
+      "2026-06-23",
+      1
+    ],
+    [
+      "2026-06-24",
+      1
+    ],
+    [
+      "2026-06-25",
+      0
+    ],
+    [
+      "2026-06-26",
+      0
+    ],
+    [
+      "2026-06-27",
+      0
+    ],
+    [
+      "2026-06-28",
+      1
+    ],
+    [
+      "2026-06-29",
+      0
+    ],
+    [
+      "2026-06-30",
+      0
+    ],
+    [
+      "2026-07-01",
+      3
+    ],
+    [
+      "2026-07-02",
+      2
+    ],
+    [
+      "2026-07-03",
+      1
+    ],
+    [
+      "2026-07-04",
+      0
+    ],
+    [
+      "2026-07-05",
+      2
+    ],
+    [
+      "2026-07-06",
+      0
+    ],
+    [
+      "2026-07-07",
+      1
+    ],
+    [
+      "2026-07-08",
+      0
+    ],
+    [
+      "2026-07-09",
+      1
+    ],
+    [
+      "2026-07-10",
+      4
+    ],
+    [
+      "2026-07-11",
+      2
+    ],
+    [
+      "2026-07-12",
+      1
+    ],
+    [
+      "2026-07-13",
+      0
+    ],
+    [
+      "2026-07-14",
+      0
+    ],
+    [
+      "2026-07-15",
+      3
+    ],
+    [
+      "2026-07-16",
+      0
+    ],
+    [
+      "2026-07-17",
+      1
+    ],
+    [
+      "2026-07-18",
+      0
+    ],
+    [
+      "2026-07-19",
+      0
+    ],
+    [
+      "2026-07-20",
+      1
+    ],
+    [
+      "2026-07-21",
+      2
+    ],
+    [
+      "2026-07-22",
+      0
+    ],
+    [
+      "2026-07-23",
+      3
+    ],
+    [
+      "2026-07-24",
+      1
+    ],
+    [
+      "2026-07-25",
+      0
+    ],
+    [
+      "2026-07-26",
+      3
+    ]
+  ],
+  "cumulative": [
+    7,
+    10,
+    10,
+    12,
+    13,
+    13,
+    13,
+    14,
+    14,
+    16,
+    16,
+    18,
+    18,
+    20,
+    20,
+    21,
+    21,
+    24,
+    24,
+    24,
+    24,
+    27,
+    27,
+    27,
+    28,
+    29,
+    29,
+    29,
+    29,
+    30,
+    30,
+    30,
+    33,
+    35,
+    36,
+    36,
+    38,
+    38,
+    39,
+    39,
+    40,
+    44,
+    46,
+    47,
+    47,
+    47,
+    50,
+    50,
+    51,
+    51,
+    51,
+    52,
+    54,
+    54,
+    57,
+    58,
+    58,
+    61
+  ],
+  "weekly": [
+    [
+      "2026-W22",
+      10
+    ],
+    [
+      "2026-W23",
+      4
+    ],
+    [
+      "2026-W24",
+      7
+    ],
+    [
+      "2026-W25",
+      6
+    ],
+    [
+      "2026-W26",
+      3
+    ],
+    [
+      "2026-W27",
+      8
+    ],
+    [
+      "2026-W28",
+      9
+    ],
+    [
+      "2026-W29",
+      4
+    ],
+    [
+      "2026-W30",
+      10
+    ]
+  ],
+  "dow": {
+    "Mon": 3,
+    "Tue": 9,
+    "Wed": 10,
+    "Thu": 6,
+    "Fri": 9,
+    "Sat": 13,
+    "Sun": 11
+  },
+  "monthly": [
+    [
+      "2026-05",
+      10
+    ],
+    [
+      "2026-06",
+      20
+    ],
+    [
+      "2026-07",
+      31
+    ]
+  ],
+  "generated": "2026-07-27",
+  "longest_streak": 4,
+  "current_streak": 0
+};
+const green="#2ea043", blue="#58a6ff", grid="rgba(139,148,158,.15)", muted="#8b949e";
+Chart.defaults.color=muted;
+Chart.defaults.font.family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif";
+document.getElementById('sub').textContent =
+  `Repo: CreditRiskLearning · ${D.total} commits · ${D.start} → ${D.end} · updated ${D.generated}`;
+const idle = D.span_days - D.active_days;
+const stats=[
+  ["Total commits", D.total],
+  ["% days active", D.pct_active + "%"],
+  ["Current streak", (D.current_streak||0) + "d"],
+  ["Longest streak", (D.longest_streak||0) + "d"]
+];
+document.getElementById('stats').innerHTML = stats.map(s=>
+  `<div class="stat"><div class="n">${s[1]}</div><div class="l">${s[0]}</div></div>`).join('');
+const labels = D.daily.map(d=>d[0]);
+const counts = D.daily.map(d=>d[1]);
+new Chart(document.getElementById('timeline'),{
+  data:{labels,datasets:[
+    {type:'bar',label:'Commits/day',data:counts,backgroundColor:green,borderRadius:2,order:2,yAxisID:'y'},
+    {type:'line',label:'Cumulative',data:D.cumulative,borderColor:blue,backgroundColor:blue,tension:.25,pointRadius:0,borderWidth:2,order:1,yAxisID:'y1'}
+  ]},
+  options:{maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+    scales:{x:{grid:{display:false},ticks:{maxTicksLimit:10,autoSkip:true}},
+      y:{beginAtZero:true,position:'left',grid:{color:grid},title:{display:true,text:'per day'}},
+      y1:{beginAtZero:true,position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'cumulative'}}},
+    plugins:{legend:{labels:{usePointStyle:true}}}}
+});
+new Chart(document.getElementById('weekly'),{
+  type:'bar',
+  data:{labels:D.weekly.map(w=>w[0].replace(/^\d+-/,'')),datasets:[{label:'Commits',data:D.weekly.map(w=>w[1]),backgroundColor:green,borderRadius:3}]},
+  options:{maintainAspectRatio:false,scales:{x:{grid:{display:false}},y:{beginAtZero:true,grid:{color:grid}}},plugins:{legend:{display:false}}}
+});
+new Chart(document.getElementById('active'),{
+  type:'doughnut',
+  data:{labels:['Active days','Idle days'],datasets:[{data:[D.active_days,idle],backgroundColor:[green,'#30363d'],borderColor:'#161b22',borderWidth:3}]},
+  options:{maintainAspectRatio:false,cutout:'68%',plugins:{legend:{position:'bottom',labels:{usePointStyle:true}},
+    tooltip:{callbacks:{label:c=>`${c.label}: ${c.raw} (${(c.raw/D.span_days*100).toFixed(1)}%)`}}}}
+});
+const dowKeys=Object.keys(D.dow);
+new Chart(document.getElementById('dow'),{
+  type:'bar',
+  data:{labels:dowKeys,datasets:[{label:'Commits',data:dowKeys.map(k=>D.dow[k]),backgroundColor:blue,borderRadius:3}]},
+  options:{maintainAspectRatio:false,scales:{x:{grid:{display:false}},y:{beginAtZero:true,grid:{color:grid}}},plugins:{legend:{display:false}}}
+});
+document.getElementById('foot').textContent =
+  `${D.active_days} of ${D.span_days} calendar days had commits (${D.pct_active}%). Includes identities Evan & smallchuch.`;
+</script>
+</body>
+</html>
