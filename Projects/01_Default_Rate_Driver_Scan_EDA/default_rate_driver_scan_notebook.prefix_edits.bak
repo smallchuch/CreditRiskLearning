@@ -1317,7 +1317,7 @@
    "source": [
     "**Obvervation:** 300k+ Rows and 122 Columns. \n",
     "\n",
-    "**Decision:** Will need to split into statistical categories and potentially similar buckets (i.e. applicant data, security data, social data) for further assessment as attempting look at this number of columns as a whole group will make it difficult to draw tangible conclusions."
+    "**Decision:** Will need to split into statistical categories and potentially similar buckets (i.e. applicant data, security data, social data) for further assessment as attempting look at this number of columns as a whole group will make it difficult to draw tangible conslusions."
    ]
   },
   {
@@ -1401,7 +1401,7 @@
    "id": "f3beb6af",
    "metadata": {},
    "source": [
-    "## 2. Data Quality and Missingness\n",
+    "## 2. Data Quality and Missingess\n",
     "\n",
     "**Prediction:** Expecting large portion of data to be missing for various reasons, such as length of employment missing due to an applicant potentially being unemployed (MNAR). These types of missingness relationship will be established across variables by looking at cross-validation."
    ]
@@ -2209,7 +2209,7 @@
     "\n",
     "**DAYS_EMPLOYED**\n",
     "\n",
-    "The value '365243' within the DAYS_EMPLOYED column is technically a null value disguised as real entry. This value must be flagged and replaced with 'NaN' before proceeding with the missingness assessment.\n",
+    "The value '365243' within the DAYS_EMPLOYED column is technically a null value disguised as real entry. This value must be flagged and replaced with 'NaN' before proceeding with the missingness assesment.\n",
     "\n",
     "**CODE_GENDER**\n",
     "\n",
@@ -2475,9 +2475,9 @@
    "source": [
     "**Observation:** All of the columns with >= 50% of data missing belong to the same thematic subset - 'building_stats' - except for for 'OWN_CAR_AGE' and 'EXT_SOURCE_1'. \n",
     "\n",
-    "'OCCUPATION_TYPE', 'DAYS_EMPLOYED' and 'EXT_SOURCE_3' are also noteworthy as they come from categories that would typically be key criteria when assessing an application for a mortgage.\n",
+    "'OCCUPATION_TYPE', 'DAYS_EMPLOYED' and 'EXT_SOURCE_3' are also noteworthy as they come from categoreis that would typically be key criteria when assessing an application for a mortgage.\n",
     "\n",
-    "**Decision:** The 'building_stats' subset require a separate assessment of its missingness for a better understanding of its relevance for predicting default. The other two columns with high missingness percentage (>=50%) require a more granular assessment when looking at their correlation with default."
+    "**Decision:** The 'building_stats' subset require a separate assessment of its missingness for a better understanding of its relevance for predicting default. The other two columns with high missingness percentage (>=50%) require a more granualr assessment when looking at their correlation with default."
    ]
   },
   {
@@ -2493,7 +2493,7 @@
    "id": "126680ec",
    "metadata": {},
    "source": [
-    "**Prediction:** There are some subsets that have zero missing values and should be excluded to provide a focused assessment of the missingness of the data set."
+    "**Prediction:** There are some subsets that have zero missign values and should be exlcuded to provide a focused assessment of the missingness of the data set."
    ]
   },
   {
@@ -2755,7 +2755,7 @@
    "source": [
     "Assessing missingness per thematic subset that have been shown to have missing data - excluding 'building_stats', as noted previously.\n",
     "\n",
-    "**Prediction:** The thematic subset assessment will show there is block-wise missingness within these subsets."
+    "**Prediction:** The thematic subset assessment will show there is block-wise missingess within these subsets."
    ]
   },
   {
@@ -2984,7 +2984,7 @@
     "fig, axes = plt.subplots(n_rows, n_cols, figsize=(16, 0.6 * sum(bar_counts)), gridspec_kw={'height_ratios': bar_counts})\n",
     "axes = axes.flatten()\n",
     "\n",
-    "# Loop to iterate through column groups for missingness percentages\n",
+    "# Loop to iterate through column groups for missingess percentages\n",
     "\n",
     "for i, key in enumerate(groups_to_plot):\n",
     "    \n",
@@ -3136,7 +3136,7 @@
     }
    ],
    "source": [
-    "# Pivot Shows equivalent missingness counts across each of these columns - check correlation to confirm same values missing in each column\n",
+    "# Pivot Shows equivalent missingess counts across each of these columns - check correlation to confirm same values missing in each column\n",
     "corr = df[cols].isnull().corr()\n",
     "\n",
     "off_diag = corr.where(~np.eye(len(corr), dtype=bool))\n",
@@ -3163,7 +3163,7 @@
    "id": "f7219ea9",
    "metadata": {},
    "source": [
-    "**Observation**: Missingness across the average, median and mode for the building_stats thematic subgroup are equivalent"
+    "**Observation**: Missingess across the average, median and mode for the building_stats thematic subgroup are equivalent"
    ]
   },
   {
@@ -4320,7 +4320,7 @@
    "id": "3cd17840",
    "metadata": {},
    "source": [
-    "**Decision:** Leave this subset as is for now. Upon completing univariate analysis for this subset and before feature selection it can be determined whether the 15 triplet columns (AVG, MED, MODE) are collapsed into one with a 'building_missing_info' sentinel column.  "
+    "**Decision:** Leave this subset as is for now. Upon completing univariate analysis for this subet and before feature selection it can be determined whether the 15 triplet columns (AVG< MED< MODE) are collapsed into one with a 'building_missing_info' sentinel column.  "
    ]
   },
   {
@@ -4458,7 +4458,7 @@
     }
    ],
    "source": [
-    "# Check whether missingness of Car Ages for each borrower corresponds with them owning a car or not\n",
+    "# Check whetehr missingness of Car Ages for each borrower corresponds with them owning a car or not\n",
     "\n",
     "car_age_missing = df['OWN_CAR_AGE'].isnull()\n",
     "\n",
@@ -4470,7 +4470,7 @@
    "id": "a967309e",
    "metadata": {},
    "source": [
-    "**Observation/Decision:** almost a complete match of the missingness for 'OWN_CAR_AGE' to borrowers that do not own a car. Therefore this is MAR missingness and requires no action at this stage."
+    "**Observation/Decision:** almost a complete match of hte missingness for 'OWN_CAR_AGE' to borrowers that do not own a car. Therefore this is MAR missingness and requires no action at this stage."
    ]
   },
   {
@@ -4583,7 +4583,7 @@
     }
    ],
    "source": [
-    "# Pivot Shows equivalent missingness counts across each of these columns - check correlation to confirm same values missing in each column\n",
+    "# Pivot Shows equivalent missingess counts across each of these columns - check correlation to confirm same values missing in each column\n",
     "corr = df[cols_be].isnull().corr()\n",
     "\n",
     "off_diag = corr.where(~np.eye(len(corr), dtype=bool))\n",
@@ -4601,13 +4601,21 @@
     "            fmt='.2f',           # 2 decimal places\n",
     "            annot_kws={'size': 12},\n",
     "            cbar_kws={'label': 'Nullity correlation'})\n",
-    "plt.title('Missingness correlation across bureau_enquiries columns')\n",
+    "plt.title('Missingness correlation across building_stats columns')\n",
     "\n",
     "plt.xticks(rotation=45, ha='right')\n",
     "\n",
     "plt.tight_layout()\n",
     "plt.show()\n"
    ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "35e454f8",
+   "metadata": {},
+   "outputs": [],
+   "source": []
   },
   {
    "cell_type": "markdown",
@@ -4734,7 +4742,7 @@
     }
    ],
    "source": [
-    "# Pivot Shows equivalent missingness counts across each of these columns - check correlation to confirm same values missing in each column\n",
+    "# Pivot Shows equivalent missingess counts across each of these columns - check correlation to confirm same values missing in each column\n",
     "corr = df[cols_sc].isnull().corr()\n",
     "\n",
     "off_diag = corr.where(~np.eye(len(corr), dtype=bool))\n",
@@ -4752,7 +4760,7 @@
     "            fmt='.2f',           # 2 decimal places\n",
     "            annot_kws={'size': 12},\n",
     "            cbar_kws={'label': 'Nullity correlation'})\n",
-    "plt.title('Missingness correlation across social_circle columns')\n",
+    "plt.title('Missingness correlation across building_stats columns')\n",
     "\n",
     "plt.yticks(rotation=0, ha='right')\n",
     "plt.xticks(rotation=45, ha='right')\n",
