@@ -5184,7 +5184,23 @@
    "cell_type": "markdown",
    "id": "c127ad29cf28",
    "metadata": {},
-   "source": "**Purpose.** Work through each feature family end to end — characterise its distribution (**Univariate**), then test how it moves with default (**Bivariate**) — so the binning decisions in Section 4 (WOE/IV) are informed rather than arbitrary. Surface skew, outliers, sparse categories and missingness, and close every family with a Decision that states the intended transform/binning.\n\n**Approach.** Work thematically using the `cols_by_theme` scaffolding from Section 2, highest-value families first. Each family runs two beats — Univariate then Bivariate — before a single committed Decision. Keep the **Predict → Task → Decision** rhythm; each Decision should point forward to Section 4.\n\n**Planned order:**\n\n| # | Family | Columns | What to look for → decision |\n|---|---|---|---|\n| 3.1 | External scores | `EXT_SOURCE_1/2/3` | Strongest expected drivers. Shape + missingness (EXT_SOURCE_1 ~56% missing) → quantile bins, missing as its own bin? |\n| 3.2 | Loan financials | `AMT_INCOME_TOTAL`, `AMT_CREDIT`, `AMT_ANNUITY`, `AMT_GOODS_PRICE` | Heavy right-skew + outliers → log-transform vs quantile bins |\n| 3.3 | Age & employment | `DAYS_BIRTH`, `DAYS_EMPLOYED` | Convert to positive years (`/-365`); DAYS_EMPLOYED carries the sentinel NaN → bin + missing flag |\n| 3.4 | Key categoricals | education, family status, income type, contract type | Frequency bars + default rate per level; note sparse levels (links back to 2.4 cardinality) |\n| 3.5 | Other numeric families | `client_timeline`, `social_circle`, `bureau_enquiries` | Lighter touch; confirm shape, flag anything odd |\n\n**Scope note:** distributions, target relationships and binning intent — the cross-feature IV ranking and the WOE/IV encoding itself are quantified in Section 4.\n"
+   "source": [
+    "**Purpose.** Characterise each feature's distribution *before* the target-relationship and WOE/IV work, so binning decisions in Section 5 are informed rather than arbitrary. Surface skew, outliers, and sparse categories, and close every subsection with a Decision that states the intended transform/binning.\n",
+    "\n",
+    "**Approach.** Work thematically using the `cols_by_theme` scaffolding from Section 2, highest-value families first. Keep the **Predict → Task → Decision** rhythm; each Decision should point forward to Section 5.\n",
+    "\n",
+    "**Planned order:**\n",
+    "\n",
+    "| # | Family | Columns | What to look for → decision |\n",
+    "|---|---|---|---|\n",
+    "| 3.1 | External scores | `EXT_SOURCE_1/2/3` | Strongest expected drivers. Shape + missingness (EXT_SOURCE_1 ~56% missing) → quantile bins, missing as its own bin? |\n",
+    "| 3.2 | Loan financials | `AMT_INCOME_TOTAL`, `AMT_CREDIT`, `AMT_ANNUITY`, `AMT_GOODS_PRICE` | Heavy right-skew + outliers → log-transform vs quantile bins |\n",
+    "| 3.3 | Age & employment | `DAYS_BIRTH`, `DAYS_EMPLOYED` | Convert to positive years (`/-365`); DAYS_EMPLOYED carries the sentinel NaN → bin + missing flag |\n",
+    "| 3.4 | Key categoricals | education, family status, income type, contract type | Frequency bars; note sparse levels (links back to 2.4 cardinality) |\n",
+    "| 3.5 | Other numeric families | `client_timeline`, `social_circle`, `bureau_enquiries` | Lighter touch; confirm shape, flag anything odd |\n",
+    "\n",
+    "**Scope note:** distributions and binning intent only — no target relationship yet (that's Section 4) and no WOE/IV (Section 5).\n"
+   ]
   },
   {
    "cell_type": "markdown",
@@ -5775,136 +5791,40 @@
   },
   {
    "cell_type": "markdown",
+   "id": "fd2f9608",
+   "metadata": {},
+   "source": [
+    "## 4. Target Relationship Scan"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "e2d2c57e",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
    "id": "f0f8527d",
    "metadata": {},
    "source": [
-    "## 4. WOE/IV Computation"
+    "## 5. WOE/IV Computation"
    ]
   },
   {
    "cell_type": "markdown",
-   "id": "17cd6b23",
+   "id": "a9aa1eb2",
    "metadata": {},
-   "source": "**Purpose.** Turn the binning decisions from Section 3 into two things: a ranked view of *which* features drive default (**Information Value**), and model-ready **Weight of Evidence** encodings of those features. IV answers \"how predictive?\"; WOE is the monotonic re-expression a scorecard/logit consumes.\n\n**Approach.** Hand-roll the WOE/IV mechanic first so the numbers aren't a black box, then optionally cross-check with `optbinning`. Bins and WOE values are derived on the **training split only** and applied to validation/test — fitting on the full data leaks the target.\n\n**Leakage guards.**\n- Exclude id columns (`SK_ID_CURR`) before ranking — a unique key yields spurious near-infinite IV.\n- Carry the Section 3 Decisions (transforms, missing-as-its-own-bin) into the binning here rather than re-deciding.\n\nRhythm: **Predict → Task → Decision**, each Decision pointing forward to preprocessing/modelling."
-  },
-  {
-   "cell_type": "markdown",
-   "id": "97499539",
-   "metadata": {},
-   "source": "### 4.1 Split & Binning Inputs"
-  },
-  {
-   "cell_type": "markdown",
-   "id": "23f1c229",
-   "metadata": {},
-   "source": "**Task.** Create the train/validation split (stratified on `TARGET`) and assemble the binned feature frame from the Section 3 decisions. Everything downstream fits on train, applies to val."
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "96246f43",
-   "metadata": {},
-   "outputs": [],
-   "source": "# from sklearn.model_selection import train_test_split\n\n# TODO: assemble modelling frame — drop id columns (SK_ID_CURR) and TARGET from X\n# id_cols = cols_by_type.get('id', [])\n# X = df.drop(columns=id_cols + ['TARGET'])\n# y = df['TARGET']\n\n# X_train, X_val, y_train, y_val = train_test_split(\n#     X, y, test_size=0.2, stratify=y, random_state=42)\n\n# TODO: apply Section 3 binning decisions to build a *binned* view of each feature\n#   numeric  -> pd.qcut(...) quantile bins (or optbinning), missing as its own bin\n#   categorical -> use ORG_BAND / OCC_BAND etc. from Section 2.4\n"
-  },
-  {
-   "cell_type": "markdown",
-   "id": "ba5a3ef5",
-   "metadata": {},
-   "source": "### 4.2 WOE / IV Helper"
-  },
-  {
-   "cell_type": "markdown",
-   "id": "7dfae351",
-   "metadata": {},
-   "source": "**Task.** One function: given a *binned* feature and the target, return the per-bin WOE table and the feature's total IV. Fit on train only.\n\nWOE per bin = ln( (%goods in bin) / (%bads in bin) ). IV = Σ (%goods − %bads) × WOE. Add a small epsilon so empty bins don't divide by zero.\n\nIV rule of thumb (Siddiqi): <0.02 unpredictive · 0.02–0.1 weak · 0.1–0.3 medium · 0.3–0.5 strong · >0.5 suspiciously strong → check for leakage."
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "aadcf323",
-   "metadata": {},
-   "outputs": [],
-   "source": "import numpy as np, pandas as pd\n\ndef woe_iv(binned, target, eps=1e-6):\n    \"\"\"Return (woe_table, iv) for one binned feature. Fit on TRAIN only.\"\"\"\n    g = pd.DataFrame({'bin': binned, 'y': target})\n    grp = g.groupby('bin', dropna=False)['y']\n    tbl = pd.DataFrame({'bad': grp.sum(), 'total': grp.count()})\n    tbl['good'] = tbl['total'] - tbl['bad']\n    # TODO: convert to distributions, then WOE + IV\n    # tbl['pct_good'] = tbl['good'] / tbl['good'].sum()\n    # tbl['pct_bad']  = tbl['bad']  / tbl['bad'].sum()\n    # tbl['woe'] = np.log((tbl['pct_good'] + eps) / (tbl['pct_bad'] + eps))\n    # tbl['iv_bin'] = (tbl['pct_good'] - tbl['pct_bad']) * tbl['woe']\n    # iv = tbl['iv_bin'].sum()\n    # return tbl, iv\n    raise NotImplementedError  # fill in tomorrow\n"
-  },
-  {
-   "cell_type": "markdown",
-   "id": "7498ac1f",
-   "metadata": {},
-   "source": "### 4.3 IV Across All Features"
-  },
-  {
-   "cell_type": "markdown",
-   "id": "1511c7db",
-   "metadata": {},
-   "source": "**Task.** Loop the binned features, collect each IV, build a table sorted high→low. This is the cross-feature ranking that used to live in the old \"Target Relationship Scan\".\n\n**Observation:** _<fill after running — where does the IV cliff fall? any suspiciously-high features to leakage-check?>_"
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "f663391b",
-   "metadata": {},
-   "outputs": [],
-   "source": "# iv_scores = {}\n# for col in binned_features:            # the binned views from 4.1\n#     _, iv = woe_iv(X_train_binned[col], y_train)\n#     iv_scores[col] = iv\n# iv_table = (pd.Series(iv_scores, name='IV')\n#               .sort_values(ascending=False)\n#               .to_frame())\n# iv_table\n"
-  },
-  {
-   "cell_type": "markdown",
-   "id": "17294078",
-   "metadata": {},
-   "source": "### 4.4 Top 10 Drivers"
-  },
-  {
-   "cell_type": "markdown",
-   "id": "491f5d6f",
-   "metadata": {},
-   "source": "**Task.** The payoff table — top 10 features by IV, styled. Feeds the narrative in Section 5.\n\n**Observation:** _<name the strongest drivers; sanity-check against the Section 3 bivariate reads>_\n\n**Decision:** _<which features carry into modelling; anything dropped for low IV or leakage>_"
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "7e3bf3e1",
-   "metadata": {},
-   "outputs": [],
-   "source": "# from python_style_util import style_df\n# style_df(iv_table.head(10), gradient_cols=['IV'], gradient_cmap='Purples')\n"
-  },
-  {
-   "cell_type": "markdown",
-   "id": "702f9504",
-   "metadata": {},
-   "source": "### 4.5 WOE Encoding"
-  },
-  {
-   "cell_type": "markdown",
-   "id": "ace3da60",
-   "metadata": {},
-   "source": "**Task.** Apply the train-fit WOE maps to produce WOE-transformed train/val frames for modelling. Same discipline as imputation: fit on train, `transform` val/test — never refit on val.\n\n**Decision:** _<confirm WOE frames are the modelling input; note storage of the bin→WOE maps for scoring>_"
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "30a6dbfd",
-   "metadata": {},
-   "outputs": [],
-   "source": "# woe_maps = {}                          # {feature: {bin: woe}} learned on train\n# for col in kept_features:\n#     tbl, _ = woe_iv(X_train_binned[col], y_train)\n#     woe_maps[col] = tbl['woe'].to_dict()\n#\n# def apply_woe(frame_binned, maps):\n#     out = pd.DataFrame(index=frame_binned.index)\n#     for col, m in maps.items():\n#         out[col] = frame_binned[col].map(m)\n#     return out\n#\n# X_train_woe = apply_woe(X_train_binned, woe_maps)\n# X_val_woe   = apply_woe(X_val_binned,   woe_maps)   # applied, not refit\n"
-  },
-  {
-   "cell_type": "markdown",
-   "id": "b8e4c474",
-   "metadata": {},
-   "source": "### 4.6 Cross-check with `optbinning` _(optional)_"
-  },
-  {
-   "cell_type": "markdown",
-   "id": "d99bcdea",
-   "metadata": {},
-   "source": "Once the manual version is trusted, `OptimalBinning` gives monotonic/optimal bins plus IV out of the box and a sklearn `fit`/`transform` API. Use it to validate the hand-rolled IVs land in the same ballpark, not to replace the understanding.\n\n```python\nfrom optbinning import OptimalBinning\nob = OptimalBinning(name=col, dtype='numerical')\nob.fit(X_train[col].values, y_train.values)   # train only\nob.binning_table.build()                       # WOE + IV table\n```"
+   "source": []
   },
   {
    "cell_type": "markdown",
    "id": "eb29d67a",
    "metadata": {},
    "source": [
-    "## 5. Findings Summary"
+    "## 6. Findings Summary"
    ]
   },
   {
@@ -5918,7 +5838,7 @@
    "id": "c87d8eb9",
    "metadata": {},
    "source": [
-    "## 6. Next Steps"
+    "## 7. Next Steps"
    ]
   },
   {
