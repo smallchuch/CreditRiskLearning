@@ -22,7 +22,7 @@
     "\n",
     "### Audit-quality / narrative\n",
     "- [ ] **Stale comments in cardinality cells (2.4).** Comments read `< 5%` but the code checks `< 0.01` (1%). Align the comment to the code.\n",
-    "- [ ] **`Prediction` framing → `Explanation`.** Relabel and complete/remove the `Prediction` cells (2.3 missingness, 2.4 cardinality — both now flagged inline), and update the `Predict → Task → Decision` rhythm references in the Section 3 and 4 purpose blocks to `Explanation → Observation → Decision`.\n",
+    "- [ ] **Empty `Prediction` cell** in Cardinality (2.4) — fill it or remove it.\n",
     "- [ ] **Title-block placeholders** — \"Add Project Name\", \"Status: Section \\*\\*\\*\", Objective \"See MD File\". Replace with real values.\n",
     "\n",
     "### Content still to write (per brief)\n",
@@ -864,8 +864,6 @@
    "id": "126680ec",
    "metadata": {},
    "source": [
-    "> 🚩 **FIX before submission (see Pre-Submission Fix List):** relabel `Prediction` → `Explanation` and complete/remove per the E/O/D convention.\n",
-    "\n",
     "**Prediction:** There are some subsets that have zero missing values and should be excluded to provide a focused assessment of the missingness of the data set."
    ]
   },
@@ -1311,8 +1309,6 @@
    "id": "51cc6e22",
    "metadata": {},
    "source": [
-    "> 🚩 **FIX before submission (see Pre-Submission Fix List):** relabel `Prediction` → `Explanation` and complete/remove per the E/O/D convention.\n",
-    "\n",
     "**Prediction**:"
    ]
   },
@@ -1500,14 +1496,6 @@
   },
   {
    "cell_type": "markdown",
-   "id": "aeecdc7c",
-   "metadata": {},
-   "source": [
-    "**Explanation.** External credit scores (`EXT_SOURCE_1/2/3`) are the expected strongest drivers — normalised third-party risk scores on a 0–1 scale. Here we characterise their distribution and coverage (EXT_SOURCE_1 is ~56% missing) to decide binning strategy and how to treat missingness."
-   ]
-  },
-  {
-   "cell_type": "markdown",
    "id": "72af8c62",
    "metadata": {},
    "source": [
@@ -1584,14 +1572,6 @@
   },
   {
    "cell_type": "markdown",
-   "id": "5f1d25cd",
-   "metadata": {},
-   "source": [
-    "**Observation.** _(complete from the histograms + missingness chart above: shape of each score's distribution, coverage per provider, any separation by default.)_"
-   ]
-  },
-  {
-   "cell_type": "markdown",
    "id": "c949bd88",
    "metadata": {},
    "source": [
@@ -1600,26 +1580,10 @@
   },
   {
    "cell_type": "markdown",
-   "id": "cc5c302c",
-   "metadata": {},
-   "source": [
-    "**Observation / Decision.** _(bivariate: default rate across score bands. Decision → quantile bins; treat missing as its own bin? Carry into Section 4 binning.)_"
-   ]
-  },
-  {
-   "cell_type": "markdown",
    "id": "33f6c06a",
    "metadata": {},
    "source": [
     "### 3.2 Loan Financials"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "id": "16c7f241",
-   "metadata": {},
-   "source": [
-    "**Explanation.** Loan-financial amounts (`AMT_INCOME_TOTAL`, `AMT_CREDIT`, `AMT_ANNUITY`, `AMT_GOODS_PRICE`) describe loan size and affordability. Expect heavy right-skew and outliers; the question is log-transform vs quantile bins."
    ]
   },
   {
@@ -1689,14 +1653,6 @@
   },
   {
    "cell_type": "markdown",
-   "id": "4ccb76a5",
-   "metadata": {},
-   "source": [
-    "**Observation.** _(complete from the histograms + category counts above: degree of skew, outlier tails, sparse categorical levels.)_"
-   ]
-  },
-  {
-   "cell_type": "markdown",
    "id": "f98fb71e",
    "metadata": {},
    "source": [
@@ -1705,26 +1661,10 @@
   },
   {
    "cell_type": "markdown",
-   "id": "45bc00e1",
-   "metadata": {},
-   "source": [
-    "**Observation / Decision.** _(bivariate: default rate vs amount bands / ratios. Decision → log-transform vs quantile bins; note any engineered ratios for Section 4.)_"
-   ]
-  },
-  {
-   "cell_type": "markdown",
    "id": "e4352098",
    "metadata": {},
    "source": [
     "### 3.3 Age and Employment"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "id": "e5b40701",
-   "metadata": {},
-   "source": [
-    "**Explanation.** Age & employment (`DAYS_BIRTH`, `DAYS_EMPLOYED`) — convert to positive years (`/-365`). `DAYS_EMPLOYED` carries the sentinel value flagged in 2.3, so it needs a bin plus a missing flag."
    ]
   },
   {
@@ -1815,14 +1755,6 @@
   },
   {
    "cell_type": "markdown",
-   "id": "fb951e50",
-   "metadata": {},
-   "source": [
-    "**Observation.** _(complete from the histograms + category counts above: age/tenure distributions in years, behaviour of the DAYS_EMPLOYED sentinel.)_"
-   ]
-  },
-  {
-   "cell_type": "markdown",
    "id": "8e7174f7",
    "metadata": {},
    "source": [
@@ -1831,26 +1763,10 @@
   },
   {
    "cell_type": "markdown",
-   "id": "3b1c27a4",
-   "metadata": {},
-   "source": [
-    "**Observation / Decision.** _(bivariate: default rate across age/tenure bands. Decision → binning + missing flag; carry into Section 4.)_"
-   ]
-  },
-  {
-   "cell_type": "markdown",
    "id": "5947ab3b",
    "metadata": {},
    "source": [
     "### 3.4 Key Demographic Variables"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "id": "d072f14d",
-   "metadata": {},
-   "source": [
-    "**Explanation.** Key categoricals (education, family status, income type, contract type). Look at frequency and default rate per level; note sparse levels — this links back to the 2.4 cardinality treatment."
    ]
   },
   {
@@ -1887,26 +1803,10 @@
   },
   {
    "cell_type": "markdown",
-   "id": "377888c3",
-   "metadata": {},
-   "source": [
-    "**Observation.** _(complete from the category bars above: level frequencies, sparse levels needing pooling.)_"
-   ]
-  },
-  {
-   "cell_type": "markdown",
    "id": "086ff0db",
    "metadata": {},
    "source": [
     "#### Bivariate Analysis"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "id": "1642baba",
-   "metadata": {},
-   "source": [
-    "**Observation / Decision.** _(bivariate: default rate per level. Decision → pooling / band mapping to carry into Section 4.)_"
    ]
   },
   {
@@ -1919,14 +1819,6 @@
   },
   {
    "cell_type": "markdown",
-   "id": "02776b13",
-   "metadata": {},
-   "source": [
-    "**Explanation.** Remaining numeric families (`client_timeline`, `social_circle`, `bureau_enquiries`) — a lighter touch: confirm shape and flag anything odd, given the block-wise missingness already noted in 2.3."
-   ]
-  },
-  {
-   "cell_type": "markdown",
    "id": "beb9cd3d",
    "metadata": {},
    "source": [
@@ -1935,26 +1827,10 @@
   },
   {
    "cell_type": "markdown",
-   "id": "0343a55a",
-   "metadata": {},
-   "source": [
-    "**Observation.** _(complete once univariate plots are added: shape, anomalies.)_"
-   ]
-  },
-  {
-   "cell_type": "markdown",
    "id": "3bc23367",
    "metadata": {},
    "source": [
     "#### Bivariate Analysis"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "id": "3dba35ba",
-   "metadata": {},
-   "source": [
-    "**Observation / Decision.** _(bivariate: relationship with default. Decision → include/exclude + binning intent for Section 4.)_"
    ]
   },
   {

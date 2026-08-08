@@ -6,3 +6,8 @@ Home Credit Default Risk/
 data/*.csv
 __pycache__/
 .ipynb_checkpoints/
+Datasets/
+# Power BI
+*.pbix.tmp
+.pbi/
+TempState/
