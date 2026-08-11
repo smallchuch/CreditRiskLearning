@@ -7,16 +7,20 @@ _Type: exploratory dashboard (more interactivity + segmentation; the "decision" 
 ## 1. Audience + decision
 _One sentence: "This dashboard helps [who] decide / understand [what]."_
 
+People Across the Organisation wanting to get a snapshot of loanbook to understand our current state.
+
 >
 
 ## 2. Questions to answer
 _Ranked, phrased as actual questions. Aim for 5–8. Cut any that don't tie to the goal above._
 
-1.
-2.
-3.
-4.
-5.
+1. How much are we lending?
+2. Who are we lending to?
+3. Which customers have defaulted?
+4. Which customers are at highest risk of default?
+5. What is the credit profile of our customer base?
+6. What is our exposure?
+7. What assets we are lending for? (types of dwellings)
 
 ## 3. Metric per question
 _Map each question → the specific measure/field that answers it. Note if the data supports it yet._
@@ -25,6 +29,21 @@ _Map each question → the specific measure/field that answers it. Note if the d
 |---|----------|----------------|--------------|
 | 1 |          |                |              |
 | 2 |          |                |              |
+| 3 |          |                |              |
+| 4 |          |                |              |
+| 5 |          |                |              |
+| 6 |          |                |              |
+| 8 |          |                |              |
+| 9 |          |                |              |
+| 10 |          |                |              |
+| 11 |          |                |              |
+| 11 |          |                |              |
+| 11 |          |                |              |
+| 11 |          |                |              |
+| 11 |          |                |              |
+| 11 |          |                |              |
+v
+
 
 ## 4. Structure (inverted pyramid)
 _Overview → zoom/filter → detail. Think in Streamlit terms: tabs / sections / sidebar filters._

@@ -217,16 +217,18 @@ def default_rate_by_bin(data, cols, target, *, ncols=3, bins=10,
                         method="quantile", xlabel="Bin (low → high)",
                         color=None, show_base_rate=True, suptitle=None,
                         panel_w=9.0, panel_h=3.2, numeric_only=True,
-                        rotation=45, **kwargs):
+                        rotation=45, ylabel="Default rate",
+                        value_fmt=".1%", **kwargs):
     """
     Draw a grid of default-rate-per-bin bar charts, one panel per column.
 
-    The workhorse bivariate plot for a binary target: bin each numeric feature,
-    then show the mean of `target` (the default rate) within each bin. This
-    exposes the *shape* of the risk relationship — monotonic, linear, threshold
-    — which is what you check before scorecard binning / WOE encoding. Because
-    binning a continuous feature turns it into "default rate per group", this is
-    also the continuous counterpart to a categorical default-rate chart.
+    The workhorse bivariate plot: bin each numeric feature, then show the mean
+    of `target` within each bin. For a binary (0/1) target that mean *is* the
+    default rate, exposing the *shape* of the risk relationship — monotonic,
+    linear, threshold — which is what you check before scorecard binning / WOE
+    encoding. Because the mean of a 0/1 column is a proportion, the labels and
+    y-axis default to percent framing; for a continuous target (e.g. mean income
+    per score bin) pass `ylabel` and `value_fmt` to relabel the output honestly.
 
     Parameters
     ----------
@@ -259,6 +261,15 @@ def default_rate_by_bin(data, cols, target, *, ncols=3, bins=10,
         Silently drop non-numeric columns (binning needs numeric data).
     rotation : int, default 45
         Rotation for the bin-edge tick labels.
+    ylabel : str, default "Default rate"
+        Y-axis label. Change it when the target isn't a default rate
+        (e.g. "Mean income").
+    value_fmt : str or callable, default ".1%"
+        How each bar label and the base-line label are formatted. A format spec
+        string is applied as ``format(v, value_fmt)`` — ".1%" for a rate,
+        ",.0f" for a count, "$,.0f" for currency. Or pass a callable
+        ``v -> str`` for full control. The default ".1%" only reads honestly
+        for a 0/1 target; change it for any other target.
     **kwargs
         Extra keyword args forwarded to ax.bar (e.g. alpha, linewidth).
 
@@ -267,6 +278,9 @@ def default_rate_by_bin(data, cols, target, *, ncols=3, bins=10,
     (fig, axes) : same contract as the other grid plotters.
     """
     color = color or p("jacaranda", 300)
+
+    # value_fmt may be a format spec ("...") or a callable v -> str
+    fmt = value_fmt if callable(value_fmt) else (lambda v: format(v, value_fmt))
 
     if numeric_only:   # binning needs numeric data — drop string/categorical cols
         cols = [c for c in cols if pd.api.types.is_numeric_dtype(data[c])]
@@ -295,12 +309,12 @@ def default_rate_by_bin(data, cols, target, *, ncols=3, bins=10,
         bar_kw.update(kwargs)
         bars = ax.bar(range(len(rate)), rate.values, color=color, **bar_kw)
 
-        ax.bar_label(bars, labels=[f"{v:.1%}" for v in rate.values],
+        ax.bar_label(bars, labels=[fmt(v) for v in rate.values],
                      padding=3, fontsize=s("small"), fontfamily=f("mono"))
 
-        if show_base_rate:   # overall default rate reference
+        if show_base_rate:   # overall target mean reference
             ax.axhline(base_rate, color=C.text_muted, ls="--", lw=1)
-            ax.text(len(rate) - 0.5, base_rate, f" base {base_rate:.1%}",
+            ax.text(len(rate) - 0.5, base_rate, f" base {fmt(base_rate)}",
                     va="bottom", ha="right", fontsize=s("small"),
                     color=C.text_muted, fontfamily=f("mono"))
 
@@ -311,7 +325,7 @@ def default_rate_by_bin(data, cols, target, *, ncols=3, bins=10,
                     f"{method} bins · n={counts.sum():,} · "
                     f"{data[col].isna().mean():.0%} missing")
         ax.set_xlabel(xlabel)
-        ax.set_ylabel("Default rate")
+        ax.set_ylabel(ylabel)
         ax.grid(axis="y")
         ax.grid(axis="x", visible=False)
         ax.margins(y=0.15)   # headroom for value labels
