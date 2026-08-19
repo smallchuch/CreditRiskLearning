@@ -15,6 +15,7 @@ overlaid_histogram_per_group : grid of histograms split/overlaid by a class vari
 mean_by_bin : grid of mean-of-y-per-bin bars — the general binned-mean engine.
 default_rate_by_bin : credit-risk wrapper of mean_by_bin (binary target → default rate).
 frequency_per_group : grid of frequency bars for categorical columns.
+plot_woe : diverging bar chart of a woe.woe_table() result, one bar per bin.
 """
 
 import math
@@ -618,3 +619,91 @@ def frequency_per_group(data, cols, *, ncols=2, top_n=15, dropna=False,
 
     fig.tight_layout(h_pad=2)
     return fig, axes
+
+
+def plot_woe(woe_table, feature, iv=None, *, ax=None, panel_w=7.0,
+            panel_h=None, title_pad=None):
+    """
+    Horizontal diverging bar chart of a WOE table, one bar per bin — the
+    plotting counterpart to woe.woe_table(). Bin order is preserved from the
+    table (first row plots on top), and colour follows sign: safer than
+    average (positive WOE) vs riskier than average (negative WOE).
+
+    Parameters
+    ----------
+    woe_table : pd.DataFrame
+        Output of woe.woe_table() — needs 'bucket' and 'woe' columns.
+    feature : str
+        Feature name, used for the panel title.
+    iv : float, optional
+        The feature's IV (e.g. from woe.iv(), or woe_table['iv_bin'].sum()
+        if you already have the table). Shown in the subtitle if given.
+    ax : matplotlib Axes, optional
+        Draw on an existing axes — e.g. one panel you're assembling into a
+        grid by hand. Creates its own single-panel figure if None.
+    panel_w : float, default 7.0
+        Figure width in inches when ax is None.
+    panel_h : float, optional
+        Figure height in inches when ax is None; defaults to scaling with
+        the number of bins so tall tables don't cramp.
+    title_pad : float, optional
+        Extra padding (points) between the title and the axes.
+
+    Returns
+    -------
+    ax : the matplotlib Axes the chart was drawn on.
+    """
+    t = woe_table.iloc[::-1].reset_index(drop=True)   # first bin plots on top
+    labels = t["bucket"].astype(str)
+    values = t["woe"]
+
+    pal = binary_palette(labels=("safe", "risk"))   # positional: 1st->green, 2nd->red
+    colors = [pal["risk"] if v < 0 else pal["safe"] for v in values]
+
+    if ax is None:
+        panel_h = panel_h or (0.55 * len(t) + 1.2)
+        _, ax = plt.subplots(figsize=(panel_w, panel_h))
+
+    bars = ax.barh(labels, values, color=colors, alpha=0.85,
+                   edgecolor="white", linewidth=0.5, height=0.6, zorder=3)
+
+    # Value labels default to sitting INSIDE each bar near its outer end
+    # (white text), so a long bar never collides with the y-axis bin labels
+    # on the same side. But bin widths here can span orders of magnitude
+    # (a normal bin next to a rare "Missing" outlier), so a fixed inset
+    # sized off the largest bar would overflow tiny bars and vanish against
+    # the white background. Instead: draw inside first, then measure each
+    # label against its own bar in pixel space and flip any that don't
+    # actually fit to sit just outside the bar in dark ink.
+    ax.figure.canvas.draw()   # materialise a renderer so extents are real
+    inset = 0.02 * (max(values.max(), 0) - min(values.min(), 0) or 1e-6)
+    labels_drawn = []
+    for bar, v in zip(bars, values):
+        x_in = bar.get_width() - inset if v >= 0 else bar.get_width() + inset
+        ha = "right" if v >= 0 else "left"
+        txt = ax.text(x_in, bar.get_y() + bar.get_height() / 2, f"{v:+.2f}",
+                      va="center", ha=ha, fontsize=s("small"), fontfamily=f("mono"),
+                      color="white", fontweight="bold", zorder=4)
+        labels_drawn.append((txt, bar, v))
+
+    ax.figure.canvas.draw()
+    renderer = ax.figure.canvas.get_renderer()
+    for txt, bar, v in labels_drawn:
+        fits = txt.get_window_extent(renderer).width + 4 <= bar.get_window_extent(renderer).width
+        if not fits:   # doesn't fit inside -> flip to just outside, dark ink
+            txt.set_color(C.text)
+            x_out = bar.get_width() + inset if v >= 0 else bar.get_width() - inset
+            txt.set_position((x_out, bar.get_y() + bar.get_height() / 2))
+            txt.set_ha("left" if v >= 0 else "right")
+
+    ax.axvline(0, color=C.text_muted, lw=1)
+
+    subtitle = f"{len(t)} bins" if iv is None else f"{len(t)} bins · IV = {iv:.3f}"
+    _panel_title(ax, feature, subtitle, title_pad=title_pad)
+
+    ax.set_xlabel("WOE   (← higher risk        lower risk →)")
+    ax.grid(axis="x")
+    ax.grid(axis="y", visible=False)
+    ax.margins(x=0.08)
+
+    return ax

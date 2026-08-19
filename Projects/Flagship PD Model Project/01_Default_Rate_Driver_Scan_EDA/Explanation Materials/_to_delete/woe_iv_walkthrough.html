@@ -1,0 +1,116 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WOE / IV — what each line does</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1e2530;--mut:#5b6675;--line:#e4e8ee;--hl:#fff5e6;--hlb:#f0b452;--code:#0f172a;--acc:#2A9D8F;}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1419;--card:#171d26;--ink:#e6eaf0;--mut:#94a3b8;--line:#28303c;--hl:#2a2417;--hlb:#a8791f;--code:#0b1017;--acc:#3fb8a8;}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding:28px 18px 60px}
+.wrap{max-width:860px;margin:0 auto}
+h1{font-size:25px;margin:0 0 4px}
+.sub{color:var(--mut);margin:0 0 8px}
+.goal{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--acc);border-radius:10px;padding:14px 16px;margin:16px 0 26px}
+.goal b{color:var(--acc)}
+.stage{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:0 0 16px}
+.sh{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.snum{background:var(--acc);color:#fff;width:26px;height:26px;border-radius:7px;display:grid;place-items:center;font-weight:700;font-size:14px;flex:none}
+.sh h3{margin:0;font-size:16.5px}
+.code{background:var(--code);color:#dbe4f0;border-radius:8px;padding:11px 13px;font:12.5px/1.5 "SF Mono",Menlo,Consolas,monospace;overflow-x:auto;margin:0 0 12px;white-space:pre}
+.tw{overflow-x:auto;margin-bottom:10px}
+table.df{border-collapse:collapse;font:12.5px/1.3 "SF Mono",Menlo,Consolas,monospace;width:auto}
+table.df th,table.df td{border:1px solid var(--line);padding:3px 9px;text-align:right;white-space:nowrap}
+table.df th{background:rgba(127,140,160,.08);font-weight:600;color:var(--mut)}
+table.df td.idx,table.df th.idx{text-align:left;color:var(--mut);background:rgba(127,140,160,.05)}
+table.df .hl{background:var(--hl);border-color:var(--hlb)}
+table.df th.hl{color:var(--hlb)}
+.expl{font-size:13.5px}
+.expl .what{margin-bottom:4px}
+.expl .why{color:var(--mut)}
+.note{background:var(--hl);border:1px solid var(--hlb);border-radius:8px;padding:9px 12px;font-size:12.8px;margin-bottom:10px}
+code{background:rgba(127,140,160,.15);padding:1px 5px;border-radius:4px;font:12px "SF Mono",Menlo,monospace}
+.chartbox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin:26px 0}
+.chart .cl{font:12px "SF Mono",Menlo,monospace;fill:var(--mut)}
+.chart .vl{font:600 12.5px -apple-system,sans-serif;fill:var(--ink)}
+.chart .vl.in{fill:#fff}
+.chart .ax{font:11px -apple-system,sans-serif;fill:var(--mut)}
+.leg{display:flex;gap:18px;justify-content:center;margin-top:6px;font-size:12.5px;color:var(--mut)}
+.leg span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:11px;height:11px;border-radius:3px;display:inline-block}
+.ivbig{font-size:34px;font-weight:800;color:var(--acc);letter-spacing:-.5px}
+.finalgrid{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.h2{font-size:19px;margin:34px 0 10px}
+</style></head><body><div class="wrap">
+<h1>WOE / IV: what every line of the cell is doing</h1>
+<p class="sub">Worked on 20 borrowers &middot; feature = <code>income</code> &middot; target = <code>default</code> (1 = defaulted)</p>
+<div class="goal"><b>The goal of this cell:</b> take one raw predictor and turn it into a small table that says, for each slice of that predictor, <em>how much riskier or safer than average</em> borrowers in that slice are (the <b>WOE</b> column) — and boil the whole variable down to a single strength score (<b>IV</b>). You feed WOE into the model; you use IV to decide which variables are worth keeping.</div>
+<section class="stage">
+  <div class="sh"><span class="snum">0</span><h3>Copy the two columns you need</h3></div>
+  <pre class="code">d = df[[&#x27;income&#x27;,&#x27;default&#x27;]].copy()</pre>
+  <div class="tw"><table class="df"><thead><tr><th>income</th><th>default</th></tr></thead><tbody><tr><td>22</td><td>1</td></tr><tr><td>28</td><td>1</td></tr><tr><td>31</td><td>1</td></tr><tr><td>35</td><td>1</td></tr><tr><td>38</td><td>0</td></tr><tr><td>42</td><td>1</td></tr><tr><td>45</td><td>1</td></tr><tr><td>48</td><td>1</td></tr><tr><td>52</td><td>0</td></tr><tr><td>55</td><td>0</td></tr><tr><td>60</td><td>1</td></tr><tr><td>64</td><td>1</td></tr><tr><td>70</td><td>0</td></tr><tr><td>75</td><td>0</td></tr><tr><td>80</td><td>0</td></tr><tr><td>88</td><td>1</td></tr><tr><td>95</td><td>0</td></tr><tr><td>110</td><td>0</td></tr><tr><td>130</td><td>0</td></tr><tr><td>150</td><td>0</td></tr></tbody></table></div>
+  
+  <div class="expl"><div class="what"><b>What changed:</b> Nothing yet — <code>d</code> is just a private copy of the two columns (20 rows).</div>
+  <div class="why"><b>Why:</b> You work on a copy so the binning columns you're about to add never touch the original dataframe.</div></div>
+</section><section class="stage">
+  <div class="sh"><span class="snum">1</span><h3>Cut income into bins</h3></div>
+  <pre class="code">d[&#x27;bucket&#x27;] = pd.qcut(d[&#x27;income&#x27;], q=4, duplicates=&#x27;drop&#x27;)</pre>
+  <div class="tw"><table class="df"><thead><tr><th>income</th><th>default</th><th class="hl">bucket</th></tr></thead><tbody><tr><td>22</td><td>1</td><td class="hl">(21.999, 41.0]</td></tr><tr><td>28</td><td>1</td><td class="hl">(21.999, 41.0]</td></tr><tr><td>31</td><td>1</td><td class="hl">(21.999, 41.0]</td></tr><tr><td>35</td><td>1</td><td class="hl">(21.999, 41.0]</td></tr><tr><td>38</td><td>0</td><td class="hl">(21.999, 41.0]</td></tr><tr><td>42</td><td>1</td><td class="hl">(41.0, 57.5]</td></tr><tr><td>45</td><td>1</td><td class="hl">(41.0, 57.5]</td></tr><tr><td>48</td><td>1</td><td class="hl">(41.0, 57.5]</td></tr><tr><td>52</td><td>0</td><td class="hl">(41.0, 57.5]</td></tr><tr><td>55</td><td>0</td><td class="hl">(41.0, 57.5]</td></tr><tr><td>60</td><td>1</td><td class="hl">(57.5, 82.0]</td></tr><tr><td>64</td><td>1</td><td class="hl">(57.5, 82.0]</td></tr><tr><td>70</td><td>0</td><td class="hl">(57.5, 82.0]</td></tr><tr><td>75</td><td>0</td><td class="hl">(57.5, 82.0]</td></tr><tr><td>80</td><td>0</td><td class="hl">(57.5, 82.0]</td></tr><tr><td>88</td><td>1</td><td class="hl">(82.0, 150.0]</td></tr><tr><td>95</td><td>0</td><td class="hl">(82.0, 150.0]</td></tr><tr><td>110</td><td>0</td><td class="hl">(82.0, 150.0]</td></tr><tr><td>130</td><td>0</td><td class="hl">(82.0, 150.0]</td></tr><tr><td>150</td><td>0</td><td class="hl">(82.0, 150.0]</td></tr></tbody></table></div>
+  
+  <div class="expl"><div class="what"><b>What changed:</b> A new <code>bucket</code> column appears. Each borrower is tagged with the income range they fell into. <code>qcut</code> made 4 <em>equal-count</em> bins (5 rows each).</div>
+  <div class="why"><b>Why:</b> WOE is computed <em>per group</em>, so first every borrower needs a group label. This is the only step that still has one row per borrower.</div></div>
+</section><section class="stage">
+  <div class="sh"><span class="snum">2</span><h3>Group down to one row per bin</h3></div>
+  <pre class="code">g = d.groupby(&#x27;bucket&#x27;)[&#x27;default&#x27;].agg([&#x27;count&#x27;,&#x27;sum&#x27;])
+g.columns = [&#x27;total&#x27;,&#x27;bad&#x27;]</pre>
+  <div class="tw"><table class="df"><thead><tr><th class="idx">bucket</th><th class="hl">total</th><th class="hl">bad</th></tr></thead><tbody><tr><td class="idx">(21.999, 41.0]</td><td class="hl">5</td><td class="hl">4</td></tr><tr><td class="idx">(41.0, 57.5]</td><td class="hl">5</td><td class="hl">3</td></tr><tr><td class="idx">(57.5, 82.0]</td><td class="hl">5</td><td class="hl">2</td></tr><tr><td class="idx">(82.0, 150.0]</td><td class="hl">5</td><td class="hl">1</td></tr></tbody></table></div>
+  
+  <div class="expl"><div class="what"><b>What changed:</b> 20 rows collapse into 4 — one per bin. <code>total</code> = borrowers in the bin; <code>bad</code> = how many defaulted (sum of a 0/1 column counts the 1s).</div>
+  <div class="why"><b>Why:</b> This is the heart of it. Everything from here is arithmetic on these 4 rows.</div></div>
+</section><section class="stage">
+  <div class="sh"><span class="snum">3</span><h3>Derive the good count</h3></div>
+  <pre class="code">g[&#x27;good&#x27;] = g[&#x27;total&#x27;] - g[&#x27;bad&#x27;]</pre>
+  <div class="tw"><table class="df"><thead><tr><th class="idx">bucket</th><th>total</th><th>bad</th><th class="hl">good</th></tr></thead><tbody><tr><td class="idx">(21.999, 41.0]</td><td>5</td><td>4</td><td class="hl">1</td></tr><tr><td class="idx">(41.0, 57.5]</td><td>5</td><td>3</td><td class="hl">2</td></tr><tr><td class="idx">(57.5, 82.0]</td><td>5</td><td>2</td><td class="hl">3</td></tr><tr><td class="idx">(82.0, 150.0]</td><td>5</td><td>1</td><td class="hl">4</td></tr></tbody></table></div>
+  
+  <div class="expl"><div class="what"><b>What changed:</b> A <code>good</code> column: the non-defaulters in each bin.</div>
+  <div class="why"><b>Why:</b> WOE compares goods against bads, so you need both counts side by side.</div></div>
+</section><section class="stage">
+  <div class="sh"><span class="snum">4</span><h3>Grand totals (two plain numbers)</h3></div>
+  <pre class="code">total_good = g[&#x27;good&#x27;].sum()   # -&gt; 10
+total_bad  = g[&#x27;bad&#x27;].sum()    # -&gt; 10</pre>
+  <div class="tw"><table class="df"><thead><tr><th class="hl">value</th></tr></thead><tbody><tr><td class="hl">10</td></tr><tr><td class="hl">10</td></tr></tbody></table></div>
+  
+  <div class="expl"><div class="what"><b>What changed:</b> Not a table change — just two scalars: the whole portfolio has 10 goods and 10 bads.</div>
+  <div class="why"><b>Why:</b> These are the denominators for the next step. A bin's importance depends on its share of <em>all</em> goods/bads, so you need the totals.</div></div>
+</section><section class="stage">
+  <div class="sh"><span class="snum">5</span><h3>Turn counts into distributions</h3></div>
+  <pre class="code">g[&#x27;dist_good&#x27;] = g[&#x27;good&#x27;] / total_good
+g[&#x27;dist_bad&#x27;]  = g[&#x27;bad&#x27;]  / total_bad</pre>
+  <div class="tw"><table class="df"><thead><tr><th class="idx">bucket</th><th>good</th><th>bad</th><th class="hl">dist_good</th><th class="hl">dist_bad</th></tr></thead><tbody><tr><td class="idx">(21.999, 41.0]</td><td>1</td><td>4</td><td class="hl">0.1</td><td class="hl">0.4</td></tr><tr><td class="idx">(41.0, 57.5]</td><td>2</td><td>3</td><td class="hl">0.2</td><td class="hl">0.3</td></tr><tr><td class="idx">(57.5, 82.0]</td><td>3</td><td>2</td><td class="hl">0.3</td><td class="hl">0.2</td></tr><tr><td class="idx">(82.0, 150.0]</td><td>4</td><td>1</td><td class="hl">0.4</td><td class="hl">0.1</td></tr></tbody></table></div>
+  <div class="note">The <code>.replace(0, 1e-6)</code> guard lives on this line — it only fires when a bin has <em>zero</em> goods or bads (which would make the next step's log blow up to infinity). None of our bins are empty, so it does nothing here.</div>
+  <div class="expl"><div class="what"><b>What changed:</b> Each bin's <b>share</b> of all goods and of all bads. Row 1 holds 1/10 of goods (0.1) but 4/10 of bads (0.4).</div>
+  <div class="why"><b>Why:</b> This is the trick that trips people up: WOE compares <em>distributions</em>, not raw counts. A bin matters if it soaks up a different slice of bads than of goods.</div></div>
+</section><section class="stage">
+  <div class="sh"><span class="snum">6</span><h3>Weight of Evidence</h3></div>
+  <pre class="code">g[&#x27;woe&#x27;] = np.log(g[&#x27;dist_good&#x27;] / g[&#x27;dist_bad&#x27;])</pre>
+  <div class="tw"><table class="df"><thead><tr><th class="idx">bucket</th><th>dist_good</th><th>dist_bad</th><th class="hl">woe</th></tr></thead><tbody><tr><td class="idx">(21.999, 41.0]</td><td>0.1</td><td>0.4</td><td class="hl">-1.386</td></tr><tr><td class="idx">(41.0, 57.5]</td><td>0.2</td><td>0.3</td><td class="hl">-0.4055</td></tr><tr><td class="idx">(57.5, 82.0]</td><td>0.3</td><td>0.2</td><td class="hl">0.4055</td></tr><tr><td class="idx">(82.0, 150.0]</td><td>0.4</td><td>0.1</td><td class="hl">1.386</td></tr></tbody></table></div>
+  
+  <div class="expl"><div class="what"><b>What changed:</b> One number per bin. <b>Negative</b> = more bads than goods relative to average (riskier). <b>Positive</b> = safer. Watch it climb monotonically as income rises.</div>
+  <div class="why"><b>Why:</b> This is the value you'll swap into the model in place of raw income. By construction it's linear in the log-odds of default.</div></div>
+</section><section class="stage">
+  <div class="sh"><span class="snum">7</span><h3>Per-bin IV contribution</h3></div>
+  <pre class="code">g[&#x27;iv_bin&#x27;] = (g[&#x27;dist_good&#x27;] - g[&#x27;dist_bad&#x27;]) * g[&#x27;woe&#x27;]</pre>
+  <div class="tw"><table class="df"><thead><tr><th class="idx">bucket</th><th>dist_good</th><th>dist_bad</th><th>woe</th><th class="hl">iv_bin</th></tr></thead><tbody><tr><td class="idx">(21.999, 41.0]</td><td>0.1</td><td>0.4</td><td>-1.386</td><td class="hl">0.4159</td></tr><tr><td class="idx">(41.0, 57.5]</td><td>0.2</td><td>0.3</td><td>-0.4055</td><td class="hl">0.04055</td></tr><tr><td class="idx">(57.5, 82.0]</td><td>0.3</td><td>0.2</td><td>0.4055</td><td class="hl">0.04055</td></tr><tr><td class="idx">(82.0, 150.0]</td><td>0.4</td><td>0.1</td><td>1.386</td><td class="hl">0.4159</td></tr></tbody></table></div>
+  
+  <div class="expl"><div class="what"><b>What changed:</b> How much each bin contributes to the variable's total predictive power. Extreme bins (very risky or very safe) contribute most.</div>
+  <div class="why"><b>Why:</b> Summing these gives IV — the single score you rank all your variables by.</div></div>
+</section>
+<h2 class="h2">The payoff: read the WOE column as a picture</h2>
+<div class="chartbox"><svg viewBox="0 0 520 190" width="100%" class="chart"><line x1="303.0" y1="16" x2="303.0" y2="174" stroke="#94a3b8" stroke-width="1.5"/><rect x="157.5" y="23.5" width="145.5" height="24.5" rx="3" fill="#D1495B"/><text x="130" y="39.8" text-anchor="end" class="cl">(21.999, 41.0]</text><text x="165.5" y="39.8" text-anchor="start" class="vl in">-1.39</text><rect x="260.4" y="63.0" width="42.6" height="24.5" rx="3" fill="#D1495B"/><text x="130" y="79.2" text-anchor="end" class="cl">(41.0, 57.5]</text><text x="268.4" y="79.2" text-anchor="start" class="vl in">-0.41</text><rect x="303.0" y="102.5" width="42.6" height="24.5" rx="3" fill="#2A9D8F"/><text x="130" y="118.8" text-anchor="end" class="cl">(57.5, 82.0]</text><text x="337.6" y="118.8" text-anchor="end" class="vl in">+0.41</text><rect x="303.0" y="142.0" width="145.5" height="24.5" rx="3" fill="#2A9D8F"/><text x="130" y="158.2" text-anchor="end" class="cl">(82.0, 150.0]</text><text x="440.5" y="158.2" text-anchor="end" class="vl in">+1.39</text><text x="213.3" y="176.0" text-anchor="middle" class="ax">← higher risk</text><text x="392.6" y="176.0" text-anchor="middle" class="ax">lower risk →</text></svg>
+<div class="leg"><span><i class="sw" style="background:#D1495B"></i>negative WOE = riskier bin</span><span><i class="sw" style="background:#2A9D8F"></i>positive WOE = safer bin</span></div>
+</div>
+<p class="sub">A clean staircase from risky (low income) to safe (high income) is exactly what you want — it means the relationship is monotonic and the binning is sensible. A jagged, up-and-down WOE usually means you over-binned.</p>
+<h2 class="h2">Final table + the one number that leaves the cell</h2>
+<div class="stage"><div class="tw"><table class="df"><thead><tr><th class="idx">bucket</th><th>total</th><th>bad</th><th>good</th><th>dist_good</th><th>dist_bad</th><th class="hl">woe</th><th class="hl">iv_bin</th><th>bad_rate</th></tr></thead><tbody><tr><td class="idx">(21.999, 41.0]</td><td>5</td><td>4</td><td>1</td><td>0.1</td><td>0.4</td><td class="hl">-1.386</td><td class="hl">0.4159</td><td>0.8</td></tr><tr><td class="idx">(41.0, 57.5]</td><td>5</td><td>3</td><td>2</td><td>0.2</td><td>0.3</td><td class="hl">-0.4055</td><td class="hl">0.04055</td><td>0.6</td></tr><tr><td class="idx">(57.5, 82.0]</td><td>5</td><td>2</td><td>3</td><td>0.3</td><td>0.2</td><td class="hl">0.4055</td><td class="hl">0.04055</td><td>0.4</td></tr><tr><td class="idx">(82.0, 150.0]</td><td>5</td><td>1</td><td>4</td><td>0.4</td><td>0.1</td><td class="hl">1.386</td><td class="hl">0.4159</td><td>0.2</td></tr></tbody></table></div>
+<div class="finalgrid"><div><div class="ivbig">IV = 0.91</div><div class="sub">= sum of the iv_bin column</div></div>
+<div style="max-width:430px;font-size:13.5px;color:var(--mut)">This is the number you compare across all your variables. (On real data anything above ~0.5 is a leakage red flag — here it's just high because it's a tiny, tidy toy set. The <em>shape</em> is what matters, not the magnitude.)</div></div>
+</div>
+</div></body></html>
