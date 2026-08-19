@@ -5,9 +5,10 @@ keep the pipeline in order and to make sure each stage produces a documented
 *decision*, not just a chart. The decisions are what make this read as credit-risk
 work rather than a generic ML tutorial.
 
-> **North star:** every stage should end with a written Observation → Decision. The
-> code proves you can execute; the decision trail proves you can think. That trail
-> is the single most impressive thing you can show a hiring manager.
+> **North star:** every analysis block should end with a written Explanation →
+> Observation → Decision (the **E/O/D** convention used in the notebook). The code
+> proves you can execute; the decision trail proves you can think. That trail is the
+> single most impressive thing you can show a hiring manager.
 
 ---
 
@@ -28,41 +29,56 @@ definition invalidates everything downstream.
 
 ---
 
-## Stage 1 — EDA (Exploratory Data Analysis)
+## Stage 1 + 2 — EDA & Feature Engineering (WOE / IV) *(combined)*
 
-Understand the data before modelling it. *(This is the stage your current notebook
-covers — 6 parts.)*
+Originally two stages; in practice the driver scan runs straight through from
+understanding the data to encoding it, so they're **combined into one notebook**
+(`01_Default_Rate_Driver_Scan_EDA`). Structure below follows the notebook's seven
+sections; each analysis block uses the **E/O/D** convention (Explanation before
+looking, Observation off the output, Decision that points forward to the binning in
+Section 4).
 
-- First look — shape, dtypes, class imbalance (default rate vs industry norm).
-- **Data quality & missingness** — disguised sentinels (e.g. `365243`, `XNA`),
-  missingness %, structural vs random blocks, MCAR/MAR/MNAR classification.
-- Univariate — one variable at a time: distributions, outliers, category frequencies.
-- Target relationship scan — bivariate; how each feature relates to default.
-- Findings summary — the handful of things that carry forward.
+- **1. First Look** — shape (307k × 122), class imbalance (92% repaid / 8% default —
+  high for a mortgage book; *no resampling*, since this is a screening exercise, not
+  model training, and WOE/IV are computed on the full distribution), description-lookup
+  reference for feature relevance.
+- **2. Data Quality & Missingness** — split the 122 columns into **statistical subsets**
+  (continuous / discrete / nominal / ordinal / binary / id) and **thematic subsets**
+  (`cols_by_theme`) so a wide table stays tractable. Flag disguised sentinels
+  (`DAYS_EMPLOYED` = 365243, `CODE_GENDER` = XNA); rank missingness; diagnose
+  **block-wise missingness** (`building_stats`, `social_circle`, `bureau_enquiries`) and
+  classify the mechanism (MAR vs MNAR — e.g. `OWN_CAR_AGE` missing ↔ no car = MAR).
+  **Cardinality treatment** for high-cardinality categoricals: `ORGANIZATION_TYPE` band
+  mapping by default rate, `OCCUPATION_TYPE` sparse-level pooling with NaN as its own
+  category.
+- **3. Feature Analysis** — per-family **univariate + bivariate** scan, highest-value
+  families first: external scores (`EXT_SOURCE_1/2/3`), loan financials, age &
+  employment, demographics, other numeric families. Bivariate toolkit: default-rate-by-bin,
+  AUC / Gini, KS / ECDF. Each family closes with a Decision stating the intended
+  transform/binning for Section 4.
+- **4. WOE / IV Computation** — the feature-engineering heart. **Train-only split**
+  (stratified on TARGET), a hand-rolled WOE/IV helper (`WOE = ln(%good / %bad)`,
+  `IV = Σ (%good − %bad) × WOE`), the **cross-feature IV ranking** (this is where the old
+  "target-relationship scan" now lives), top-10 drivers, WOE encoding (fit on train,
+  `transform` val/test), and an `optbinning` cross-check. IV rule of thumb: <0.02 useless,
+  0.1–0.3 medium, 0.3–0.5 strong, >0.5 suspiciously strong → leakage-check.
+- **5. Findings Summary** — consolidated headline drivers + data-quality conclusions,
+  written to stand alone for an auditor.
+- **6. Next Steps** — concrete actions carried into feature selection / modelling.
+- **7. Assumptions, Limitations & Data Lineage** — the reproducibility and
+  model-validation record.
 
-**Key decisions:** which columns are usable, how sentinels are handled, which
-missingness is informative (keep a flag) vs explainable (impute), what to defer.
+**Key decisions:** which columns are usable; how sentinels are handled; which missingness
+is informative (keep a flag) vs explainable (impute); bin boundaries and monotonicity;
+missing-as-its-own-bin where informative; which engineered features to create.
+
+**Leakage guards:** exclude id columns (`SK_ID_CURR`) before ranking — a unique key
+yields spurious near-infinite IV; fit bins and WOE on the **train split only** and apply
+to val/test, never refit on val.
 
 **Gotchas:** keep target-relationship work *out* of univariate (that's bivariate);
-peeking at TARGET is a diagnostic here, the real work happens in the scan.
-
----
-
-## Stage 2 — Feature Engineering (WOE / IV)
-
-The heart of a scorecard. Transform raw variables into model-ready predictors.
-
-- **Binning** — group continuous/categorical variables into bins (monotonic where it
-  makes business sense).
-- **WOE encoding** — replace each bin with its Weight of Evidence:
-  `WOE = ln(%good / %bad)`.
-- **Information Value** — score each variable's predictive power:
-  `IV = Σ (%good − %bad) × WOE`. Rough guide: <0.02 useless, 0.1–0.3 medium,
-  0.3–0.5 strong, >0.5 suspiciously strong (check for leakage).
-- Handle missing as its own bin where the missingness is informative.
-
-**Key decisions:** bin boundaries, monotonicity, how missing/structural values are
-binned, which engineered features to create.
+peeking at TARGET in Section 3 is a diagnostic — the quantified cross-feature ranking is
+the real work and lives in Section 4.
 
 ---
 
