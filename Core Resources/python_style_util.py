@@ -532,6 +532,28 @@ def set_style():
         # Lines
         'lines.linewidth':          2.0,
         'lines.color':              palette['jacaranda'][300],
+
+        # Colour cycle — raw matplotlib multi-series / line plots (drawn
+        # without an explicit color=) pick up the brand colours, mirroring
+        # the seaborn palette set at the end of this function.
+        'axes.prop_cycle':          plt.cycler(color=multi_series()),
+
+        # Titles — left-aligned by default (modern, and matches the WOE / EDA
+        # charts), with figure-level suptitles sized to the type scale.
+        'axes.titlelocation':       'left',
+        'figure.titlesize':         sizes['display'],
+        'figure.titleweight':       'bold',
+        'figure.labelsize':         sizes['subtitle'],
+
+        # Layout — constrained_layout spaces titles, axis labels, legends and
+        # subplots automatically so nothing overlaps or gets clipped. This is
+        # the modern replacement for manual plt.tight_layout() calls; do NOT
+        # mix the two (calling tight_layout() afterwards warns and overrides).
+        'figure.constrained_layout.use':    True,
+        'figure.constrained_layout.h_pad':  0.08,   # inches — padding above/below axes
+        'figure.constrained_layout.w_pad':  0.08,   # inches — padding left/right of axes
+        'figure.constrained_layout.hspace': 0.05,   # fraction — gap between subplot rows
+        'figure.constrained_layout.wspace': 0.05,   # fraction — gap between subplot cols
     })
 
     # Seaborn — sets the default colour cycle so any sns plot without an

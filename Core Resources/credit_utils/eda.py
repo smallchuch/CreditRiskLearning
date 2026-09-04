@@ -201,7 +201,16 @@ def histogram_per_group(data, cols, *, ncols=3, bins=50, xlabel="Value",
     if suptitle:
         fig.suptitle(suptitle, fontfamily=f("heading"), fontsize=s("display"))
 
-    fig.tight_layout(h_pad=2)
+    # Spacing: if constrained_layout is active (the brand set_style() enables it
+    # globally), tune its pads instead of calling tight_layout() — mixing the two
+    # warns and reverts the auto-spacing. Fall back to tight_layout otherwise.
+    if fig.get_constrained_layout():
+        try:
+            fig.get_layout_engine().set(hspace=0.08, h_pad=0.12)
+        except Exception:
+            pass
+    else:
+        fig.tight_layout(h_pad=2)
     return fig, axes
 
 
@@ -317,14 +326,24 @@ def overlaid_histogram_per_group(data, cols, by, *, ncols=3, bins=50,
     if suptitle:
         fig.suptitle(suptitle, fontfamily=f("heading"), fontsize=s("display"))
 
-    fig.tight_layout(h_pad=2)
+    # Spacing: if constrained_layout is active (the brand set_style() enables it
+    # globally), tune its pads instead of calling tight_layout() — mixing the two
+    # warns and reverts the auto-spacing. Fall back to tight_layout otherwise.
+    if fig.get_constrained_layout():
+        try:
+            fig.get_layout_engine().set(hspace=0.08, h_pad=0.12)
+        except Exception:
+            pass
+    else:
+        fig.tight_layout(h_pad=2)
     return fig, axes
 
 
 def mean_by_bin(data, cols, y, *, ncols=3, bins=10,
                 method="quantile", xlabel="Bin (low → high)",
                 color=None, grade=False, grade_scale="jacaranda",
-                bin_label="range", bin_num_fmt=None, titles=None,
+                bin_label="range", bin_num_fmt=None,
+                right=True, include_lowest=False, open_top=False, titles=None,
                 title_pad=None, show_base_rate=True, suptitle=None,
                 panel_w=9.0, panel_h=3.2, numeric_only=True,
                 rotation=45, ylabel="Mean",
@@ -371,10 +390,18 @@ def mean_by_bin(data, cols, y, *, ncols=3, bins=10,
           * "risk"/"diverging" → brand green→yellow→red (low green, high red);
             only meaningful when high = worse.
           * a matplotlib Colormap, a list of hex colours, or a named mpl colormap.
-    bin_label : {"range", "rank", "left", "center"}, default "range"
+    bin_label : {"range", "rank", "left", "center", "band"}, default "range"
         What the x-tick labels show. "range" → compact "36k–88k" edges;
         "rank" → 1..N (cleanest for quantile bins, where the story is the trend,
-        not the cutoffs); "left"/"center" → a single compact edge or midpoint.
+        not the cutoffs); "left"/"center" → a single compact edge or midpoint;
+        "band" → clean integer bands "20–24", "25–29" for left-closed
+        equal-width bins (pair with method="width", right=False).
+    right, include_lowest : bool
+        Forwarded to pd.cut (equal-width / explicit-edge binning only; ignored
+        for quantile). right=False gives left-closed bins [a, b) — the standard
+        for age/tenure bands so a value on an edge lands in exactly one band.
+    open_top : bool, default False
+        Relabel the final bin as "N+" (an open-ended top band, e.g. "20+").
     bin_num_fmt : callable, optional
         v -> str formatter for the bin-edge numbers (every bin_label except
         "rank"). Defaults to a compact k/M/B formatter; pass your own for full
@@ -441,8 +468,12 @@ def mean_by_bin(data, cols, y, *, ncols=3, bins=10,
     for i, (ax, col) in enumerate(zip(axes, cols)):
         sub = data[[col, y]].dropna(subset=[col])
 
-        cutter = pd.qcut if method == "quantile" else pd.cut
-        sub = sub.assign(_bin=cutter(sub[col], bins, duplicates="drop"))
+        if method == "quantile":
+            sub = sub.assign(_bin=pd.qcut(sub[col], bins, duplicates="drop"))
+        else:   # equal-width / explicit edges — supports right & include_lowest
+            sub = sub.assign(_bin=pd.cut(sub[col], bins, right=right,
+                                         include_lowest=include_lowest,
+                                         duplicates="drop"))
 
         grp = sub.groupby("_bin", observed=True)[y]
         rate = grp.mean()
@@ -456,8 +487,20 @@ def mean_by_bin(data, cols, y, *, ncols=3, bins=10,
             labels = [nfmt(iv.left) for iv in rate.index]
         elif bin_label == "center":
             labels = [nfmt((iv.left + iv.right) / 2) for iv in rate.index]
+        elif bin_label == "band":
+            # Integer bands: a left-closed bin [a, b) covers whole values a..b-1,
+            # shown as "a–(b-1)" — e.g. edges 20,25,30 -> "20–24", "25–29"; a
+            # width-1 band [a, a+1) collapses to just "a". Pair with
+            # method="width", right=False on a whole-number feature.
+            def _band(iv):
+                lo, hi = iv.left, iv.right - 1
+                return f"{nfmt(lo)}" if hi <= lo else f"{nfmt(lo)}–{nfmt(hi)}"
+            labels = [_band(iv) for iv in rate.index]
         else:   # "range"
             labels = [f"{nfmt(iv.left)}–{nfmt(iv.right)}" for iv in rate.index]
+
+        if open_top and len(labels):        # open-ended top band -> "N+"
+            labels[-1] = f"{nfmt(rate.index[-1].left)}+" 
 
         # grade bars by rate (green→red risk scale) unless a flat colour is asked
         bar_color = _rate_ramp(rate.values, grade_scale) if grade else color
@@ -493,7 +536,16 @@ def mean_by_bin(data, cols, y, *, ncols=3, bins=10,
     if suptitle:
         fig.suptitle(suptitle, fontfamily=f("heading"), fontsize=s("display"))
 
-    fig.tight_layout(h_pad=2)
+    # Spacing: if constrained_layout is active (the brand set_style() enables it
+    # globally), tune its pads instead of calling tight_layout() — mixing the two
+    # warns and reverts the auto-spacing. Fall back to tight_layout otherwise.
+    if fig.get_constrained_layout():
+        try:
+            fig.get_layout_engine().set(hspace=0.08, h_pad=0.12)
+        except Exception:
+            pass
+    else:
+        fig.tight_layout(h_pad=2)
     return fig, axes
 
 
@@ -617,7 +669,16 @@ def frequency_per_group(data, cols, *, ncols=2, top_n=15, dropna=False,
     if suptitle:
         fig.suptitle(suptitle, fontfamily=f("heading"), fontsize=s("display"))
 
-    fig.tight_layout(h_pad=2)
+    # Spacing: if constrained_layout is active (the brand set_style() enables it
+    # globally), tune its pads instead of calling tight_layout() — mixing the two
+    # warns and reverts the auto-spacing. Fall back to tight_layout otherwise.
+    if fig.get_constrained_layout():
+        try:
+            fig.get_layout_engine().set(hspace=0.08, h_pad=0.12)
+        except Exception:
+            pass
+    else:
+        fig.tight_layout(h_pad=2)
     return fig, axes
 
 
