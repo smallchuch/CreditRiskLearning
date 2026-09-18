@@ -17,6 +17,7 @@ from python_style_util import (  # noqa: F401  (re-exported on purpose)
     C, Shade, Size,
     set_style,
     gradient, traffic_light, diverging, diverging_cmap,
+    risk_cmap, RISK_LOW, RISK_HIGH,
     multi_series, binary_palette,
     chart_title, annotate,
     style_df,

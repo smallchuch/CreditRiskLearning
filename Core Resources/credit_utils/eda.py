@@ -343,7 +343,8 @@ def mean_by_bin(data, cols, y, *, ncols=3, bins=10,
                 method="quantile", xlabel="Bin (low → high)",
                 color=None, grade=False, grade_scale="jacaranda",
                 bin_label="range", bin_num_fmt=None,
-                right=True, include_lowest=False, open_top=False, titles=None,
+                right=True, include_lowest=False, open_top=False,
+                na_as_bin=False, titles=None,
                 title_pad=None, show_base_rate=True, suptitle=None,
                 panel_w=9.0, panel_h=3.2, numeric_only=True,
                 rotation=45, ylabel="Mean",
@@ -402,6 +403,16 @@ def mean_by_bin(data, cols, y, *, ncols=3, bins=10,
         for age/tenure bands so a value on an edge lands in exactly one band.
     open_top : bool, default False
         Relabel the final bin as "N+" (an open-ended top band, e.g. "20+").
+    na_as_bin : bool, default False
+        If True, append a trailing "Missing" bar showing the mean of `y` over
+        rows whose feature value is NaN -- the default rate of the missing
+        group, which in credit-risk data is often as predictive as any
+        populated bin. Off by default: missing rows are dropped before binning,
+        as before. The missing bar is drawn in a neutral muted colour and set
+        slightly apart, so it reads as off-scale rather than as part of the
+        ordered ramp, and it is excluded from the grade colour scale so it
+        can't distort it. Rows with a non-missing feature but a missing `y`
+        never contribute to any bar (mean skips NaN), missing or otherwise.
     bin_num_fmt : callable, optional
         v -> str formatter for the bin-edge numbers (every bin_label except
         "rank"). Defaults to a compact k/M/B formatter; pass your own for full
@@ -511,13 +522,29 @@ def mean_by_bin(data, cols, y, *, ncols=3, bins=10,
         ax.bar_label(bars, labels=[fmt(v) for v in rate.values],
                      padding=3, fontsize=s("small"), fontfamily=f("mono"))
 
+        # optional trailing "Missing" bar: the mean of y over rows whose feature
+        # is NaN. Kept off the ordered ramp (its own muted colour + a small gap)
+        # so it reads as a separate, off-scale group rather than the next bin.
+        tick_pos = list(range(len(rate)))
+        if na_as_bin:
+            miss_mask = data[col].isna()
+            miss_rate = (data.loc[miss_mask, y].mean()
+                         if miss_mask.any() else np.nan)
+            if pd.notna(miss_rate):
+                miss_x = len(rate) + 0.6
+                mbar = ax.bar([miss_x], [miss_rate], color=C.text_muted, **bar_kw)
+                ax.bar_label(mbar, labels=[fmt(miss_rate)], padding=3,
+                             fontsize=s("small"), fontfamily=f("mono"))
+                labels = labels + ["Missing"]
+                tick_pos.append(miss_x)
+
         if show_base_rate:   # overall target mean reference
             ax.axhline(base_rate, color=C.text_muted, ls="--", lw=1)
             ax.text(len(rate) - 0.5, base_rate, f" base {fmt(base_rate)}",
                     va="bottom", ha="right", fontsize=s("small"),
                     color=C.text_muted, fontfamily=f("mono"))
 
-        ax.set_xticks(range(len(rate)))
+        ax.set_xticks(tick_pos)
         ax.set_xticklabels(labels, rotation=rotation, ha="right",
                            fontsize=s("small"))
         _panel_title(ax, col,
@@ -558,7 +585,8 @@ def default_rate_by_bin(data, cols, target, **kwargs):
     and the green→yellow→red risk grade. Every other knob (bins, method,
     bin_label, grade_scale, panel size, …) forwards straight to `mean_by_bin`,
     and anything you pass explicitly overrides these defaults — e.g.
-    grade_scale="red" for a colour-blind-safe grade, or grade=False for flat bars.
+    grade_scale="red" for a colour-blind-safe grade, grade=False for flat bars,
+    or na_as_bin=True to add a trailing bar for the missing group's default rate.
 
     This is the workhorse bivariate risk plot: the *shape* of the rate across
     bins (monotonic / threshold / flat) is what you read before scorecard

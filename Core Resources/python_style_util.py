@@ -439,6 +439,35 @@ def diverging_cmap():
     return mcolors.LinearSegmentedColormap.from_list('diverging', colors)
 
 
+# Brand risk ramp endpoints — purple = low / safe, gold = high / risk.
+# Single source of truth: change these two hexes and every risk_cmap()-based
+# chart (default-rate bars, occupation / demographic barh, heatmaps) shifts
+# together.
+RISK_LOW = '#6D5FB3'     # purple  (low default rate)
+RISK_HIGH = '#E1A100'    # gold    (high default rate)
+
+
+def risk_cmap(low=RISK_LOW, high=RISK_HIGH, mid=None):
+    """
+    Brand risk ramp as a continuous Colormap: low (purple) -> high (gold).
+
+    The workbook's distinct, colour-blind-safe alternative to matplotlib's
+    RdYlGn, with the same "low good / high bad" reading. Use it everywhere so
+    the whole notebook shares one ramp:
+        default_rate_by_bin(..., grade_scale=risk_cmap())   # graded bars
+        cmap_occupation = risk_cmap()                       # graded barh / heatmap
+
+    Overrides (nothing is locked in):
+        risk_cmap()                        # brand default
+        risk_cmap(high='#C89B3C')          # swap one endpoint
+        risk_cmap(mid='#9C8B6E')           # insert a mid colour
+        risk_cmap(low=p('jacaranda', 300), high=p('gold', 300))
+    Or ignore it entirely and pass any other cmap / colour list to the plot.
+    """
+    stops = [low, mid, high] if mid else [low, high]
+    return mcolors.LinearSegmentedColormap.from_list('brand_risk', stops)
+
+
 def multi_series():
     """
     Return the three brand colours for multi-series charts.
