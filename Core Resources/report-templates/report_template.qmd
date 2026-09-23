@@ -1,0 +1,241 @@
+---
+# ═══════════════════════════════════════════════════════════════════════════
+# REPORT TEMPLATE  (Quarto reveal.js executive-summary deck)
+#
+# This file RENDERS AS-IS into a demo deck so you can see every slide pattern.
+# Each slide is marked "EXAMPLE — …"; replace the demo content/data with yours
+# and delete any patterns you don't need. Render:
+#     quarto render report_template.qmd --to revealjs
+#
+# SWITCH BRAND SCHEME — two lines, nothing else changes:
+#   Personal (external portfolio) — jacaranda / gold / green:
+#       theme:  [default, brand.scss]              + PAL = deck_style()
+#   HomeStart (internal presentation) — official blue / green:
+#       theme:  [default, palette-homestart.scss, brand.scss]
+#                                                  + PAL = deck_style(theme="homestart")
+# ═══════════════════════════════════════════════════════════════════════════
+title: "REPORT TITLE HERE"
+subtitle: "Subtitle · team / source"
+author: "Chuch"
+date: today
+date-format: "MMMM YYYY"
+format:
+  revealjs:
+    theme: [default, brand.scss]          # ← swap to [default, palette-homestart.scss, brand.scss]
+    slide-number: c/t
+    transition: fade
+    transition-speed: fast
+    width: 1280
+    height: 720
+    center: false
+    margin: 0
+    menu: false
+    progress: false
+    auto-stretch: false
+    fig-align: center
+    echo: false
+    embed-resources: true
+    footer: "Report name · source"
+execute:
+  warning: false
+  message: false
+  freeze: auto
+jupyter: python3
+---
+
+```{python}
+#| label: setup
+#| include: false
+import os, sys, warnings
+warnings.filterwarnings("ignore")
+import numpy as np, pandas as pd
+import matplotlib.pyplot as plt
+
+# Make the helpers beside this file importable, plus python_style_util one level up.
+HERE = os.getcwd()
+sys.path.insert(0, os.path.dirname(HERE))   # ..parent (python_style_util.py in this repo)
+sys.path.insert(0, HERE)                     # this folder (deck_utils.py, brand_palettes.py)
+
+from python_style_util import p, f, s, C, chart_title   # chart_title = styled left title
+from deck_utils import deck_style, add_baseline, strip_bar_labels, small_labels, reset_labels
+from brand_palettes import HOMESTART, JACARANDA   # named colours to hand-pick from
+
+PAL = deck_style()                 # ← swap to deck_style(theme="homestart")
+# Colour a chart either way:
+#   • Automatic : PAL.primary / PAL.secondary / PAL.tertiary / PAL.ramp  (follow the theme)
+#   • Hand-pick : a specific brand colour, e.g. HOMESTART.salmon, JACARANDA.gold
+
+# ── DEMO DATA — delete this block and load your own (df = pd.read_csv(...)) ──
+seg  = ["Segment A", "Segment B", "Segment C", "Segment D", "Segment E"]
+val  = [12.4, 9.1, 7.8, 6.2, 4.5]
+val2 = [3.0, 4.2, 6.1, 5.0, 7.3]
+BASE = 0.081                        # a reference rate, if you use add_baseline()
+```
+
+## Headline answer {.hero data-kick="Executive summary"}
+
+::: {.hero-wrap}
+::: {.hero-col}
+<div class="hero-num">$4.2M<small>the one number this report delivers</small></div>
+:::
+
+::: {.hero-col}
+The "so what", up top — one or two sentences a manager can repeat.
+
+- **Point one** — the most important thing
+- **Point two** — the next
+- **Point three** — and the next
+:::
+:::
+
+::: {.takeaway}
+EXAMPLE — the single line you want the room to remember.
+:::
+
+## Single chart {data-kick="Example · one chart"}
+
+```{python}
+fig, ax = plt.subplots(figsize=(11, 4.6))
+colors = [PAL.ramp(v / max(val)) for v in val]              # graded light→dark by height
+bars = ax.bar(seg, val, color=colors, edgecolor="white", linewidth=1)
+ax.bar_label(bars, fmt="%.1f", padding=4, fontfamily=f("mono"), fontsize=11, color=C.text)
+chart_title(ax, "One chart, centred on a card")
+ax.set_ylabel("Demo metric"); ax.margins(y=0.16)
+plt.show()
+```
+
+::: {.takeaway}
+EXAMPLE — graded colour (`PAL.ramp`), value labels (`ax.bar_label`) and a styled
+title (`chart_title`) are what make it read as finished. A flat `ax.bar(…, color=PAL.primary)`
+also works when you want it plain.
+:::
+
+## Three panels, one figure {data-kick="Example · multi-panel"}
+
+```{python}
+# Best when the panels are the same chart repeated. One image, fills the card.
+fig, axes = plt.subplots(1, 3, figsize=(15, 4.7))
+colors = [PAL.ramp(v / max(val)) for v in val]
+for ax, t in zip(axes, ["Panel one", "Panel two", "Panel three"]):
+    bars = ax.bar(seg, val, color=colors, edgecolor="white", linewidth=1)
+    ax.bar_label(bars, fmt="%.1f", padding=3, fontfamily=f("mono"), fontsize=9, color=C.text)
+    chart_title(ax, t)
+    ax.tick_params(axis="x", rotation=45); ax.margins(y=0.18)
+plt.show()
+```
+
+::: {.takeaway}
+EXAMPLE — `plt.subplots(1, 3, …)`; keep the total figsize wide-and-short (~3:1).
+:::
+
+## Two figures side by side {data-kick="Example · two-up"}
+
+```{python}
+#| layout-ncol: 2
+fig, ax = plt.subplots(figsize=(6.2, 4.4))
+bars = ax.bar(seg, val, color=[PAL.ramp(v / max(val)) for v in val], edgecolor="white", linewidth=1)
+ax.bar_label(bars, fmt="%.1f", padding=3, fontfamily=f("mono"), fontsize=10, color=C.text)
+chart_title(ax, "A bar chart")
+ax.tick_params(axis="x", rotation=45); ax.margins(y=0.18); plt.show()
+
+fig, ax = plt.subplots(figsize=(6.2, 4.4))
+ax.plot(seg, val2, marker="o", color=PAL.secondary, linewidth=2.5)
+chart_title(ax, "A trend line")
+ax.tick_params(axis="x", rotation=45); plt.show()
+```
+
+::: {.takeaway}
+EXAMPLE — `#| layout-ncol: 2` puts two independent figures on their own cards.
+:::
+
+## Chart beside commentary {data-kick="Example · chart + text"}
+
+:::: {.columns}
+::: {.column width="46%"}
+**What this shows**
+
+- Point one about the chart
+- Point two
+- Point three
+:::
+
+::: {.column width="54%"}
+```{python}
+fig, ax = plt.subplots(figsize=(7, 5))
+bars = ax.bar(seg, val2, color=[PAL.ramp(v / max(val2)) for v in val2], edgecolor="white", linewidth=1)
+ax.bar_label(bars, fmt="%.1f", padding=3, fontfamily=f("mono"), fontsize=10, color=C.text)
+chart_title(ax, "Beside text")
+ax.tick_params(axis="x", rotation=45); ax.margins(y=0.18); plt.show()
+```
+:::
+::::
+
+::: {.caveat}
+EXAMPLE — column divs (four colons `::::` outside, three `:::` per column).
+:::
+
+## A text slide {data-kick="Example · text"}
+
+Text-only slides centre themselves — no layout work needed. Use these for
+context, method, or a recommendation.
+
+- **Retained** — the drivers you're keeping
+- **Parked** — what you set aside, and why
+- **Next** — the one action you're asking for
+
+::: {.caveat}
+EXAMPLE — `.caveat` (accent) for a watch-out; `.takeaway` (primary) for the key point.
+:::
+
+## Using the shared chart helpers {data-kick="Example · helpers"}
+
+```{python}
+# The default_rate_by_bin helper (from credit_utils) + add_baseline / strip_bar_labels:
+# fig, axes = default_rate_by_bin(df, ["FEATURE"], "TARGET",
+#     grade_scale=PAL.ramp, show_base_rate=False, panel_w=5.0, panel_h=4.7)
+# add_baseline(axes, BASE)     # reference line, label parked in the margin
+# strip_bar_labels(axes)       # drop per-bar labels on dense (12-bin) panels
+# plt.show()
+#
+# Here's the same idea by hand — a graded bar using the theme ramp:
+import matplotlib.cm as cm
+fig, ax = plt.subplots(figsize=(11, 4.6))
+norm = plt.Normalize(min(val), max(val))
+ax.bar(seg, val, color=[PAL.ramp(norm(v)) for v in val])
+add_baseline([ax], BASE)
+ax.set_title("Graded bars coloured by height (PAL.ramp)", loc="left")
+plt.show()
+```
+
+::: {.takeaway}
+EXAMPLE — `PAL.ramp` is a colormap; `PAL.ramp(0..1)` gives a colour along it.
+:::
+
+## {.closing}
+
+<div class="rule"></div>
+<div class="lead">Closing statement.</div>
+<div class="sub">What this established, and what comes <em>next</em>.</div>
+<div class="tag">Report name · source · programme</div>
+
+```{=html}
+<script>
+// Cover kicker + stat chips (edit or delete). Add your logo here too if you like.
+window.addEventListener('load', () => {
+  const t = document.getElementById('title-slide');
+  if (t && !t.querySelector('.cover-meta')) {
+    const head = document.createElement('div');
+    head.className = 'cover-head';
+    head.innerHTML = '<div class="cover-kick">01 &nbsp;·&nbsp; Report Series</div><div class="cover-rule"></div>';
+    t.insertBefore(head, t.firstChild);
+    const d = document.createElement('div');
+    d.className = 'cover-meta';
+    d.innerHTML = `
+      <div class="cm"><span class="cm-n">0000</span><span class="cm-l">Metric one</span></div>
+      <div class="cm"><span class="cm-n">0.00</span><span class="cm-l">Metric two</span></div>
+      <div class="cm"><span class="cm-n">0.0%</span><span class="cm-l">Metric three</span></div>`;
+    t.appendChild(d);
+  }
+});
+</script>
+```

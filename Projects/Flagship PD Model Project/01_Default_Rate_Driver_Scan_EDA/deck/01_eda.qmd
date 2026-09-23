@@ -1,0 +1,306 @@
+---
+title: "What Predicts Repayment Difficulty?"
+subtitle: "Default-Rate Driver Scan · Home Credit application data"
+author: "Chuch"
+date: today
+date-format: "MMMM YYYY"
+format:
+  revealjs:
+    theme: [default, brand.scss]
+    slide-number: c/t
+    transition: fade
+    transition-speed: fast
+    width: 1280
+    height: 720
+    center: false
+    menu: false
+    progress: false
+    auto-stretch: false
+    fig-align: center
+    echo: false
+    embed-resources: true
+    footer: "Default-Rate Driver Scan · Home Credit Default Data"
+title-slide-attributes:
+    data-background-color: "#3D2E4F"
+    data-background-gradient: "radial-gradient(120% 135% at 12% 4%, #5C4577 0%, #3D2E4F 52%, #2C2039 100%)"
+execute:
+  warning: false
+  message: false
+  freeze: auto
+jupyter: python3
+---
+
+```{python}
+#| label: setup
+#| include: false
+import os, sys, warnings
+warnings.filterwarnings("ignore")
+import numpy as np, pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.ticker as mticker
+
+def find_repo_root(start, name="CreditRiskLearning"):
+    p = os.path.abspath(start)
+    while True:
+        if os.path.basename(p) == name:
+            return p
+        parent = os.path.dirname(p)
+        if parent == p:
+            raise FileNotFoundError(name)
+        p = parent
+
+REPO = find_repo_root(os.getcwd())
+sys.path.append(os.path.join(REPO, "Core Resources"))
+sys.path.append(os.path.join(REPO, "Core Resources", "Scripts"))
+
+# Brand chart system + shared deck helpers (see Core Resources/Scripts/deck_utils.py)
+from python_style_util import p, f, s, C
+from credit_utils.eda import default_rate_by_bin
+from deck_utils import (deck_style, BRAND_RAMP, add_baseline,
+                        strip_bar_labels, small_labels, reset_labels)
+deck_style()
+
+DATA = os.path.join(REPO, "Datasets", "Home Credit Default Risk", "application_train.csv")
+usecols = ["TARGET", "EXT_SOURCE_1", "EXT_SOURCE_2", "EXT_SOURCE_3",
+           "DAYS_BIRTH", "DAYS_EMPLOYED", "NAME_EDUCATION_TYPE",
+           "AMT_INCOME_TOTAL", "AMT_CREDIT", "AMT_ANNUITY", "AMT_GOODS_PRICE", "CODE_GENDER"]
+df = pd.read_csv(DATA, usecols=usecols)
+df = df[df["CODE_GENDER"] != "XNA"]
+df["DAYS_EMPLOYED"] = df["DAYS_EMPLOYED"].replace(365243, np.nan)
+df["AGE_YEARS"] = -df["DAYS_BIRTH"] / 365.25
+df["EMP_YEARS"] = -df["DAYS_EMPLOYED"] / 365.25
+
+def _sd(n, d): return n / d.replace(0, np.nan)
+df["DTI"]          = _sd(df["AMT_ANNUITY"], df["AMT_INCOME_TOTAL"])
+df["CREDIT_GOODS"] = _sd(df["AMT_CREDIT"],  df["AMT_GOODS_PRICE"])
+df["EMPLOYED_AGE"] = _sd(df["DAYS_EMPLOYED"], df["DAYS_BIRTH"])
+
+BASE = df["TARGET"].mean()
+N = len(df)
+```
+
+## The short version {.hero data-kick="Executive summary"}
+
+::: {.hero-wrap}
+::: {.hero-col}
+<div class="hero-num">~8%<small>of applicants hit repayment difficulty</small></div>
+:::
+
+::: {.hero-col}
+Across **307,000+ applications**, a handful of signals separate that 8% cleanly:
+
+- **External credit scores** — by far the strongest
+- **Age & job tenure** — younger, less-tenured default more
+- **Affordability ratios** — repayment size *relative* to the loan
+
+And one thing that barely matters alone: **the raw loan amount**.
+:::
+:::
+
+::: {.takeaway}
+This deck is the *scan* — which fields carry signal — before any model is built. Every rate is read against the **8% base rate**.
+:::
+
+## The data in one slide {data-kick="The data"}
+
+```{python}
+#| fig-width: 10
+#| fig-height: 3.0
+counts = df["TARGET"].value_counts(normalize=True).sort_index()
+labels = ["Repaid on time", "Repayment difficulty"]
+fig, ax = plt.subplots(figsize=(11, 3.4))
+bars = ax.barh(labels, counts.values, color=[p("jacaranda", 300), p("gold", 300)],
+               alpha=0.95, edgecolor="white", linewidth=1.2, height=0.62)
+for b, v in zip(bars, counts.values):
+    ax.text(v + 0.012, b.get_y() + b.get_height()/2, f"{v:.1%}", va="center",
+            fontweight="bold", fontfamily=f("mono"), fontsize=12, color=C.text)
+ax.set_xlim(0, 1); ax.set_xlabel("Share of applications")
+ax.set_title(f"{N:,} applications  ·  122 fields  ·  {BASE:.1%} hit repayment difficulty",
+             loc="left")
+ax.grid(axis="x"); ax.grid(axis="y", visible=False)
+ax.invert_yaxis()
+plt.show()
+```
+
+::: {.takeaway}
+The classes are **imbalanced** — roughly 12 good for every 1 bad. That's normal for credit, and it's why every group is read against the 8% line rather than a 50/50 split.
+:::
+
+## How to read a driver {data-kick="Method"}
+
+For each field we sort applicants into bins (low → high) and check the **default rate in each bin** against the 8% base line.
+
+- Bars that **slope** — the field separates good from bad → useful signal.
+- Bars that stay **flat** on the line — no signal → drop it.
+
+Colour just re-states height: [lighter = safer]{.stat}, the [deeper the purple]{.stat}, the higher the default rate.
+
+::: {.takeaway}
+That's the whole method. The next slides are this one chart, one field at a time.
+:::
+
+## Strongest signal — external credit scores {data-kick="Signal · strongest"}
+
+```{python}
+#| fig-width: 11
+#| fig-height: 4.3
+fig, axes = default_rate_by_bin(
+    df, ["EXT_SOURCE_2", "EXT_SOURCE_3", "EXT_SOURCE_1"],
+    target="TARGET", ncols=3, bins=10, bin_label="rank",
+    grade_scale=BRAND_RAMP, na_as_bin=True, panel_w=5.0, panel_h=4.7,
+    show_base_rate=False,
+)
+add_baseline(axes, BASE)
+plt.show()
+```
+
+::: {.takeaway}
+A clean, steep slide from **~20% default in the lowest-score bin to ~2–3% in the highest**. These pre-built external scores are the single best predictors in the data.
+:::
+
+## Age & job tenure {data-kick="Signal · demographics"}
+
+```{python}
+#| fig-width: 10.5
+#| fig-height: 4.2
+fig, axes = default_rate_by_bin(
+    df, ["AGE_YEARS", "EMP_YEARS"], target="TARGET",
+    ncols=2, bins=8, method="quantile", bin_label="range",
+    grade_scale=BRAND_RAMP, na_as_bin=True, panel_w=6.4, panel_h=4.7,
+    show_base_rate=False,
+)
+add_baseline(axes, BASE)
+plt.show()
+```
+
+::: {.takeaway}
+Both slope the intuitive way: **younger applicants, and those with less time in a job, default more**. Stability reads as lower risk. (The "missing" tenure bar is pensioners — correctly low-risk.)
+:::
+
+## Education tells a clean story too {data-kick="Signal · education"}
+
+```{python}
+#| fig-width: 10
+#| fig-height: 3.7
+order = df.groupby("NAME_EDUCATION_TYPE")["TARGET"].mean().sort_values()
+from matplotlib import colors as _mc
+norm = _mc.Normalize(order.min(), order.max())
+rgba = BRAND_RAMP(norm(order.values)); rgba[:, 3] = 0.95
+fig, ax = plt.subplots(figsize=(11, 4.2))
+bars = ax.barh(order.index.astype(str), order.values, color=rgba,
+               edgecolor="white", linewidth=1.0)
+ax.axvline(BASE, ls="--", color=C.text_muted, lw=1, zorder=1.4)
+ax.text(BASE, len(order)-0.35, f" base {BASE:.1%}", va="bottom", ha="left",
+        fontsize=11, color=C.text_muted, fontfamily=f("mono"), zorder=5,
+        bbox=dict(facecolor="white", edgecolor="none", boxstyle="round,pad=0.18", alpha=0.85))
+for b, v in zip(bars, order.values):
+    ax.text(v + 0.002, b.get_y()+b.get_height()/2, f"{v:.1%}", va="center",
+            fontweight="bold", fontsize=12, fontfamily=f("mono"), color=C.text)
+ax.set_xlim(0, order.values.max() * 1.16)   # headroom so the top % label never clips
+ax.xaxis.set_major_formatter(mticker.PercentFormatter(xmax=1))
+ax.set_title("Default rate by education level", loc="left")
+ax.grid(axis="x"); ax.grid(axis="y", visible=False)
+plt.show()
+```
+
+::: {.takeaway}
+A steady gradient from **higher education (~2%) to lower secondary (~11%)** — education is a real, ordered driver.
+:::
+
+## The surprise — loan amounts barely matter {data-kick="Signal · the surprise"}
+
+```{python}
+#| fig-width: 11
+#| fig-height: 4.3
+small_labels(9)   # denser bins -> smaller per-bar labels so they never touch
+fig, axes = default_rate_by_bin(
+    df, ["AMT_CREDIT", "AMT_INCOME_TOTAL", "AMT_ANNUITY"],
+    target="TARGET", ncols=3, bins=10, bin_label="rank",
+    grade_scale=BRAND_RAMP, panel_w=5.0, panel_h=4.7, show_base_rate=False,
+)
+reset_labels()
+add_baseline(axes, BASE)
+plt.show()
+```
+
+::: {.caveat}
+As **raw amounts**, these are nearly flat — a big loan is not, by itself, a risky loan. The signal isn't the size; it's the size *relative* to income and the asset. That motivates the engineered ratios.
+:::
+
+## Engineered affordability ratios {data-kick="Feature engineering"}
+
+```{python}
+#| fig-width: 11
+#| fig-height: 4.3
+fig, axes = default_rate_by_bin(
+    df, ["EMPLOYED_AGE", "CREDIT_GOODS", "DTI"], target="TARGET",
+    ncols=3, bins=12, bin_label="rank", grade_scale=BRAND_RAMP, na_as_bin=True,
+    panel_w=5.0, panel_h=4.7, show_base_rate=False,
+)
+strip_bar_labels(axes)   # 12 near-equal bins -> labels collide; let the y-axis carry values
+for ax in np.ravel(np.asarray(axes)):
+    ax.margins(y=0.06)
+add_baseline(axes, BASE)
+plt.show()
+```
+
+::: {.caveat}
+**Job-tenure share** and **loan-to-value** (`CREDIT_GOODS`) slope cleanly — the affordability signal the raw amounts lacked. But **debt-to-income (`DTI`) is flat**: the textbook metric underperforms here, almost certainly because self-reported income is noisy.
+:::
+
+## What we carry forward {data-kick="Shortlist"}
+
+**Retained** as candidate drivers for the modelling screen:
+
+- **External scores** (strongest), **age & tenure**, **education**
+- **Affordability ratios** — loan-to-value and tenure-share
+- Weak-but-documented: DTI / income ratios (kept to *show* they underperform)
+
+**Deliberately parked** (reversible, one line to re-add):
+
+- Social-circle and bureau-enquiry counts — too weak to earn a baseline slot
+
+::: {.takeaway}
+A **lean, defensible shortlist** beats a kitchen sink — it's the judgment call, not the field count, that matters.
+:::
+
+## Caveats & what's next {data-kick="Caveats · next"}
+
+- **Gender is excluded** from any model — responsible-lending / anti-discrimination — and used for context only.
+- The model **leans heavily on opaque external scores**; self-reported income is noisy.
+- Application-time data only; **missing values are kept as their own group** where the absence is itself informative.
+
+::: {.caveat}
+**Next:** turn this scan into a ranked screen (WOE / Information Value), then a first interpretable scorecard. This deck answers *"what looks predictive"*; the next answers *"how strongly, and in what order."*
+:::
+
+## {.closing background-color="#3D2E4F" background-gradient="radial-gradient(120% 135% at 88% 96%, #5C4577 0%, #3D2E4F 52%, #2C2039 100%)"}
+
+<div class="rule"></div>
+<div class="lead">From scan to scorecard.</div>
+<div class="sub">This deck answered <em>what looks predictive</em>. Next: rank every driver by Information Value, then build a first interpretable, leakage-safe scorecard.</div>
+<div class="tag">Default-Rate Driver Scan · Home Credit · Flagship PD Model</div>
+
+```{=html}
+<script>
+window.addEventListener('load', () => {
+  const t = document.getElementById('title-slide');
+  if (t && !t.querySelector('.cover-meta')) {
+    // header: kicker + gold rule, prepended above the title
+    const head = document.createElement('div');
+    head.className = 'cover-head';
+    head.innerHTML = '<div class="cover-kick">01 &nbsp;·&nbsp; Default-Rate Driver Scan</div><div class="cover-rule"></div>';
+    t.insertBefore(head, t.firstChild);
+    // stat chips, appended below the author line
+    const d = document.createElement('div');
+    d.className = 'cover-meta';
+    d.innerHTML = `
+      <div class="cm"><span class="cm-n">307,511</span><span class="cm-l">Applications</span></div>
+      <div class="cm"><span class="cm-n">122</span><span class="cm-l">Raw fields</span></div>
+      <div class="cm"><span class="cm-n">8.1%</span><span class="cm-l">Base default rate</span></div>
+      <div class="cm"><span class="cm-n">11</span><span class="cm-l">Drivers screened</span></div>`;
+    t.appendChild(d);
+  }
+});
+</script>
+```

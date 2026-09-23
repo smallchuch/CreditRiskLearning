@@ -1,0 +1,144 @@
+---
+# ─────────────────────────────────────────────────────────────────────────
+# STAGE-DECK STARTER  — copy this file + brand.scss into a new stage's deck/
+# folder, then fill in the three placeholders (title / subtitle / footer) and
+# write your slides. Everything else (theme, fonts, chart styling) is shared.
+# Render:  quarto render <thisfile>.qmd --to revealjs
+# ─────────────────────────────────────────────────────────────────────────
+title: "STAGE TITLE HERE"                    # e.g. "How Well Can We Rank Default Risk?"
+subtitle: "Stage name · Home Credit data"    # e.g. "Probability-of-Default model · Home Credit"
+author: "Chuch"
+date: today
+date-format: "MMMM YYYY"
+format:
+  revealjs:
+    theme: [default, brand.scss]
+    slide-number: c/t
+    transition: fade
+    transition-speed: fast
+    width: 1280
+    height: 720
+    center: false
+    menu: false
+    progress: false
+    auto-stretch: false
+    fig-align: center
+    echo: false
+    embed-resources: true
+    footer: "Stage name · Home Credit Default Data"   # shown on every content slide
+title-slide-attributes:
+    data-background-color: "#3D2E4F"
+    data-background-gradient: "radial-gradient(120% 135% at 12% 4%, #5C4577 0%, #3D2E4F 52%, #2C2039 100%)"
+execute:
+  warning: false
+  message: false
+  freeze: auto
+jupyter: python3
+---
+
+```{python}
+#| label: setup
+#| include: false
+# Standard boilerplate: find the repo root, then pull in the shared brand system.
+import os, sys, warnings
+warnings.filterwarnings("ignore")
+import numpy as np, pandas as pd
+import matplotlib.pyplot as plt
+
+def find_repo_root(start, name="CreditRiskLearning"):
+    p = os.path.abspath(start)
+    while True:
+        if os.path.basename(p) == name:
+            return p
+        parent = os.path.dirname(p)
+        if parent == p:
+            raise FileNotFoundError(name)
+        p = parent
+
+REPO = find_repo_root(os.getcwd())
+sys.path.append(os.path.join(REPO, "Core Resources"))
+sys.path.append(os.path.join(REPO, "Core Resources", "Scripts"))
+
+from python_style_util import p, f, s, C
+from deck_utils import (deck_style, BRAND_RAMP, add_baseline,
+                        strip_bar_labels, small_labels, reset_labels)
+deck_style()
+
+# --- load your stage's data / model outputs here ---
+# df = pd.read_csv(...)
+```
+
+## Headline answer {.hero data-kick="Executive summary"}
+
+::: {.hero-wrap}
+::: {.hero-col}
+<div class="hero-num">0.00<small>the one number this stage delivers</small></div>
+:::
+
+::: {.hero-col}
+One or two sentences of answer-first framing.
+
+- **Point one** — the most important thing
+- **Point two** — the next
+- **Point three** — and the next
+:::
+:::
+
+::: {.takeaway}
+The single sentence you want the room to remember from this slide.
+:::
+
+## A chart slide {data-kick="Section · label"}
+
+```{python}
+# Example: a graded bar chart using the shared helpers.
+# fig, axes = default_rate_by_bin(df, ["FEATURE"], "TARGET",
+#     grade_scale=BRAND_RAMP, show_base_rate=False, panel_w=5.0, panel_h=4.7)
+# add_baseline(axes, BASE)          # base-rate line, label parked in the margin
+# strip_bar_labels(axes)           # only if a dense panel's labels would collide
+# plt.show()
+```
+
+::: {.takeaway}
+What the chart proves, in one line.
+:::
+
+## A text slide {data-kick="Section · label"}
+
+Body content. Text-only slides centre automatically — no layout work needed.
+
+- Bullet one
+- Bullet two
+
+::: {.caveat}
+Use `.caveat` (gold) instead of `.takeaway` (purple) for a watch-out.
+:::
+
+## {.closing background-color="#3D2E4F" background-gradient="radial-gradient(120% 135% at 88% 96%, #5C4577 0%, #3D2E4F 52%, #2C2039 100%)"}
+
+<div class="rule"></div>
+<div class="lead">Closing statement.</div>
+<div class="sub">One or two sentences on what this stage established and what comes <em>next</em>.</div>
+<div class="tag">Stage name · Home Credit · Flagship PD Model</div>
+
+```{=html}
+<script>
+// Optional: cover stat chips + kicker (delete if you don't want them).
+window.addEventListener('load', () => {
+  const t = document.getElementById('title-slide');
+  if (t && !t.querySelector('.cover-meta')) {
+    const head = document.createElement('div');
+    head.className = 'cover-head';
+    head.innerHTML = '<div class="cover-kick">02 &nbsp;·&nbsp; Stage Name</div><div class="cover-rule"></div>';
+    t.insertBefore(head, t.firstChild);
+    const d = document.createElement('div');
+    d.className = 'cover-meta';
+    d.innerHTML = `
+      <div class="cm"><span class="cm-n">0000</span><span class="cm-l">Metric one</span></div>
+      <div class="cm"><span class="cm-n">0.00</span><span class="cm-l">Metric two</span></div>
+      <div class="cm"><span class="cm-n">0.0%</span><span class="cm-l">Metric three</span></div>`;
+    t.appendChild(d);
+  }
+});
+</script>
+```

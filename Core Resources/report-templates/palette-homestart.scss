@@ -1,0 +1,38 @@
+/*-- scss:defaults --*/
+// ══════════════════════════════════════════════════════════════════════════
+// HomeStart Finance palette  (official brand-guide colours)
+// Drop this AHEAD of brand.scss to reskin the whole deck to HomeStart:
+//     theme: [default, palette-homestart.scss, brand.scss]
+// and set deck_style(theme="homestart") in the setup cell so the charts match.
+// Only tokens live here; all layout is inherited from brand.scss.
+//
+// Guide values: HomeStart Blue #0093D6 · Space Blue #002E6D · Saphire #0069A6 ·
+// Light Blue #8CC6E7 · Light Grey #DAE0E9 · HomeStart Green #80C7BC ·
+// Corporate Tan #F6DFA4 · Corporate Salmon #FF8189 · Finance Grey (426C) ~#1D1D1B ·
+// Light Jade #F3F4E9. (The green accent shades $gold-300/$gold-400 are darker
+// tints of HomeStart Green, derived so accent TEXT stays legible on white.)
+// ══════════════════════════════════════════════════════════════════════════
+
+// primary family — HomeStart blues
+$jac-100: #DAE0E9;   // Light Grey — faint tint
+$jac-200: #8CC6E7;   // Light Blue — light accents / subtitle on dark
+$jac-300: #0093D6;   // HomeStart Blue — PRIMARY base
+$jac-400: #0069A6;   // Saphire Blue — dark / links
+$jac-500: #002E6D;   // Space Blue — darkest, cover / closing background
+
+// accent family — HomeStart Green (+ derived legible shades)
+$gold-100: #E1F0EC;
+$gold-200: #80C7BC;  // HomeStart Green — accent on dark (kicker, tag, motif)
+$gold-300: #56AA9C;  // deeper green — accent base on white (rules, markers, caveat)
+$gold-400: #2F7A6D;  // dark green — accent TEXT on white (kicker, .gold, labels)
+
+$olive-300: #F6DFA4; // Corporate Tan — tertiary (chart series)
+
+// neutrals
+$ink:     #1D1D1B;   // Finance Grey (near-black) — body text
+$ink-2:   #5B6570;   // muted
+$hair:    #DAE0E9;   // Light Grey — dividers
+$page:    #F3F4E9;   // Light Jade — soft corporate off-white
+$surface: #FFFFFF;
+
+$motif-fill: "80C7BC";   // HomeStart Green — faint bar motif on the navy cover
