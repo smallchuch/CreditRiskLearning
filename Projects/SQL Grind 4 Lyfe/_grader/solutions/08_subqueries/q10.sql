@@ -1,0 +1,1 @@
+SELECT year(origination_date) AS yr, COUNT(*) FROM loan o WHERE interest_rate_at_origination_pct > (SELECT AVG(interest_rate_at_origination_pct) FROM loan i WHERE year(i.origination_date)=year(o.origination_date)) GROUP BY 1 ORDER BY 1

@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM (SELECT primary_customer_id FROM loan GROUP BY 1 HAVING COUNT(*) FILTER (WHERE purpose='Purchase - Investment')>0 AND COUNT(*) FILTER (WHERE purpose='Purchase - Owner Occupied')>0)

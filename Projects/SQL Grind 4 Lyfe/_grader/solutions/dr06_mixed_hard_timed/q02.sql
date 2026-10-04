@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM (SELECT primary_customer_id, MAX(original_amount) FILTER (WHERE rn=1) AS a1, MAX(original_amount) FILTER (WHERE rn=2) AS a2 FROM (SELECT primary_customer_id, original_amount, ROW_NUMBER() OVER (PARTITION BY primary_customer_id ORDER BY origination_date, loan_id) AS rn FROM loan) GROUP BY 1) WHERE a2>a1

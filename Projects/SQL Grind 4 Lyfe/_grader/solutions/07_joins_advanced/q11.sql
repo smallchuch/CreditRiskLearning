@@ -1,0 +1,1 @@
+SELECT h.loan_id, h.interest_rate_pct FROM loan_rate_history h WHERE h.loan_id <= 10 AND h.effective_from <= DATE '2022-12-31' AND (h.effective_to IS NULL OR h.effective_to > DATE '2022-12-31') ORDER BY 1

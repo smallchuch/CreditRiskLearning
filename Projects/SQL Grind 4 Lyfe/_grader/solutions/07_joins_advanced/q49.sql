@@ -1,0 +1,1 @@
+SELECT a.price_index, b.price_index, ROUND(100*(b.price_index/a.price_index-1),1) FROM ref_property_price_index a JOIN ref_property_price_index b ON b.state=a.state WHERE a.state='QLD' AND a.month_end_date=DATE '2020-12-31' AND b.month_end_date=DATE '2025-12-31'

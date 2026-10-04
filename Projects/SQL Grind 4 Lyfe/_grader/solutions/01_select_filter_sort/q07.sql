@@ -1,0 +1,1 @@
+SELECT loan_id, interest_rate_at_origination_pct, fixed_rate_expiry_date FROM loan WHERE rate_type='Fixed' AND origination_date >= DATE '2021-01-01' AND origination_date < DATE '2022-01-01' ORDER BY loan_id

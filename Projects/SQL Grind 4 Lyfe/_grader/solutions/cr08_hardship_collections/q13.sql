@@ -1,0 +1,1 @@
+SELECT COUNT(*), COUNT(*) FILTER (WHERE s.days_past_due>=30), ROUND(100.0*COUNT(*) FILTER (WHERE s.days_past_due>=30)/COUNT(*),1) FROM loan_monthly_snapshot s WHERE s.snapshot_date=DATE '2025-12-31' AND s.loan_status<>'Closed' AND EXISTS (SELECT 1 FROM hardship_arrangement h WHERE h.loan_id=s.loan_id AND h.hardship_type='COVID-19 repayment deferral')

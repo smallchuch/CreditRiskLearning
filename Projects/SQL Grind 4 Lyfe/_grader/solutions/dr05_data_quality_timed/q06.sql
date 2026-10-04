@@ -1,0 +1,1 @@
+WITH s AS (SELECT application_id, MIN(status_ts) FILTER (WHERE status='Submitted') AS a, MIN(status_ts) FILTER (WHERE status='Settled') AS b FROM application_status_history GROUP BY 1) SELECT COUNT(*) FROM s WHERE b<a

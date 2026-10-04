@@ -1,0 +1,1 @@
+WITH t AS (SELECT product_id, SUM(original_amount) AS s FROM loan WHERE purpose='Purchase - Owner Occupied' GROUP BY 1) SELECT product_id, ROUND(s,0), rnk FROM (SELECT product_id, s, ROW_NUMBER() OVER (ORDER BY s DESC, product_id) AS rnk FROM t) WHERE rnk<=3 ORDER BY rnk

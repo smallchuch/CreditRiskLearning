@@ -1,0 +1,1 @@
+SELECT n, COUNT(*) FROM (SELECT loan_id, COUNT(*) AS n FROM loan_borrower GROUP BY 1) GROUP BY 1 ORDER BY 1

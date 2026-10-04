@@ -1,0 +1,1 @@
+SELECT d.state, COUNT(*), ROUND(100.0*COUNT(*) FILTER (WHERE s.days_past_due>=90)/COUNT(*),2) AS r FROM loan_monthly_snapshot s JOIN loan l USING (loan_id) JOIN property p ON p.property_id=l.property_id JOIN dim_postcode d ON d.postcode=p.postcode WHERE s.snapshot_date=DATE '2025-12-31' AND s.loan_status<>'Closed' GROUP BY 1 HAVING COUNT(*)>=1000 ORDER BY r DESC, 1

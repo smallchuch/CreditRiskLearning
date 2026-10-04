@@ -1,0 +1,1 @@
+SELECT l.channel, ROUND(100*SUM(s.closing_balance)/SUM(SUM(s.closing_balance)) OVER (),1) AS p FROM loan_monthly_snapshot s JOIN loan l USING (loan_id) WHERE s.snapshot_date=DATE '2025-12-31' AND s.loan_status<>'Closed' GROUP BY 1 ORDER BY p DESC

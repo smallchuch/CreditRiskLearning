@@ -1,0 +1,1 @@
+WITH RECURSIVE c AS (SELECT staff_id, 1 AS depth, CAST(full_name AS VARCHAR) AS path FROM dim_staff WHERE manager_staff_id IS NULL UNION ALL SELECT s.staff_id, c.depth+1, c.path || ' > ' || s.full_name FROM dim_staff s JOIN c ON s.manager_staff_id=c.staff_id) SELECT staff_id, depth, path FROM c WHERE depth=3 ORDER BY staff_id LIMIT 10

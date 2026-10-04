@@ -1,0 +1,1 @@
+SELECT ROUND(SUM(sh*sh)*10000,0) FROM (SELECT SUM(s.closing_balance)/SUM(SUM(s.closing_balance)) OVER () AS sh FROM loan_monthly_snapshot s JOIN loan l USING (loan_id) JOIN property p ON p.property_id=l.property_id JOIN dim_postcode d ON d.postcode=p.postcode WHERE s.snapshot_date=DATE '2025-12-31' AND s.loan_status<>'Closed' GROUP BY d.state)

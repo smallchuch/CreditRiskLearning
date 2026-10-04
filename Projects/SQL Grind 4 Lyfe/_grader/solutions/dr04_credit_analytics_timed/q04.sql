@@ -1,0 +1,1 @@
+SELECT yr, p FROM (SELECT year(l.origination_date) AS yr, ROUND(100.0*COUNT(e.loan_id)/COUNT(*),2) AS p FROM loan l LEFT JOIN (SELECT loan_id FROM loan_monthly_snapshot GROUP BY 1 HAVING MAX(days_past_due)>=90) e ON e.loan_id=l.loan_id GROUP BY 1) ORDER BY p DESC, yr LIMIT 1

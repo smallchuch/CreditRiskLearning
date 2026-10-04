@@ -1,0 +1,1 @@
+SELECT ROUND(SUM(e.current_lvr_pct*e.ead)/SUM(e.ead),1), COUNT(*) FILTER (WHERE e.current_lvr_pct>90) FROM ecl_provision_quarterly e JOIN loan l USING (loan_id) WHERE e.reporting_date=DATE '2025-12-31' AND l.purpose='Construction'

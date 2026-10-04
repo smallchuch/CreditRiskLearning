@@ -1,0 +1,1 @@
+SELECT channel, COUNT(*) FROM loan WHERE branch_id IS NULL GROUP BY 1 ORDER BY 1

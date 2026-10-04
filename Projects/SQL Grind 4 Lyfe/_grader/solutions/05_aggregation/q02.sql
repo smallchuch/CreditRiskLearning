@@ -1,0 +1,1 @@
+SELECT purpose, COUNT(*) FROM loan GROUP BY 1 ORDER BY 2 DESC, 1

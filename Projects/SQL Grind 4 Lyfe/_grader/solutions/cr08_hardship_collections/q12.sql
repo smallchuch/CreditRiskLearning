@@ -1,0 +1,1 @@
+SELECT agent_staff_id, COUNT(*) AS n, ROUND(100.0*COUNT(*) FILTER (WHERE promise_kept_flag)/NULLIF(COUNT(*) FILTER (WHERE promise_amount IS NOT NULL),0),1) FROM collections_activity WHERE activity_date>=DATE '2025-01-01' AND activity_date<DATE '2026-01-01' AND agent_staff_id IS NOT NULL GROUP BY 1 ORDER BY n DESC, 1 LIMIT 5

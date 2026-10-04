@@ -1,0 +1,1 @@
+SELECT (SELECT COUNT(*) FROM loan_application a WHERE a.current_status='Settled' AND NOT EXISTS (SELECT 1 FROM loan l WHERE l.application_id=a.application_id)), (SELECT COUNT(*) FROM loan l JOIN loan_application a ON a.application_id=l.application_id WHERE a.current_status<>'Settled')

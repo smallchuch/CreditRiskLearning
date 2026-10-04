@@ -1,0 +1,1 @@
+SELECT COUNT(*), COUNT(DISTINCT loan_id), COUNT(*) FILTER (WHERE promise_amount IS NOT NULL), ROUND(100.0*COUNT(*) FILTER (WHERE promise_kept_flag)/NULLIF(COUNT(*) FILTER (WHERE promise_amount IS NOT NULL),0),1) FROM collections_activity WHERE activity_date >= DATE '2019-01-01' AND activity_date < DATE '2020-01-01'

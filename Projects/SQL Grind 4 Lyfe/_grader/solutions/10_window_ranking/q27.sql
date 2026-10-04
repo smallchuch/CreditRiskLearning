@@ -1,0 +1,1 @@
+SELECT * FROM (SELECT product_id, COUNT(*) AS n, RANK() OVER (ORDER BY COUNT(*) DESC) AS r FROM loan WHERE origination_date >= DATE '2020-01-01' AND origination_date < DATE '2021-01-01' GROUP BY 1) WHERE r<=3 ORDER BY r, product_id

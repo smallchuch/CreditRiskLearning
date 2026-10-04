@@ -1,0 +1,1 @@
+SELECT COUNT(*), COUNT(*) FILTER (WHERE days_past_due>=30), COUNT(*) FILTER (WHERE days_past_due>=90), ROUND(100*SUM(closing_balance) FILTER (WHERE days_past_due>=90)/SUM(closing_balance),2) FROM loan_monthly_snapshot WHERE snapshot_date = DATE '2025-12-31' AND loan_status <> 'Closed'

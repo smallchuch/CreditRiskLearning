@@ -1,0 +1,1 @@
+SELECT product_id, COUNT(*) AS n, RANK() OVER (ORDER BY COUNT(*) DESC) AS r FROM loan GROUP BY 1 ORDER BY r, 1

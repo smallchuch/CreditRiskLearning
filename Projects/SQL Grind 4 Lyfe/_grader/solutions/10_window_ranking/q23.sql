@@ -1,0 +1,1 @@
+SELECT channel, loan_id, original_amount, rn FROM (SELECT channel, loan_id, original_amount, ROW_NUMBER() OVER (PARTITION BY channel ORDER BY original_amount DESC, loan_id) AS rn FROM loan WHERE purpose='Refinance') WHERE rn<=2 ORDER BY channel, rn

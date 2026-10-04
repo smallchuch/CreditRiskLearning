@@ -1,0 +1,1 @@
+SELECT COUNT(*), COUNT(resolved_date), ROUND(MEDIAN(resolved_date-received_date),1), ROUND(SUM(COALESCE(compensation_amount,0)),0) FROM complaint WHERE received_date >= DATE '2019-01-01' AND received_date < DATE '2020-01-01'

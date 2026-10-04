@@ -1,0 +1,1 @@
+SELECT property_id, bedrooms, land_area_sqm, year_built FROM property WHERE property_type='House' AND bedrooms >= 4 AND land_area_sqm > 1000 AND year_built > 2010 ORDER BY land_area_sqm DESC, property_id

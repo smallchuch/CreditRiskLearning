@@ -1,0 +1,2 @@
+SELECT status, COUNT(*) AS n FROM (SELECT h.application_id, h.status FROM application_status_history h JOIN loan_application a USING (application_id) WHERE a.application_date BETWEEN DATE '2024-06-01' AND DATE '2024-06-15' AND h.status_ts <= TIMESTAMP '2024-06-30 23:59:59'
+QUALIFY ROW_NUMBER() OVER (PARTITION BY h.application_id ORDER BY h.status_ts DESC, h.event_id DESC)=1) GROUP BY 1 ORDER BY n DESC, 1

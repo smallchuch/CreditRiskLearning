@@ -1,0 +1,1 @@
+SELECT application_id, requested_amount FROM loan_application WHERE current_status='In Progress' AND application_date >= DATE '2025-01-01' AND application_date < DATE '2026-01-01' AND requested_amount > 400000 ORDER BY requested_amount DESC, application_id LIMIT 10

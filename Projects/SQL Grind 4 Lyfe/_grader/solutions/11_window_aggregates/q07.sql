@@ -1,0 +1,1 @@
+SELECT snapshot_date, closing_balance, LAG(closing_balance) OVER (ORDER BY snapshot_date), ROUND(LAG(closing_balance) OVER (ORDER BY snapshot_date)-closing_balance,2) FROM loan_monthly_snapshot WHERE loan_id=1 ORDER BY snapshot_date

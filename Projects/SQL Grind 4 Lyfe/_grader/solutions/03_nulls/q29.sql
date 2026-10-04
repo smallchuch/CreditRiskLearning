@@ -1,0 +1,1 @@
+SELECT ROUND(100.0*COUNT(*) FILTER (WHERE parent_loan_id IS NULL)/COUNT(*),2) FROM loan

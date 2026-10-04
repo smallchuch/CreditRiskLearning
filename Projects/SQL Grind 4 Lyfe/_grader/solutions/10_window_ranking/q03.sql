@@ -1,0 +1,1 @@
+SELECT loan_id, ROW_NUMBER() OVER (ORDER BY loan_id) FROM (SELECT loan_id FROM loan ORDER BY loan_id LIMIT 12) ORDER BY 1

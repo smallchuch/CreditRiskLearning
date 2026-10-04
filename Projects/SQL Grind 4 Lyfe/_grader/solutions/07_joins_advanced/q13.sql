@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM application_applicant p JOIN application_applicant c ON c.application_id=p.application_id AND c.applicant_role='Co-applicant' WHERE p.applicant_role='Primary' AND c.income_share_pct > p.income_share_pct

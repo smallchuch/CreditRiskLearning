@@ -1,0 +1,1 @@
+SELECT l.channel, COUNT(*), ROUND(100.0*COUNT(e.loan_id)/COUNT(*),2) FROM loan l LEFT JOIN (SELECT loan_id FROM loan_monthly_snapshot GROUP BY 1 HAVING MAX(days_past_due)>=90) e ON e.loan_id=l.loan_id WHERE l.origination_date >= DATE '2021-01-01' AND l.origination_date < DATE '2022-01-01' GROUP BY 1 ORDER BY 1

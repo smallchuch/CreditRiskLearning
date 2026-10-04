@@ -1,0 +1,1 @@
+SELECT purpose, loan_id, original_amount FROM (SELECT purpose, loan_id, original_amount, ROW_NUMBER() OVER (PARTITION BY purpose ORDER BY original_amount DESC, loan_id) AS rn FROM loan) WHERE rn=1 ORDER BY 1

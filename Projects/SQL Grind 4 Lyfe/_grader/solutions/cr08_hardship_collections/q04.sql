@@ -1,0 +1,1 @@
+SELECT arrangement_outcome, COUNT(*) AS n, ROUND(100.0*COUNT(*)/SUM(COUNT(*)) OVER (),1) FROM hardship_arrangement WHERE arrangement_status='Completed' AND hardship_type<>'COVID-19 repayment deferral' GROUP BY 1 ORDER BY n DESC, 1

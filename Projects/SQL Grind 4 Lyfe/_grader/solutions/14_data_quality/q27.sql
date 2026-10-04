@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM (SELECT broker_id FROM dim_broker GROUP BY 1 HAVING COUNT(*)>1)

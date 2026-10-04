@@ -1,0 +1,1 @@
+SELECT purpose, loans FROM (SELECT purpose, COUNT(*) AS loans FROM loan WHERE purpose='Construction' GROUP BY 1 UNION ALL SELECT purpose, COUNT(*) FROM loan WHERE purpose='Refinance' GROUP BY 1) ORDER BY 1

@@ -1,0 +1,2 @@
+WITH r AS (SELECT loan_id, MIN(event_date) AS d FROM loan_event WHERE event_type='Entered recovery - possession process' GROUP BY 1)
+SELECT COUNT(*), COUNT(*) FILTER (WHERE EXISTS (SELECT 1 FROM collections_activity a WHERE a.loan_id=r.loan_id AND a.activity_type='Legal referral' AND a.activity_date<r.d)), COUNT(*) FILTER (WHERE EXISTS (SELECT 1 FROM collections_activity a WHERE a.loan_id=r.loan_id AND a.activity_type='Possession notice' AND a.activity_date<r.d)) FROM r

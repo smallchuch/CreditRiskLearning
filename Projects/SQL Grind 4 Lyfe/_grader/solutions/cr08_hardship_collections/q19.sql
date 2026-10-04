@@ -1,0 +1,1 @@
+SELECT COUNT(*), ROUND(AVG(planned_length_months),1), COUNT(*) FILTER (WHERE arrangement_outcome='Returned to normal repayments'), COUNT(*) FILTER (WHERE arrangement_outcome='Moved into arrears'), COUNT(*) FILTER (WHERE arrangement_outcome='Loan closed during arrangement') FROM hardship_arrangement WHERE hardship_type='Term extension'

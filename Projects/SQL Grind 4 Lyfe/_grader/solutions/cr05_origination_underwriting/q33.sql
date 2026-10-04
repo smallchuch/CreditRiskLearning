@@ -1,0 +1,1 @@
+SELECT ROUND(AVG(s.nsr),2), ROUND(AVG(s.dti_ratio),2), ROUND(100.0*COUNT(*) FILTER (WHERE s.hem_applied_flag)/COUNT(*),1) FROM loan_application a JOIN application_assessment s USING (application_id) WHERE a.application_date >= DATE '2025-01-01' AND a.application_date < DATE '2026-01-01'

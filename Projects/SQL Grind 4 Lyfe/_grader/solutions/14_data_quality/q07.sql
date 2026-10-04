@@ -1,0 +1,1 @@
+SELECT CASE WHEN mobile IS NULL THEN 'missing' WHEN mobile LIKE '04%' AND LENGTH(mobile)=10 THEN '04xxxxxxxx' WHEN mobile LIKE '+61%' THEN '+61 prefix' ELSE 'other' END AS f, COUNT(*) FROM customer GROUP BY 1 ORDER BY 1

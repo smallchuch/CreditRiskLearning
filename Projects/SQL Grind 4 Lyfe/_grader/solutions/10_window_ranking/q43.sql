@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM (SELECT decision FROM loan_application WHERE application_date < DATE '2023-01-01' QUALIFY ROW_NUMBER() OVER (PARTITION BY primary_customer_id ORDER BY application_date DESC, application_id DESC)=1) WHERE decision='Declined'

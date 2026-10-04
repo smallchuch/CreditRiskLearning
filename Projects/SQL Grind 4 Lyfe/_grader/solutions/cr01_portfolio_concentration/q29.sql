@@ -1,0 +1,1 @@
+SELECT COUNT(*), ROUND(SUM(s.closing_balance),0), ROUND(AVG(l.lvr_at_origination_pct),1), ROUND(SUM(s.closing_balance*s.interest_rate_pct)/SUM(s.closing_balance),3) FROM loan_monthly_snapshot s JOIN loan l USING (loan_id) WHERE s.snapshot_date = DATE '2025-12-31' AND s.loan_status <> 'Closed' AND l.purpose='Internal Refinance'

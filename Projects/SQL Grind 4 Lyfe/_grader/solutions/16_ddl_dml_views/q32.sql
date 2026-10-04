@@ -1,0 +1,1 @@
+CREATE OR REPLACE TABLE scratch.d2 AS SELECT loan_id, original_amount FROM loan WHERE origination_date >= DATE '2025-01-01' AND origination_date < DATE '2026-01-01'; DELETE FROM scratch.d2 WHERE original_amount>900000; SELECT COUNT(*) FROM scratch.d2

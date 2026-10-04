@@ -1,0 +1,1 @@
+SELECT loan_id, interest_rate_at_origination_pct FROM loan WHERE origination_date >= DATE '2024-01-01' AND origination_date < DATE '2025-01-01' ORDER BY interest_rate_at_origination_pct DESC, loan_id LIMIT 5

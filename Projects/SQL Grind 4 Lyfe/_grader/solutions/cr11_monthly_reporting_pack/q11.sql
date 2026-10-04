@@ -1,0 +1,1 @@
+SELECT b.branch_name, COUNT(*), ROUND(SUM(l.original_amount),0) AS a, ROUND(AVG(l.lvr_at_origination_pct),1) FROM loan l JOIN dim_branch b USING (branch_id) WHERE l.origination_date>=DATE '2025-01-01' AND l.origination_date<DATE '2026-01-01' GROUP BY b.branch_id, b.branch_name HAVING COUNT(*)>=60 ORDER BY a DESC LIMIT 5

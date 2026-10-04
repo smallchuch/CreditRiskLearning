@@ -1,0 +1,1 @@
+SELECT year(origination_date), COUNT(*) FILTER (WHERE channel='Broker'), COUNT(*) FILTER (WHERE channel='Branch'), COUNT(*) FILTER (WHERE channel='Digital'), COUNT(*) FILTER (WHERE channel='Mobile Lender') FROM loan WHERE purpose='Equity Release / Top-up' GROUP BY 1 ORDER BY 1

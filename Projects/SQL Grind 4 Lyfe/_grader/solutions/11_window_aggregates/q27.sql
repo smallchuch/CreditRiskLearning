@@ -1,0 +1,1 @@
+WITH m AS (SELECT month(origination_date) AS mon, SUM(original_amount) AS a FROM loan WHERE purpose='Equity Release / Top-up' AND origination_date >= DATE '2024-01-01' AND origination_date < DATE '2025-01-01' GROUP BY 1) SELECT mon, ROUND(a,0), ROUND(SUM(a) OVER (ORDER BY mon),0) FROM m ORDER BY mon

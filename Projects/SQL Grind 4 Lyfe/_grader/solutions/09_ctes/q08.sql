@@ -1,0 +1,1 @@
+WITH RECURSIVE c AS (SELECT staff_id, 1 AS depth FROM dim_staff WHERE manager_staff_id IS NULL UNION ALL SELECT s.staff_id, c.depth+1 FROM dim_staff s JOIN c ON s.manager_staff_id=c.staff_id) SELECT depth, COUNT(*) FROM c GROUP BY 1 ORDER BY 1

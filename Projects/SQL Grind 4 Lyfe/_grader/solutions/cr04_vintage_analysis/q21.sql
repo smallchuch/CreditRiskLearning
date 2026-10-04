@@ -1,0 +1,1 @@
+SELECT year(l.origination_date), COUNT(*), ROUND(100.0*COUNT(*) FILTER (WHERE s.days_past_due>=30)/COUNT(*),2) FROM loan_monthly_snapshot s JOIN loan l USING (loan_id) WHERE l.purpose='Equity Release / Top-up' AND s.months_on_book=12 AND s.loan_status<>'Closed' AND year(l.origination_date) BETWEEN 2019 AND 2024 GROUP BY 1 ORDER BY 1

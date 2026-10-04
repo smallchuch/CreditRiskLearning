@@ -1,0 +1,1 @@
+SELECT loan_id, event_date, event_type FROM (SELECT loan_id, event_date, event_type FROM loan_event WHERE loan_id <= 300 UNION ALL SELECT loan_id, start_date, 'Hardship start' FROM hardship_arrangement WHERE loan_id <= 300) ORDER BY 1,2,3

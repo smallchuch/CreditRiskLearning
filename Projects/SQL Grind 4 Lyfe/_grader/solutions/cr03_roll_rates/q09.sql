@@ -1,0 +1,1 @@
+SELECT year(d) || '-Q' || quarter(d), COUNT(*) FROM (SELECT loan_id, MIN(snapshot_date) AS d FROM loan_monthly_snapshot WHERE days_past_due>=90 AND loan_status<>'Closed' GROUP BY 1) WHERE d>=DATE '2024-01-01' GROUP BY 1 ORDER BY 1

@@ -1,0 +1,1 @@
+SELECT COUNT(*), ROUND(AVG(days_past_due_at_activity),1), (SELECT outcome FROM collections_activity WHERE activity_type='Outbound call' GROUP BY 1 ORDER BY COUNT(*) DESC, 1 LIMIT 1) FROM collections_activity WHERE activity_type='Outbound call'

@@ -1,0 +1,1 @@
+SELECT COUNT(DISTINCT l.primary_customer_id) FROM loan l WHERE l.purpose='Construction' AND EXISTS (SELECT 1 FROM loan l2 JOIN hardship_arrangement h ON h.loan_id=l2.loan_id WHERE l2.primary_customer_id=l.primary_customer_id)

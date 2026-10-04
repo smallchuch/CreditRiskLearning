@@ -1,0 +1,1 @@
+SELECT status, n FROM (SELECT 'active' AS status, COUNT(*) AS n FROM loan WHERE loan_status='Active' UNION ALL SELECT 'closed', COUNT(*) FROM loan WHERE loan_status='Closed' UNION ALL SELECT 'in_recovery', COUNT(*) FROM loan WHERE loan_status='In Recovery') ORDER BY 1

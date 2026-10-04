@@ -1,0 +1,1 @@
+SELECT a.assessor_staff_id, s.full_name, COUNT(*) AS n FROM loan_application a JOIN dim_staff s ON s.staff_id=a.assessor_staff_id WHERE a.decision='Approved' GROUP BY 1,2 HAVING COUNT(*)>1000 ORDER BY n DESC, 1

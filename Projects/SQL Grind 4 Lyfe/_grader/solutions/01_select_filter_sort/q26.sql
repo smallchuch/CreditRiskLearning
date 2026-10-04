@@ -1,0 +1,1 @@
+SELECT loan_id, original_amount FROM loan WHERE purpose = 'Purchase - Investment' AND origination_date >= DATE '2023-01-01' AND origination_date < DATE '2024-01-01' AND original_amount > 500000 ORDER BY original_amount DESC, loan_id LIMIT 10

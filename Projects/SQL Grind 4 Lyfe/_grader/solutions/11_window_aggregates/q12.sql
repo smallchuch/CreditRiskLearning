@@ -1,0 +1,1 @@
+SELECT CASE WHEN m>=180 THEN '180+' ELSE '90-179' END AS b, COUNT(*) FROM (SELECT loan_id, MAX(days_past_due) AS m FROM loan_monthly_snapshot GROUP BY 1 HAVING MAX(days_past_due)>=90) GROUP BY 1 ORDER BY 1

@@ -1,0 +1,1 @@
+WITH a AS (SELECT * FROM loan_application WHERE channel='Digital'), s AS (SELECT * FROM a WHERE current_status='Settled') SELECT (SELECT COUNT(*) FROM a), (SELECT COUNT(*) FROM s), ROUND(100.0*(SELECT COUNT(*) FROM s)/(SELECT COUNT(*) FROM a),1)

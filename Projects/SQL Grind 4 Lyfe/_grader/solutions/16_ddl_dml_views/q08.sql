@@ -1,0 +1,1 @@
+CREATE OR REPLACE VIEW scratch.v_loan_lvr_band AS SELECT loan_id, CASE WHEN lvr_at_origination_pct<=80 THEN '<=80' WHEN lvr_at_origination_pct<=90 THEN '80-90' ELSE '>90' END AS band FROM loan; SELECT band, COUNT(*) FROM scratch.v_loan_lvr_band GROUP BY 1 ORDER BY 1

@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM loan WHERE branch_id IS NULL

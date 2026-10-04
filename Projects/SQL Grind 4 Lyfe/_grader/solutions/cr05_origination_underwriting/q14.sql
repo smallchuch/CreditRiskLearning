@@ -1,0 +1,2 @@
+WITH i AS (SELECT application_id, SUM(declared_annual_amount) AS dec, SUM(COALESCE(verified_annual_amount, declared_annual_amount)) AS ver FROM applicant_income GROUP BY 1)
+SELECT ROUND(100.0*COUNT(*) FILTER (WHERE i.dec > i.ver*1.05)/COUNT(*),2) FROM loan_application a JOIN i USING (application_id) WHERE a.decision='Approved' AND a.application_date>=DATE '2025-01-01' AND a.application_date<DATE '2026-01-01'

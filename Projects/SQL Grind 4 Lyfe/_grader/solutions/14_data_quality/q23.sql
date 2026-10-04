@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM (SELECT customer_id FROM customer GROUP BY 1 HAVING COUNT(*)>1)

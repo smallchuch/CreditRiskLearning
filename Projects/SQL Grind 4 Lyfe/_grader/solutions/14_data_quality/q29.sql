@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM (SELECT branch_id FROM dim_branch GROUP BY 1 HAVING COUNT(*)>1)

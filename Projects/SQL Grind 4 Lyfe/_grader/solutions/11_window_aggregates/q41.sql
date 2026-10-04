@@ -1,0 +1,1 @@
+WITH m AS (SELECT month(origination_date) AS mon, SUM(original_amount) AS a FROM loan WHERE origination_date >= DATE '2022-01-01' AND origination_date < DATE '2023-01-01' GROUP BY 1) SELECT mon, ROUND(100*a/SUM(a) OVER (),1) FROM m ORDER BY mon

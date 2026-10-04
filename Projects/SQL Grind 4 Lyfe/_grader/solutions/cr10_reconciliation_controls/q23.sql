@@ -1,0 +1,1 @@
+SELECT a, b, a-b FROM (SELECT (SELECT COUNT(*) FROM loan WHERE origination_date >= DATE '2022-01-01' AND origination_date < DATE '2023-01-01') AS a, (SELECT COUNT(*) FROM loan_monthly_snapshot WHERE months_on_book=0 AND snapshot_date >= DATE '2022-01-01' AND snapshot_date < DATE '2023-01-01') AS b)

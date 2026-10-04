@@ -1,0 +1,1 @@
+CREATE OR REPLACE TABLE scratch.hist (loan_id INTEGER, bal DOUBLE); INSERT INTO scratch.hist SELECT loan_id, closing_balance FROM loan_monthly_snapshot WHERE snapshot_date=DATE '2025-12-31' AND loan_status<>'Closed' AND loan_id<=50; SELECT COUNT(*), ROUND(SUM(bal),0) FROM scratch.hist

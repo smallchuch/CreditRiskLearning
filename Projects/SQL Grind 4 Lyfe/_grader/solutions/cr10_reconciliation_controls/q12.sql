@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM loan_monthly_snapshot s WHERE s.snapshot_date=DATE '2025-12-31' AND s.loan_status<>'Closed' AND s.hardship_flag AND NOT EXISTS (SELECT 1 FROM hardship_arrangement h WHERE h.loan_id=s.loan_id AND h.start_date<=s.snapshot_date AND COALESCE(h.end_date,DATE '9999-12-31')>=s.snapshot_date)

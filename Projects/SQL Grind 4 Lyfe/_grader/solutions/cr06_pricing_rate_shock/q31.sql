@@ -1,0 +1,1 @@
+SELECT s.snapshot_date, ROUND(SUM(s.closing_balance*s.interest_rate_pct)/SUM(s.closing_balance),3) FROM loan_monthly_snapshot s JOIN loan l USING (loan_id) WHERE l.purpose='Purchase - Owner Occupied' AND s.loan_status<>'Closed' AND s.snapshot_date IN (DATE '2022-12-31',DATE '2023-12-31',DATE '2024-12-31',DATE '2025-12-31') GROUP BY 1 ORDER BY 1

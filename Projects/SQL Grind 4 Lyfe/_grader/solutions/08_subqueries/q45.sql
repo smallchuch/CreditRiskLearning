@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM customer c WHERE EXISTS (SELECT 1 FROM loan l WHERE l.primary_customer_id=c.customer_id AND EXISTS (SELECT 1 FROM hardship_arrangement h WHERE h.loan_id=l.loan_id AND h.hardship_type='Arrears capitalisation'))

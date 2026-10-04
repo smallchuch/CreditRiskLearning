@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM (SELECT snapshot_date, loan_status, LEAD(snapshot_date) OVER (PARTITION BY loan_id ORDER BY snapshot_date) AS n FROM loan_monthly_snapshot) WHERE snapshot_date>=DATE '2025-01-01' AND loan_status<>'Closed' AND n IS NOT NULL

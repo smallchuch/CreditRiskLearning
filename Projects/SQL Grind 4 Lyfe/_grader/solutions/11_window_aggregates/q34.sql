@@ -1,0 +1,1 @@
+SELECT months_on_book, closing_balance, d FROM (SELECT months_on_book, closing_balance, ROUND(LAG(closing_balance) OVER (ORDER BY snapshot_date)-closing_balance,2) AS d FROM loan_monthly_snapshot WHERE loan_id=1008) WHERE months_on_book BETWEEN 1 AND 6 ORDER BY 1

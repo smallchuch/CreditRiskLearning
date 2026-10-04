@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM (SELECT s.loan_id FROM loan_monthly_snapshot s JOIN loan l USING (loan_id) WHERE l.origination_date >= DATE '2024-01-01' AND l.origination_date < DATE '2025-01-01' GROUP BY 1 HAVING COUNT(*)<>MAX(s.months_on_book)+1)

@@ -1,0 +1,1 @@
+CREATE OR REPLACE TABLE scratch.u3 AS SELECT loan_id, original_amount, CAST(NULL AS VARCHAR) AS flag FROM loan WHERE loan_id<=20; UPDATE scratch.u3 SET flag = CASE WHEN original_amount >= 1000000 THEN 'big' ELSE 'small' END; SELECT flag, COUNT(*) FROM scratch.u3 GROUP BY 1 ORDER BY 1

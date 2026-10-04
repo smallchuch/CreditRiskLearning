@@ -1,0 +1,1 @@
+SELECT year(origination_date), ROUND(100.0*COUNT(*) FILTER (WHERE channel='Broker')/COUNT(*),1), ROUND(100.0*COUNT(*) FILTER (WHERE channel='Branch')/COUNT(*),1), ROUND(100.0*COUNT(*) FILTER (WHERE channel='Digital')/COUNT(*),1), ROUND(100.0*COUNT(*) FILTER (WHERE channel='Mobile Lender')/COUNT(*),1) FROM loan GROUP BY 1 ORDER BY 1

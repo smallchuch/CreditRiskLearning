@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM (SELECT ROW_NUMBER() OVER (PARTITION BY LOWER(TRIM(first_name)), LOWER(TRIM(last_name)), date_of_birth ORDER BY customer_id) AS rn FROM customer WHERE date_of_birth IS NOT NULL) WHERE rn>1

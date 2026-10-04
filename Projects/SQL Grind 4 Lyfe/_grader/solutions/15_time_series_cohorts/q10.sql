@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM (SELECT property_id, valuation_amount FROM property_valuation WHERE valuation_amount>0 AND valuation_date <= DATE '2025-12-31' QUALIFY ROW_NUMBER() OVER (PARTITION BY property_id ORDER BY valuation_date DESC, valuation_id DESC)=1) WHERE valuation_amount > 1000000

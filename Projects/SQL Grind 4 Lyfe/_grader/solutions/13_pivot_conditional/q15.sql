@@ -1,0 +1,1 @@
+SELECT * FROM (PIVOT (SELECT category, CAST(year(received_date) AS VARCHAR) AS yr FROM complaint) ON yr IN ('2018','2019','2020','2021','2022','2023','2024','2025') USING COUNT(*) GROUP BY category) ORDER BY category

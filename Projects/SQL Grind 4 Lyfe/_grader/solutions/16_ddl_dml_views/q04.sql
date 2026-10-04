@@ -1,0 +1,1 @@
+CREATE OR REPLACE TABLE scratch.prod_summary AS SELECT product_id, COUNT(*) AS loans, ROUND(SUM(original_amount),0) AS total_amount FROM loan GROUP BY 1; SELECT * FROM scratch.prod_summary WHERE product_id <= 5 ORDER BY 1

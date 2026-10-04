@@ -1,0 +1,1 @@
+SELECT channel, COUNT(*) FILTER (WHERE current_status='Settled'), COUNT(*) FILTER (WHERE current_status='Declined'), COUNT(*) FILTER (WHERE current_status='Withdrawn'), COUNT(*) FILTER (WHERE current_status='Lapsed') FROM loan_application WHERE application_date >= DATE '2024-01-01' AND application_date < DATE '2025-01-01' GROUP BY 1 ORDER BY 1

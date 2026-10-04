@@ -1,0 +1,1 @@
+SELECT loan_id, closing_balance, rn FROM (SELECT loan_id, closing_balance, ROW_NUMBER() OVER (ORDER BY closing_balance DESC, loan_id) AS rn FROM loan_monthly_snapshot WHERE snapshot_date=DATE '2025-12-31' AND loan_status<>'Closed') WHERE rn<=5 ORDER BY rn

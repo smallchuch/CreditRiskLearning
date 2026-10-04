@@ -1,0 +1,1 @@
+SELECT ROUND(MEDIAN(d2-d1),1) FROM (SELECT MIN(origination_date) FILTER (WHERE rn=1) AS d1, MIN(origination_date) FILTER (WHERE rn=2) AS d2 FROM (SELECT primary_customer_id, origination_date, ROW_NUMBER() OVER (PARTITION BY primary_customer_id ORDER BY origination_date, loan_id) AS rn FROM loan) GROUP BY primary_customer_id) WHERE d2 IS NOT NULL

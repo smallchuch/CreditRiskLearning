@@ -1,0 +1,1 @@
+SELECT l.rate_type, ROUND(SUM(s.interest_rate_pct*s.closing_balance)/SUM(s.closing_balance),3) FROM loan_monthly_snapshot s JOIN loan l USING (loan_id) WHERE s.snapshot_date=DATE '2025-12-31' AND s.loan_status<>'Closed' GROUP BY 1 ORDER BY 1

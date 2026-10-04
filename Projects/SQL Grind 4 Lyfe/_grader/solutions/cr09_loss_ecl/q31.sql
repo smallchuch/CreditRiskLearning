@@ -1,0 +1,1 @@
+SELECT e.ifrs9_stage, COUNT(*), ROUND(100*SUM(e.ecl_amount)/SUM(e.ead),2) FROM ecl_provision_quarterly e JOIN loan l USING (loan_id) WHERE e.reporting_date=DATE '2025-12-31' AND l.purpose='Purchase - Investment' GROUP BY 1 ORDER BY 1

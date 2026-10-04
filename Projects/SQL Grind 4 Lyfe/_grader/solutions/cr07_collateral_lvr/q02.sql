@@ -1,0 +1,1 @@
+SELECT b.band_name, COUNT(*) FROM loan l JOIN ref_lvr_band b ON (l.lvr_at_origination_pct>b.lvr_from_pct OR b.lvr_from_pct=0) AND l.lvr_at_origination_pct<=COALESCE(b.lvr_to_pct,1e9) GROUP BY b.band_id, b.band_name ORDER BY b.band_id

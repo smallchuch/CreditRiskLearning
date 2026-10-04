@@ -1,0 +1,1 @@
+SELECT purpose, COUNT(*), ROUND(SUM(original_amount),0), COUNT(*) FILTER (WHERE lvr_at_origination_pct>80) FROM loan WHERE origination_date >= DATE '2021-01-01' AND origination_date < DATE '2022-01-01' GROUP BY 1 ORDER BY 1

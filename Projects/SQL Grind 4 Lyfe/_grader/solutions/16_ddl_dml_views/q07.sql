@@ -1,0 +1,1 @@
+CREATE OR REPLACE TABLE scratch.l3 AS SELECT loan_id, original_amount FROM loan WHERE loan_id<=6; ALTER TABLE scratch.l3 ADD COLUMN size_band VARCHAR; UPDATE scratch.l3 SET size_band = CASE WHEN original_amount >= 600000 THEN 'Large' ELSE 'Standard' END; SELECT loan_id, size_band FROM scratch.l3 ORDER BY 1

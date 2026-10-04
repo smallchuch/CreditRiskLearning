@@ -1,0 +1,3 @@
+WITH e AS (SELECT loan_id, last_day(event_date) AS me FROM loan_event WHERE event_type='Interest-only period ended - converted to P&I' AND event_date>=DATE '2025-01-01' AND event_date<DATE '2026-01-01'),
+x AS (SELECT e.loan_id, b.scheduled_repayment AS bef, a.scheduled_repayment AS aft FROM e JOIN loan_monthly_snapshot b ON b.loan_id=e.loan_id AND b.snapshot_date=last_day(e.me - INTERVAL 1 MONTH) JOIN loan_monthly_snapshot a ON a.loan_id=e.loan_id AND a.snapshot_date=last_day(e.me + INTERVAL 1 MONTH))
+SELECT COUNT(*), ROUND(AVG(bef),1), ROUND(AVG(aft),1), ROUND(100*(AVG(aft)/AVG(bef)-1),1) FROM x

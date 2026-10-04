@@ -1,0 +1,1 @@
+SELECT p.policy_id, COUNT(*) FROM loan_application a JOIN ref_serviceability_policy p ON a.application_date BETWEEN p.effective_from AND COALESCE(p.effective_to, DATE '9999-12-31') WHERE a.channel='Digital' GROUP BY 1 ORDER BY 1

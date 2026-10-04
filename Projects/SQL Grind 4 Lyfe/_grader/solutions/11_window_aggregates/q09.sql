@@ -1,0 +1,2 @@
+WITH b AS (SELECT broker_id, SUM(original_amount) AS t FROM loan WHERE broker_id IS NOT NULL GROUP BY 1)
+SELECT * FROM (SELECT broker_id, ROUND(t,0), ROUND(100*SUM(t) OVER (ORDER BY t DESC, broker_id)/SUM(t) OVER (),1) AS c FROM b) QUALIFY ROW_NUMBER() OVER (ORDER BY 2 DESC, 1) <= 10 ORDER BY 2 DESC, 1

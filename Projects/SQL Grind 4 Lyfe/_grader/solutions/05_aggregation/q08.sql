@@ -1,0 +1,1 @@
+SELECT product_id, COUNT(*) FROM loan GROUP BY 1 HAVING COUNT(*) > 3000 ORDER BY 1

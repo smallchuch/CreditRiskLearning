@@ -1,0 +1,1 @@
+SELECT e.ifrs9_stage, COUNT(*) FROM loan_loss x JOIN ecl_provision_quarterly e ON e.loan_id=x.loan_id WHERE e.reporting_date = (SELECT MAX(e2.reporting_date) FROM ecl_provision_quarterly e2 WHERE e2.loan_id=x.loan_id AND e2.reporting_date <= x.default_date - INTERVAL 1 YEAR) GROUP BY 1 ORDER BY 1

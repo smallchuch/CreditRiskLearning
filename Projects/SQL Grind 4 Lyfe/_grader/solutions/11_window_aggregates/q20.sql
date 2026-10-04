@@ -1,0 +1,1 @@
+SELECT month(ms), n, p FROM (SELECT ms, n, ROUND(100.0*(n/LAG(n) OVER (ORDER BY ms)-1),1) AS p FROM (SELECT CAST(date_trunc('month', origination_date) AS DATE) AS ms, COUNT(*) AS n FROM loan GROUP BY 1)) WHERE year(ms)=2022 ORDER BY ms

@@ -1,0 +1,1 @@
+SELECT year(application_date), COUNT(*) FILTER (WHERE current_status='Settled'), COUNT(*) FILTER (WHERE current_status='Declined'), COUNT(*) FILTER (WHERE current_status='Withdrawn'), COUNT(*) FILTER (WHERE current_status='Lapsed') FROM loan_application GROUP BY 1 ORDER BY 1

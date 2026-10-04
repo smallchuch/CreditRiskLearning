@@ -1,0 +1,1 @@
+SELECT a.decision, ROUND(AVG(b.bureau_score),0) FROM loan_application a JOIN credit_bureau_report b ON b.application_id=a.application_id AND b.customer_id=a.primary_customer_id WHERE a.decision IS NOT NULL GROUP BY 1 ORDER BY 1

@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM (SELECT event_id FROM loan_event GROUP BY 1 HAVING COUNT(*)>1)

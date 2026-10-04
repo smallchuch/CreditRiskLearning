@@ -1,0 +1,1 @@
+SELECT ROUND(p,0), ROUND(s,0), ROUND(p-s,0) FROM (SELECT (SELECT SUM(payment_amount) FROM loan_payment WHERE payment_status='Paid' AND payment_date>=DATE '2025-12-01' AND payment_date<=DATE '2025-12-31') AS p, (SELECT SUM(actual_repayment) FROM loan_monthly_snapshot WHERE snapshot_date=DATE '2025-12-31') AS s)

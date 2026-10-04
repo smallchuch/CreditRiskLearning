@@ -1,0 +1,1 @@
+SELECT loan_id, CASE WHEN purpose='Purchase - Owner Occupied' AND lvr_at_origination_pct<=80 THEN 'Prime owner-occ' WHEN purpose='Purchase - Owner Occupied' THEN 'High-LVR owner-occ' WHEN purpose='Purchase - Investment' THEN 'Investor' ELSE 'Other' END FROM loan WHERE loan_id<=30 ORDER BY loan_id

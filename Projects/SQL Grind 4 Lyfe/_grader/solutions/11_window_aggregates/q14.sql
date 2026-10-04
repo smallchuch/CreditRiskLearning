@@ -1,0 +1,1 @@
+SELECT * FROM (SELECT snapshot_date, actual_repayment < scheduled_repayment AS sf, SUM(CASE WHEN actual_repayment < scheduled_repayment THEN 1 ELSE 0 END) OVER (ORDER BY snapshot_date) AS c FROM loan_monthly_snapshot WHERE loan_id=1) WHERE snapshot_date >= DATE '2019-01-31' ORDER BY 1

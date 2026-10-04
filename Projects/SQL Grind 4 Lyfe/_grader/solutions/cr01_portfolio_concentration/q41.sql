@@ -1,0 +1,1 @@
+SELECT ROUND(100*SUM(b)/(SELECT SUM(closing_balance) FROM loan_monthly_snapshot WHERE snapshot_date = DATE '2025-12-31' AND loan_status <> 'Closed'),2) FROM (SELECT SUM(s.closing_balance) AS b FROM loan_monthly_snapshot s JOIN loan l USING (loan_id) WHERE s.snapshot_date = DATE '2025-12-31' AND s.loan_status <> 'Closed' GROUP BY l.primary_customer_id ORDER BY b DESC LIMIT 5)

@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM (SELECT loan_id FROM loan_borrower GROUP BY 1 HAVING COUNT(*) = 2)

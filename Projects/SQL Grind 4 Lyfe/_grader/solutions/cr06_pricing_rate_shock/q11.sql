@@ -1,0 +1,1 @@
+SELECT ROUND(SUM(s.closing_balance*s.interest_rate_pct)/SUM(s.closing_balance) - (SELECT cash_rate_pct FROM ref_rba_cash_rate WHERE bank_effective_date<=DATE '2025-12-31' ORDER BY bank_effective_date DESC LIMIT 1),2) FROM loan_monthly_snapshot s JOIN loan l USING (loan_id) WHERE l.rate_type='Variable' AND s.snapshot_date=DATE '2025-12-31' AND s.loan_status<>'Closed'

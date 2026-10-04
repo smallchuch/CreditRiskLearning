@@ -1,0 +1,1 @@
+SELECT COUNT(*), COUNT(decision), COUNT(*) FILTER (WHERE decision='Approved'), COUNT(*) FILTER (WHERE current_status='Settled') FROM loan_application WHERE application_date>=DATE '2025-01-01' AND application_date<DATE '2026-01-01'

@@ -1,0 +1,1 @@
+SELECT COUNT(*), ROUND(AVG(prev-interest_rate_pct),2) FROM (SELECT change_reason, interest_rate_pct, LAG(interest_rate_pct) OVER (PARTITION BY loan_id ORDER BY effective_from) AS prev FROM loan_rate_history) WHERE change_reason='Retention discount' AND prev IS NOT NULL

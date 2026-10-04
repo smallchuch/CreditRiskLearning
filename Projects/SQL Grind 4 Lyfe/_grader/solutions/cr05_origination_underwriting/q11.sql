@@ -1,0 +1,1 @@
+SELECT assessor_staff_id, COUNT(decision) AS d, ROUND(100.0*COUNT(*) FILTER (WHERE decision='Approved')/COUNT(decision),1), ROUND(100.0*COUNT(*) FILTER (WHERE decision='Approved' AND policy_exception_flag)/NULLIF(COUNT(*) FILTER (WHERE decision='Approved'),0),1) FROM loan_application GROUP BY 1 HAVING COUNT(decision)>=500 ORDER BY d DESC, 1 LIMIT 10

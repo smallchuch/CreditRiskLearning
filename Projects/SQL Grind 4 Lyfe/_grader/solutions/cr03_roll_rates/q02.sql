@@ -1,0 +1,1 @@
+SELECT b, COUNT(*) FROM (SELECT CASE WHEN days_past_due=0 THEN 0 WHEN days_past_due<30 THEN 1 WHEN days_past_due<60 THEN 2 WHEN days_past_due<90 THEN 3 ELSE 4 END AS b FROM loan_monthly_snapshot WHERE snapshot_date=DATE '2025-11-30' AND loan_status<>'Closed') GROUP BY 1 ORDER BY 1

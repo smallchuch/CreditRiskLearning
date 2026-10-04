@@ -1,0 +1,1 @@
+SELECT purpose, loan_id, lvr_at_origination_pct FROM loan QUALIFY ROW_NUMBER() OVER (PARTITION BY purpose ORDER BY lvr_at_origination_pct DESC, loan_id) <= 3 ORDER BY purpose, lvr_at_origination_pct DESC, loan_id

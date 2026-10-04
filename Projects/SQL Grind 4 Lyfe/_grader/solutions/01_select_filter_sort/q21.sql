@@ -1,0 +1,1 @@
+SELECT loan_id, purpose, original_amount FROM loan WHERE (purpose = 'Purchase - Investment' OR purpose = 'Construction') AND original_amount > 1200000 AND origination_date >= DATE '2024-01-01' ORDER BY loan_id

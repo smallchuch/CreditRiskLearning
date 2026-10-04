@@ -1,0 +1,1 @@
+SELECT COALESCE(a.purpose,b.purpose), COALESCE(a.n,0), COALESCE(b.n,0), COALESCE(a.n,0)-COALESCE(b.n,0) FROM (SELECT purpose, COUNT(*) AS n FROM loan GROUP BY 1) a FULL JOIN (SELECT purpose, COUNT(*) AS n FROM loan_application WHERE current_status='Settled' GROUP BY 1) b ON a.purpose=b.purpose ORDER BY 1

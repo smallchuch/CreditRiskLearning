@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM loan_application a WHERE EXISTS (SELECT 1 FROM loan_application b WHERE b.primary_customer_id=a.primary_customer_id AND b.application_date < a.application_date AND b.decision='Approved')

@@ -1,0 +1,1 @@
+SELECT b.branch_name, ROUND(SUM(l.original_amount),0) AS a FROM loan l JOIN dim_branch b USING (branch_id) WHERE l.origination_date>=DATE '2025-01-01' AND l.origination_date<DATE '2026-01-01' GROUP BY b.branch_id, b.branch_name ORDER BY a DESC LIMIT 5

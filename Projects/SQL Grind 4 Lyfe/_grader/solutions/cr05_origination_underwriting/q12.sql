@@ -1,0 +1,1 @@
+SELECT a.channel, ROUND(100.0*COUNT(*) FILTER (WHERE l.original_amount < a.requested_amount-1)/COUNT(*),1) FROM loan l JOIN loan_application a ON a.application_id=l.application_id GROUP BY 1 ORDER BY 1

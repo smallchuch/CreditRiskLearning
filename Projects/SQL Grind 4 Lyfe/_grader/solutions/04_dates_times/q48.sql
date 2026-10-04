@@ -1,0 +1,1 @@
+SELECT dayname(application_date), COUNT(*) FROM loan_application WHERE application_date >= DATE '2023-01-01' AND application_date < DATE '2024-01-01' GROUP BY 1 ORDER BY 1

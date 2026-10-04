@@ -1,0 +1,1 @@
+SELECT CASE WHEN l.lvr_at_origination_pct<=80 THEN '<=80' WHEN l.lvr_at_origination_pct<=90 THEN '80-90' ELSE '>90' END AS b, COUNT(*), ROUND(AVG(x.lgd_pct),1) FROM loan_loss x JOIN loan l USING (loan_id) GROUP BY 1 ORDER BY 1

@@ -1,0 +1,1 @@
+WITH s AS (SELECT loan_id, closing_balance FROM loan_monthly_snapshot WHERE snapshot_date=DATE '2021-12-31' AND loan_status<>'Closed') SELECT l.channel, ROUND(SUM(s.closing_balance),0) FROM s JOIN loan l USING (loan_id) GROUP BY 1 ORDER BY 1

@@ -1,0 +1,1 @@
+SELECT ROUND(100*SUM(ead) FILTER (WHERE current_lvr_pct>80)/SUM(ead),2), ROUND(100*SUM(ead) FILTER (WHERE current_lvr_pct>90)/SUM(ead),2) FROM ecl_provision_quarterly WHERE reporting_date=DATE '2025-03-31'

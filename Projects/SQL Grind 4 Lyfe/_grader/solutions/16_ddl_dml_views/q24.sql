@@ -1,0 +1,1 @@
+CREATE OR REPLACE VIEW scratch.v_ch2 AS SELECT loan_id, product_id, original_amount FROM loan WHERE channel='Digital'; SELECT product_id, COUNT(*) FROM scratch.v_ch2 WHERE product_id<=5 GROUP BY 1 ORDER BY 1

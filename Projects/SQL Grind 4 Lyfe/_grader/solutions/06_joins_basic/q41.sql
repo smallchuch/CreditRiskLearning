@@ -1,0 +1,1 @@
+SELECT a.channel, ROUND(AVG(b.bureau_score),0) FROM loan_application a JOIN credit_bureau_report b ON b.application_id=a.application_id AND b.customer_id=a.primary_customer_id WHERE a.current_status='Settled' AND a.application_date >= DATE '2024-01-01' AND a.application_date < DATE '2025-01-01' GROUP BY 1 ORDER BY 1

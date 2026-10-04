@@ -1,0 +1,1 @@
+SELECT a, b, a-b FROM (SELECT (SELECT COUNT(*) FROM loan WHERE closed_date >= DATE '2020-01-01' AND closed_date < DATE '2021-01-01') AS a, (SELECT COUNT(*) FROM (SELECT loan_id, MIN(snapshot_date) AS d FROM loan_monthly_snapshot WHERE loan_status='Closed' GROUP BY 1) WHERE d >= DATE '2020-01-01' AND d < DATE '2021-01-01') AS b)

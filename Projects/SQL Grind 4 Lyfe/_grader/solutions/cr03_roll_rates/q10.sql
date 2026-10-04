@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM (SELECT DISTINCT a.loan_id FROM loan_monthly_snapshot a JOIN loan_monthly_snapshot b ON b.loan_id=a.loan_id AND b.months_on_book>a.months_on_book AND b.days_past_due=0 JOIN loan_monthly_snapshot c ON c.loan_id=a.loan_id AND c.months_on_book>b.months_on_book AND c.days_past_due>=30 WHERE a.days_past_due>=90)

@@ -1,0 +1,2 @@
+SELECT * FROM (SELECT UPPER(TRIM(state)) AS st, last_name, COUNT(*) AS n, ROW_NUMBER() OVER (PARTITION BY UPPER(TRIM(state)) ORDER BY COUNT(*) DESC, last_name) AS rn
+FROM customer WHERE UPPER(TRIM(state)) IN ('SA','WA') GROUP BY 1,2) WHERE rn<=3 ORDER BY 1, 4

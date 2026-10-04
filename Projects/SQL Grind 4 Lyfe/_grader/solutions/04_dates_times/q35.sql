@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM loan_monthly_snapshot s JOIN loan l USING (loan_id) WHERE s.snapshot_date=DATE '2023-12-31' AND s.loan_status<>'Closed' AND l.fixed_rate_expiry_date > DATE '2023-12-31' AND l.fixed_rate_expiry_date <= DATE '2024-12-31'

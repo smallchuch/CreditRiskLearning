@@ -1,0 +1,1 @@
+SELECT loan_id, ROUND(original_amount*(interest_rate_at_origination_pct/1200)/(1-POWER(1+interest_rate_at_origination_pct/1200,-term_months)),2) FROM loan WHERE term_months=180 AND loan_id <= 400 ORDER BY loan_id LIMIT 8

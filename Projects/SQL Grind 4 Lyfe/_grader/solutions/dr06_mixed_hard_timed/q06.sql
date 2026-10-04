@@ -1,0 +1,1 @@
+SELECT ROUND(SUM(e),0), ROUND(100*SUM(e)/(SELECT SUM(ecl_amount) FROM ecl_provision_quarterly WHERE reporting_date=DATE '2025-12-31'),2) FROM (SELECT ecl_amount AS e FROM ecl_provision_quarterly WHERE reporting_date=DATE '2025-12-31' ORDER BY ecl_amount DESC, loan_id LIMIT 10)

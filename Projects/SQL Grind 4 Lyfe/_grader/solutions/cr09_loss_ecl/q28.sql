@@ -1,0 +1,1 @@
+SELECT COUNT(*), ROUND(SUM(e.ead),0), ROUND(SUM(e.ecl_amount),0), ROUND(100*SUM(e.ecl_amount)/SUM(e.ead),2) FROM ecl_provision_quarterly e JOIN loan l USING (loan_id) JOIN property p ON p.property_id=l.property_id JOIN dim_postcode d ON d.postcode=p.postcode WHERE e.reporting_date=DATE '2025-12-31' AND d.state='NT'

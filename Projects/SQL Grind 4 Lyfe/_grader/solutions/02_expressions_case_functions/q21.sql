@@ -1,0 +1,1 @@
+SELECT application_id, CASE WHEN policy_exception_flag THEN 'Exception approval' WHEN decision='Approved' THEN 'Clean approval' WHEN decision='Declined' THEN 'Declined - ' || decline_reason_code ELSE 'No decision' END FROM loan_application WHERE application_id <= 20 ORDER BY application_id

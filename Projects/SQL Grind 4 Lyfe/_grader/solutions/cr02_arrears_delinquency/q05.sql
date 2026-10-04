@@ -1,0 +1,1 @@
+SELECT l.purpose, ROUND(100*SUM(s.closing_balance) FILTER (WHERE s.days_past_due>=30)/SUM(s.closing_balance),2) AS r FROM loan_monthly_snapshot s JOIN loan l USING (loan_id) WHERE s.snapshot_date=DATE '2025-12-31' AND s.loan_status<>'Closed' GROUP BY 1 ORDER BY r DESC, 1

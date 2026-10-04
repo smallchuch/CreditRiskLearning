@@ -1,0 +1,1 @@
+SELECT channel, COUNT(*) FILTER (WHERE decline_reason_code='SERV'), COUNT(*) FILTER (WHERE decline_reason_code='CRED'), COUNT(*) FILTER (WHERE decline_reason_code='POLICY'), COUNT(*) FILTER (WHERE decline_reason_code='LVR') FROM loan_application GROUP BY 1 ORDER BY 1

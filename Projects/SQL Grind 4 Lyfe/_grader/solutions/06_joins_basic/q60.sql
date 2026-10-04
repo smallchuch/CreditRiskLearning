@@ -1,0 +1,1 @@
+SELECT c.segment, d.state, ROUND(SUM(l.original_amount),0) FROM loan l JOIN customer c ON c.customer_id=l.primary_customer_id JOIN property p ON p.property_id=l.property_id JOIN dim_postcode d ON d.postcode=p.postcode WHERE l.origination_date >= DATE '2025-01-01' GROUP BY 1,2 ORDER BY 1,2

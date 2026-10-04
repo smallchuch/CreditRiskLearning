@@ -1,0 +1,1 @@
+SELECT loan_id, original_amount, ROUND(pr,4) FROM (SELECT loan_id, original_amount, PERCENT_RANK() OVER (ORDER BY original_amount) AS pr FROM loan WHERE origination_date >= DATE '2023-01-01' AND origination_date < DATE '2024-01-01') ORDER BY original_amount DESC, loan_id LIMIT 5

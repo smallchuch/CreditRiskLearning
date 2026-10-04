@@ -1,0 +1,1 @@
+SELECT MAX(run) FROM (SELECT loan_id, grp, COUNT(*) AS run FROM (SELECT loan_id, months_on_book - ROW_NUMBER() OVER (PARTITION BY loan_id ORDER BY months_on_book) AS grp FROM loan_monthly_snapshot WHERE days_past_due >= 30 AND loan_status <> 'Closed') GROUP BY 1,2)

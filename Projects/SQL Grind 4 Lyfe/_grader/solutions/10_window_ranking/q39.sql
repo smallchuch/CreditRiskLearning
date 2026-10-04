@@ -1,0 +1,1 @@
+SELECT * FROM (SELECT b.branch_name, COUNT(*) AS n, DENSE_RANK() OVER (ORDER BY COUNT(*) DESC) AS r FROM loan l JOIN dim_branch b USING (branch_id) WHERE b.state='QLD' GROUP BY b.branch_id, b.branch_name) WHERE r<=3 ORDER BY r, branch_name

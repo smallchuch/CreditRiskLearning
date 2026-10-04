@@ -1,0 +1,1 @@
+SELECT repayment_type, COUNT(*), COUNT(*) FILTER (WHERE days_past_due>=30), ROUND(100.0*COUNT(*) FILTER (WHERE days_past_due>=30)/COUNT(*),2) FROM loan_monthly_snapshot WHERE snapshot_date=DATE '2025-12-31' AND loan_status<>'Closed' GROUP BY 1 ORDER BY 1

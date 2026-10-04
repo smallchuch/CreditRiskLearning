@@ -1,0 +1,1 @@
+SELECT q, ROUND(a,0), c FROM (SELECT quarter(origination_date) AS q, SUM(original_amount) AS a FROM loan WHERE year(origination_date)=2025 GROUP BY 1) n JOIN (SELECT quarter(closed_date) AS q2, COUNT(*) AS c FROM loan WHERE year(closed_date)=2025 GROUP BY 1) k ON k.q2=n.q ORDER BY 1

@@ -1,0 +1,1 @@
+SELECT a, b, a-b FROM (SELECT (SELECT COUNT(*) FROM loan_monthly_snapshot WHERE snapshot_date=DATE '2021-12-31' AND loan_status<>'Closed') AS a, (SELECT COUNT(*) FROM ecl_provision_quarterly WHERE reporting_date=DATE '2021-12-31') AS b)

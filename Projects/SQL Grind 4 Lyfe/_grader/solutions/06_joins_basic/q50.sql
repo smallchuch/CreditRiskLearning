@@ -1,0 +1,1 @@
+SELECT p.product_id, COUNT(l.loan_id) FROM dim_product p LEFT JOIN loan l ON l.product_id=p.product_id AND l.origination_date >= DATE '2019-01-01' AND l.origination_date < DATE '2020-01-01' GROUP BY 1 ORDER BY 1

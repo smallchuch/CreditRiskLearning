@@ -1,0 +1,1 @@
+SELECT ROUND(SUM(e.current_lvr_pct*e.ead)/SUM(e.ead),1), COUNT(*) FILTER (WHERE e.current_lvr_pct>80), ROUND(SUM(e.ead) FILTER (WHERE e.current_lvr_pct>80),0) FROM ecl_provision_quarterly e JOIN loan l USING (loan_id) JOIN property p ON p.property_id=l.property_id JOIN dim_postcode d ON d.postcode=p.postcode WHERE e.reporting_date=DATE '2025-12-31' AND d.state='ACT'

@@ -1,0 +1,1 @@
+SELECT months_on_book, cum, mx FROM (SELECT months_on_book, SUM(CASE WHEN days_past_due>0 THEN 1 ELSE 0 END) OVER (ORDER BY snapshot_date) AS cum, MAX(days_past_due) OVER (ORDER BY snapshot_date) AS mx FROM loan_monthly_snapshot WHERE loan_id=1008) WHERE months_on_book<12 ORDER BY 1

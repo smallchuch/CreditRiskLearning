@@ -1,0 +1,2 @@
+WITH e AS (SELECT loan_id FROM loan_monthly_snapshot GROUP BY 1 HAVING MAX(days_past_due)>=90)
+SELECT p.policy_id, COUNT(*), ROUND(100.0*COUNT(e.loan_id)/COUNT(*),2) FROM loan l JOIN loan_application a ON a.application_id=l.application_id JOIN ref_serviceability_policy p ON a.application_date BETWEEN p.effective_from AND COALESCE(p.effective_to, DATE '9999-12-31') LEFT JOIN e ON e.loan_id=l.loan_id GROUP BY 1 ORDER BY 1

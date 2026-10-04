@@ -1,0 +1,1 @@
+SELECT COUNT(*), ROUND(SUM(s.closing_balance),0), ROUND(SUM(s.closing_balance*s.interest_rate_pct)/SUM(s.closing_balance),3) FROM loan l JOIN loan_monthly_snapshot s ON s.loan_id=l.loan_id AND s.snapshot_date=DATE '2025-12-31' WHERE s.loan_status<>'Closed' AND l.fixed_rate_expiry_date>=DATE '2026-04-01' AND l.fixed_rate_expiry_date<DATE '2026-07-01'

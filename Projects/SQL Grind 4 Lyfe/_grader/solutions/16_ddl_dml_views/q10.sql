@@ -1,0 +1,2 @@
+CREATE OR REPLACE TABLE scratch.cust_clean AS SELECT customer_id, CASE s WHEN 'SOUTHAUSTRALIA' THEN 'SA' WHEN 'VICTORIA' THEN 'VIC' WHEN 'NEWSOUTHWALES' THEN 'NSW' ELSE s END AS state_clean, LOWER(email) AS email_clean FROM (SELECT customer_id, UPPER(REPLACE(REPLACE(state,'.',''),' ','')) AS s, email FROM customer);
+SELECT state_clean, COUNT(*) FROM scratch.cust_clean WHERE state_clean IN ('SA','VIC','NSW') GROUP BY 1 ORDER BY 1

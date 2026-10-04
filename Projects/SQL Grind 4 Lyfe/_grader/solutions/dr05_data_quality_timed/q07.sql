@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM loan_application a JOIN (SELECT application_id, status FROM application_status_history QUALIFY ROW_NUMBER() OVER (PARTITION BY application_id ORDER BY status_ts DESC, event_id DESC)=1) h USING (application_id) WHERE a.current_status<>h.status

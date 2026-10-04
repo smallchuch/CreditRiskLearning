@@ -1,0 +1,1 @@
+SELECT ROUND(AVG(interest_rate_at_origination_pct) FILTER (WHERE rate_type='Fixed'),3), ROUND(AVG(interest_rate_at_origination_pct) FILTER (WHERE rate_type='Variable'),3) FROM loan WHERE origination_date >= DATE '2020-01-01' AND origination_date < DATE '2021-01-01'

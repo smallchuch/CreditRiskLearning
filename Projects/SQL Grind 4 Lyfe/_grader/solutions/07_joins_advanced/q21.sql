@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM (SELECT DISTINCT primary_customer_id FROM loan_application WHERE application_date >= DATE '2020-01-01' AND application_date < DATE '2021-01-01') a WHERE NOT EXISTS (SELECT 1 FROM loan l WHERE l.primary_customer_id=a.primary_customer_id)

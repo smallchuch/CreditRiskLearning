@@ -1,0 +1,1 @@
+SELECT COUNT(*), ROUND(SUM(s.closing_balance),0) FROM loan l JOIN loan_monthly_snapshot s ON s.loan_id=l.loan_id AND s.snapshot_date=DATE '2025-12-31' WHERE s.loan_status<>'Closed' AND l.fixed_rate_expiry_date>DATE '2025-12-31' AND l.fixed_rate_expiry_date<=DATE '2026-06-30'

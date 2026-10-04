@@ -1,0 +1,1 @@
+SELECT COUNT(DISTINCT primary_customer_id) FROM (SELECT primary_customer_id FROM loan_application GROUP BY primary_customer_id, year(application_date) HAVING COUNT(*)>1 AND COUNT(*) FILTER (WHERE decision='Declined')>=1)

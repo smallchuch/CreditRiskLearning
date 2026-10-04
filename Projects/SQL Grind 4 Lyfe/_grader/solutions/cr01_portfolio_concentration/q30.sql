@@ -1,0 +1,1 @@
+SELECT p.occupancy, ROUND(SUM(s.closing_balance),0), ROUND(100*SUM(s.closing_balance)/SUM(SUM(s.closing_balance)) OVER (),1) FROM loan_monthly_snapshot s JOIN loan l USING (loan_id) JOIN dim_product p ON p.product_id=l.product_id WHERE s.snapshot_date = DATE '2025-12-31' AND s.loan_status <> 'Closed' AND l.channel='Broker' GROUP BY 1 ORDER BY 1

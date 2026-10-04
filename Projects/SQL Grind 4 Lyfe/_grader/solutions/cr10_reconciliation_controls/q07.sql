@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM ecl_provision_quarterly e JOIN loan_monthly_snapshot s ON s.loan_id=e.loan_id AND s.snapshot_date=e.reporting_date WHERE e.reporting_date=DATE '2025-12-31' AND ABS(e.ead-s.closing_balance)>100

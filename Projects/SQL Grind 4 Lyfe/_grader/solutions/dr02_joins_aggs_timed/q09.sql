@@ -1,0 +1,1 @@
+SELECT yr, firm_name, n FROM (SELECT year(l.origination_date) AS yr, b.firm_name, COUNT(*) AS n, ROW_NUMBER() OVER (PARTITION BY year(l.origination_date) ORDER BY COUNT(*) DESC, b.firm_name) AS rn FROM loan l JOIN dim_broker b USING (broker_id) GROUP BY 1,2) WHERE rn=1 ORDER BY 1

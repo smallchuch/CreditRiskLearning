@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM (SELECT postcode FROM dim_postcode GROUP BY 1 HAVING COUNT(*)>1)

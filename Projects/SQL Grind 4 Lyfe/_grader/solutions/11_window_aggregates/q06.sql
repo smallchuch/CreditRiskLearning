@@ -1,0 +1,1 @@
+SELECT ROUND(AVG(application_date - prev),1) FROM (SELECT application_date, LAG(application_date) OVER (PARTITION BY primary_customer_id ORDER BY application_date, application_id) AS prev FROM loan_application) WHERE prev IS NOT NULL

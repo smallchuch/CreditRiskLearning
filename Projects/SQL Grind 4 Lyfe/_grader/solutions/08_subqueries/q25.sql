@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM loan WHERE origination_date >= DATE '2019-01-01' AND origination_date < DATE '2020-01-01' AND original_amount > (SELECT AVG(original_amount) FROM loan WHERE origination_date >= DATE '2019-01-01' AND origination_date < DATE '2020-01-01')

@@ -1,0 +1,1 @@
+SELECT b.bucket_name, COUNT(*), ROUND(SUM(s.closing_balance),0) FROM loan_monthly_snapshot s JOIN loan l USING (loan_id) JOIN ref_arrears_bucket b ON s.days_past_due BETWEEN b.dpd_from AND COALESCE(b.dpd_to,99999) WHERE s.snapshot_date = DATE '2025-12-31' AND s.loan_status <> 'Closed' AND l.purpose='Purchase - Investment' GROUP BY b.bucket_id, b.bucket_name ORDER BY b.bucket_id

@@ -1,0 +1,1 @@
+SELECT state, MAX(price_index) FILTER (WHERE month_end_date=DATE '2020-12-31'), MAX(price_index) FILTER (WHERE month_end_date=DATE '2025-12-31'), ROUND(100*(MAX(price_index) FILTER (WHERE month_end_date=DATE '2025-12-31')/MAX(price_index) FILTER (WHERE month_end_date=DATE '2020-12-31')-1),1) FROM ref_property_price_index GROUP BY 1 ORDER BY 1

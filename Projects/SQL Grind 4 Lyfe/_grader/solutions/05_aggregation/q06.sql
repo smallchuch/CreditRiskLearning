@@ -1,0 +1,1 @@
+SELECT loan_status, COUNT(*) FROM loan GROUP BY 1 ORDER BY 1

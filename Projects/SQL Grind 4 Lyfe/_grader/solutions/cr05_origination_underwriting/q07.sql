@@ -1,0 +1,1 @@
+SELECT COUNT(*), COUNT(*) FILTER (WHERE a.policy_exception_flag), COUNT(*) FILTER (WHERE NOT a.policy_exception_flag) FROM loan_application a JOIN application_assessment s USING (application_id) JOIN ref_serviceability_policy p ON a.application_date BETWEEN p.effective_from AND COALESCE(p.effective_to,DATE '9999-12-31') WHERE a.decision='Approved' AND s.nsr < p.min_nsr

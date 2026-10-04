@@ -1,0 +1,1 @@
+WITH y AS (SELECT year(origination_date) AS yr, COUNT(*) AS n FROM loan GROUP BY 1), g AS (SELECT yr, n, ROUND(100.0*(n/LAG(n) OVER (ORDER BY yr)-1),1) AS gr FROM y) SELECT yr, n, gr FROM g WHERE gr>10 ORDER BY 1

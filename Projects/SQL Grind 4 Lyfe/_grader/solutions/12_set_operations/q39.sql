@@ -1,0 +1,1 @@
+SELECT yr, channel, n FROM (SELECT 2020 AS yr, channel, COUNT(*) AS n FROM loan WHERE origination_date >= DATE '2020-01-01' AND origination_date < DATE '2021-01-01' GROUP BY 2 UNION ALL SELECT 2021, channel, COUNT(*) FROM loan WHERE origination_date >= DATE '2021-01-01' AND origination_date < DATE '2022-01-01' GROUP BY 2) ORDER BY 1,2

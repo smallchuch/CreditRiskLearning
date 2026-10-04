@@ -1,0 +1,1 @@
+SELECT purpose, COUNT(*) FILTER (WHERE lvr_at_origination_pct<=60), COUNT(*) FILTER (WHERE lvr_at_origination_pct>60 AND lvr_at_origination_pct<=80), COUNT(*) FILTER (WHERE lvr_at_origination_pct>80 AND lvr_at_origination_pct<=90), COUNT(*) FILTER (WHERE lvr_at_origination_pct>90) FROM loan GROUP BY 1 ORDER BY 1

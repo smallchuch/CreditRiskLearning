@@ -1,0 +1,1 @@
+SELECT ROUND(100.0*COUNT(DISTINCT s.loan_id)/(SELECT COUNT(*) FROM loan WHERE origination_date >= DATE '2023-01-01' AND origination_date < DATE '2024-01-01'),1) FROM loan_monthly_snapshot s JOIN loan l USING (loan_id) WHERE l.origination_date >= DATE '2023-01-01' AND l.origination_date < DATE '2024-01-01' AND s.months_on_book=24 AND s.loan_status<>'Closed'

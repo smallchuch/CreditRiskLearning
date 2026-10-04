@@ -1,0 +1,1 @@
+SELECT a.ifrs9_stage, b.ifrs9_stage, COUNT(*) FROM ecl_provision_quarterly a JOIN ecl_provision_quarterly b ON b.loan_id=a.loan_id AND b.reporting_date=DATE '2025-12-31' WHERE a.reporting_date=DATE '2025-09-30' GROUP BY 1,2 ORDER BY 1,2

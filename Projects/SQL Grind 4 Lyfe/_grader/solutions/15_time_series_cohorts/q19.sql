@@ -1,0 +1,1 @@
+SELECT c.segment, ROUND(AVG(date_diff('day', c.customer_since, f.d)/365.25),2) FROM customer c JOIN (SELECT primary_customer_id, MIN(origination_date) AS d FROM loan GROUP BY 1) f ON f.primary_customer_id=c.customer_id WHERE f.d >= c.customer_since GROUP BY 1 ORDER BY 1

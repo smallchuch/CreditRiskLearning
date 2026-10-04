@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM loan_monthly_snapshot s JOIN loan_rate_history h ON h.loan_id=s.loan_id AND h.effective_from<=s.snapshot_date AND (h.effective_to IS NULL OR h.effective_to>s.snapshot_date) WHERE s.snapshot_date=DATE '2025-12-31' AND s.loan_status<>'Closed' AND h.interest_rate_pct>=1 AND ABS(h.interest_rate_pct-s.interest_rate_pct)>0.01

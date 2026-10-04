@@ -1,0 +1,1 @@
+SELECT yr, mon, n FROM (SELECT year(origination_date) AS yr, month(origination_date) AS mon, COUNT(*) AS n, ROW_NUMBER() OVER (PARTITION BY year(origination_date) ORDER BY COUNT(*) DESC, month(origination_date)) AS rn FROM loan GROUP BY 1,2) WHERE rn=1 ORDER BY 1

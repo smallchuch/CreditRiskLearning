@@ -1,0 +1,1 @@
+WITH m AS (SELECT snapshot_date, COUNT(*) AS n FROM loan_monthly_snapshot WHERE days_past_due>=90 AND loan_status<>'Closed' GROUP BY 1), w AS (SELECT snapshot_date, n, ROUND(AVG(n) OVER (ORDER BY snapshot_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW),1) AS ma FROM m) SELECT * FROM w WHERE snapshot_date>=DATE '2025-01-01' ORDER BY 1

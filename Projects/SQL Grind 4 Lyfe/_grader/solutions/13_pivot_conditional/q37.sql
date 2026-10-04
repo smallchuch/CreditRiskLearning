@@ -1,0 +1,1 @@
+SELECT * FROM (PIVOT (SELECT purpose, channel FROM loan WHERE origination_date >= DATE '2025-01-01') ON channel IN ('Broker','Branch','Digital','Mobile Lender') USING COUNT(*) GROUP BY purpose) ORDER BY purpose

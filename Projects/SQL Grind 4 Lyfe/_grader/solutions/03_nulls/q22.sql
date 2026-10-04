@@ -1,0 +1,1 @@
+SELECT ROUND(100.0*COUNT(*) FILTER (WHERE date_of_birth IS NULL)/COUNT(*),2) FROM customer

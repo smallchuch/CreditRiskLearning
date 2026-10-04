@@ -1,0 +1,1 @@
+WITH m AS (SELECT month(origination_date) AS mon, COUNT(*) AS n FROM loan WHERE origination_date >= DATE '2021-01-01' AND origination_date < DATE '2022-01-01' GROUP BY 1) SELECT mon, n FROM m WHERE n > (SELECT AVG(n) FROM m) ORDER BY 1

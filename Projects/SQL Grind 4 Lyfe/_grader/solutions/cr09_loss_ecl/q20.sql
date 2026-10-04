@@ -1,0 +1,1 @@
+SELECT ROUND(SUM(ead),0), ROUND(SUM(ecl_amount),0), ROUND(100*SUM(ecl_amount)/SUM(ead),2), ROUND(100*SUM(ead) FILTER (WHERE ifrs9_stage>=2)/SUM(ead),2) FROM ecl_provision_quarterly WHERE reporting_date=DATE '2025-09-30'

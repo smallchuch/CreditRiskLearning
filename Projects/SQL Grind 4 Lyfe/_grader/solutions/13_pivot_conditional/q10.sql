@@ -1,0 +1,2 @@
+WITH e AS (SELECT loan_id FROM loan_monthly_snapshot GROUP BY 1 HAVING MAX(days_past_due)>=90)
+SELECT b.band_name, COUNT(*), COUNT(e.loan_id), ROUND(100.0*COUNT(e.loan_id)/COUNT(*),2) FROM loan l JOIN ref_lvr_band b ON (l.lvr_at_origination_pct > b.lvr_from_pct OR b.lvr_from_pct=0) AND l.lvr_at_origination_pct <= COALESCE(b.lvr_to_pct, 1e9) LEFT JOIN e ON e.loan_id=l.loan_id GROUP BY b.band_id, b.band_name ORDER BY b.band_id

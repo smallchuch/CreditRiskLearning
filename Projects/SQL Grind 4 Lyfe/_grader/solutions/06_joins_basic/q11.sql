@@ -1,0 +1,1 @@
+SELECT a.application_id, r.reason_description FROM loan_application a JOIN ref_decline_reason r ON r.reason_code=a.decline_reason_code WHERE a.decision='Declined' AND a.application_id <= 60 ORDER BY 1

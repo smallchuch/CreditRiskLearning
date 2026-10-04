@@ -1,0 +1,1 @@
+SELECT b.branch_name, ROUND(AVG(l.original_amount),0) AS a FROM loan l JOIN dim_branch b USING (branch_id) WHERE l.origination_date>=DATE '2025-01-01' GROUP BY b.branch_id, b.branch_name HAVING AVG(l.original_amount) > (SELECT AVG(original_amount) FROM loan WHERE origination_date>=DATE '2025-01-01') ORDER BY a DESC, 1

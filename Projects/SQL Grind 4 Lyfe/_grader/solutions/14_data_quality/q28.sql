@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM (SELECT staff_id FROM dim_staff GROUP BY 1 HAVING COUNT(*)>1)

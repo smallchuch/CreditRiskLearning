@@ -1,0 +1,1 @@
+SELECT COUNT(*), COUNT(decision), COUNT(*) FILTER (WHERE decision='Approved'), COUNT(*) FILTER (WHERE current_status='Settled'), ROUND(100.0*COUNT(*) FILTER (WHERE current_status='Settled')/COUNT(*),1) FROM loan_application WHERE application_date >= DATE '2019-01-01' AND application_date < DATE '2020-01-01'

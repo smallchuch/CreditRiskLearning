@@ -1,0 +1,1 @@
+SELECT broker_id, ROUND(100*SUM(closing_balance) FILTER (WHERE days_past_due>=90)/SUM(closing_balance),2) AS r FROM loan_monthly_snapshot s JOIN loan l USING (loan_id) WHERE s.snapshot_date=DATE '2025-12-31' AND s.loan_status<>'Closed' AND l.broker_id IS NOT NULL GROUP BY 1 HAVING SUM(closing_balance)>100000000 ORDER BY r DESC, 1 LIMIT 1

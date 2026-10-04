@@ -1,0 +1,1 @@
+SELECT l.loan_id, COUNT(h.rate_history_id) FROM loan l LEFT JOIN loan_rate_history h ON h.loan_id=l.loan_id AND h.change_reason='RBA cash rate pass-through' WHERE l.loan_id <= 15 GROUP BY 1 ORDER BY 1

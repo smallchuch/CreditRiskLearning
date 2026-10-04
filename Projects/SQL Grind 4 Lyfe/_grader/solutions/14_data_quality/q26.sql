@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM (SELECT property_id FROM property GROUP BY 1 HAVING COUNT(*)>1)

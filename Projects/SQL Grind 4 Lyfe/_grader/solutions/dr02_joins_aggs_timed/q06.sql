@@ -1,0 +1,1 @@
+SELECT c.segment, ROUND(SUM(s.closing_balance),0) FROM loan_monthly_snapshot s JOIN loan l USING (loan_id) JOIN customer c ON c.customer_id=l.primary_customer_id WHERE s.snapshot_date=DATE '2025-12-31' AND s.loan_status<>'Closed' GROUP BY 1 ORDER BY 1

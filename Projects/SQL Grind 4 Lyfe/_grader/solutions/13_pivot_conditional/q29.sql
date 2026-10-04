@@ -1,0 +1,1 @@
+SELECT rate_type, COUNT(*) FILTER (WHERE lvr_at_origination_pct<=70), COUNT(*) FILTER (WHERE lvr_at_origination_pct>70 AND lvr_at_origination_pct<=80), COUNT(*) FILTER (WHERE lvr_at_origination_pct>80 AND lvr_at_origination_pct<=90), COUNT(*) FILTER (WHERE lvr_at_origination_pct>90) FROM loan WHERE channel='Branch' GROUP BY 1 ORDER BY 1

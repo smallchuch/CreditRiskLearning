@@ -1,0 +1,1 @@
+SELECT year(origination_date), COUNT(*), ROUND(100.0*COUNT(*) FILTER (WHERE closed_date <= origination_date + INTERVAL 24 MONTH)/COUNT(*),1) FROM loan WHERE year(origination_date) BETWEEN 2019 AND 2023 GROUP BY 1 ORDER BY 1

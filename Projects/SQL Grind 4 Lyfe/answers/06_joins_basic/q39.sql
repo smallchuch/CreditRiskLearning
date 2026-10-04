@@ -1,0 +1,11 @@
+-- ============================================================================
+-- 06_joins_basic  |  Q39  |  ★★ core
+-- 
+-- Settled applications lodged in 2022: average primary-applicant bureau score by `channel`
+-- (0 dp). `channel`, `avg_score`; sorted by channel.
+-- 
+-- Return 2 column(s), in the order the question gives them.
+-- Expected 4 row(s). Sort the output as described.
+-- ============================================================================
+
+

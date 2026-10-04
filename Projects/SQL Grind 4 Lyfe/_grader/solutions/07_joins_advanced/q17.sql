@@ -1,0 +1,1 @@
+SELECT l.loan_id, COUNT(v.valuation_id), COUNT(v.valuation_id) FILTER (WHERE v.valuation_amount=0) FROM loan l LEFT JOIN property_valuation v ON v.property_id=l.property_id WHERE l.loan_id <= 10 GROUP BY 1 ORDER BY 1

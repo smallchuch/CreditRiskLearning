@@ -1,0 +1,1 @@
+SELECT state, loan_id, original_amount FROM (SELECT d.state, l.loan_id, l.original_amount, ROW_NUMBER() OVER (PARTITION BY d.state ORDER BY l.original_amount DESC, l.loan_id) AS rn FROM loan l JOIN property p ON p.property_id=l.property_id JOIN dim_postcode d ON d.postcode=p.postcode) WHERE rn<=3 ORDER BY state, original_amount DESC, loan_id

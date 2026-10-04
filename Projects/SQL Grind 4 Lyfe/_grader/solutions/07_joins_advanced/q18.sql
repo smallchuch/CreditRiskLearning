@@ -1,0 +1,1 @@
+SELECT l.loan_id, p.policy_id, l.origination_date BETWEEN p.effective_from AND COALESCE(p.effective_to, DATE '9999-12-31') FROM loan l CROSS JOIN ref_serviceability_policy p WHERE l.loan_id <= 6 ORDER BY 1,2

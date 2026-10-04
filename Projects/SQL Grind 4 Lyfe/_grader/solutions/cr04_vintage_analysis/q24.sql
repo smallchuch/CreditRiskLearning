@@ -1,0 +1,1 @@
+SELECT year(l.origination_date), COUNT(*), ROUND(100.0*COUNT(e.loan_id)/COUNT(*),2) FROM loan l LEFT JOIN (SELECT DISTINCT loan_id FROM loan_monthly_snapshot WHERE months_on_book<=6 AND days_past_due>=30) e ON e.loan_id=l.loan_id WHERE l.channel='Branch' AND year(l.origination_date) BETWEEN 2019 AND 2024 GROUP BY 1 ORDER BY 1

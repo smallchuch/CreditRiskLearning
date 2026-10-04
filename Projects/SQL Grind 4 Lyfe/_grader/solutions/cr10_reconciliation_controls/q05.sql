@@ -1,0 +1,1 @@
+SELECT COUNT(DISTINCT l.loan_id) FROM loan l JOIN loan_monthly_snapshot s ON s.loan_id=l.loan_id WHERE l.closed_date IS NOT NULL AND s.snapshot_date > last_day(l.closed_date) AND s.loan_status<>'Closed'

@@ -1,0 +1,1 @@
+CREATE OR REPLACE VIEW scratch.v1 AS SELECT loan_id, product_id FROM loan WHERE original_amount > 1000000; CREATE OR REPLACE VIEW scratch.v2 AS SELECT v.loan_id, p.product_name FROM scratch.v1 v JOIN dim_product p USING (product_id); SELECT product_name, COUNT(*) AS loans FROM scratch.v2 GROUP BY 1 ORDER BY loans DESC, 1 LIMIT 5

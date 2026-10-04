@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM (SELECT payment_id FROM loan_payment GROUP BY 1 HAVING COUNT(*)>1)

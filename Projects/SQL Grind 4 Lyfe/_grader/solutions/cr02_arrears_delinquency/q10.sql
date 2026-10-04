@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM (SELECT snapshot_date, days_past_due, loan_status, LAG(days_past_due) OVER (PARTITION BY loan_id ORDER BY snapshot_date) AS p FROM loan_monthly_snapshot) WHERE snapshot_date=DATE '2025-12-31' AND loan_status<>'Closed' AND days_past_due BETWEEN 1 AND 29 AND p>0

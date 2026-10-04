@@ -1,0 +1,1 @@
+SELECT COUNT(*), ROUND(100.0*COUNT(*) FILTER (WHERE s.days_past_due>=30)/COUNT(*),2) FROM loan_monthly_snapshot s JOIN loan l USING (loan_id) WHERE l.origination_date >= DATE '2022-01-01' AND l.origination_date < DATE '2023-01-01' AND s.months_on_book=12 AND s.loan_status<>'Closed'

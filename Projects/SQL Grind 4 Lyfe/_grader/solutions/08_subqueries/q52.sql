@@ -1,0 +1,1 @@
+SELECT branch_id, n FROM (SELECT l.branch_id, COUNT(*) AS n FROM loan l JOIN dim_branch b USING (branch_id) WHERE b.state='QLD' GROUP BY 1) WHERE n > (SELECT AVG(n2) FROM (SELECT COUNT(*) AS n2 FROM loan WHERE branch_id IS NOT NULL GROUP BY branch_id)) ORDER BY n DESC, 1

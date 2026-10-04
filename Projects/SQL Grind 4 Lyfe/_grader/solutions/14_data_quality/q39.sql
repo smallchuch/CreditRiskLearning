@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM (SELECT complaint_id FROM complaint GROUP BY 1 HAVING COUNT(*)>1)

@@ -1,0 +1,1 @@
+SELECT q, COUNT(*), MIN(original_amount), MAX(original_amount) FROM (SELECT original_amount, NTILE(4) OVER (ORDER BY original_amount, loan_id) AS q FROM loan WHERE channel='Branch') GROUP BY 1 ORDER BY 1

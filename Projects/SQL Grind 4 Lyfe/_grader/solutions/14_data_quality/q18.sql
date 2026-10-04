@@ -1,0 +1,1 @@
+SELECT ROUND(a,0), ROUND(b,0), ROUND(a-b,0) FROM (SELECT (SELECT SUM(closing_balance) FROM loan_monthly_snapshot WHERE snapshot_date=DATE '2025-12-31' AND loan_status<>'Closed') AS a, (SELECT SUM(ead) FROM ecl_provision_quarterly WHERE reporting_date=DATE '2025-12-31') AS b)
