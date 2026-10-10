@@ -10,3 +10,8 @@
 -- ============================================================================
 
 
+SELECT loan_id, interest_rate_at_origination_pct, fixed_rate_expiry_date FROM loan 
+WHERE origination_date > '2020-12-31'
+AND origination_date < '2022-01-01'
+AND rate_type == 'Fixed'
+ORDER BY loan_id;

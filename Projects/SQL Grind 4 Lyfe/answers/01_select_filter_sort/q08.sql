@@ -9,3 +9,7 @@
 -- ============================================================================
 
 
+SELECT loan_id, original_amount FROM loan 
+WHERE loan_status = 'Active'
+AND original_amount BETWEEN 400000 AND 450000
+ORDER BY loan_id;

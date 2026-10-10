@@ -1,0 +1,12 @@
+timestamp,qid,status,seconds,sql_hash
+2026-10-10T16:19:40,01_select_filter_sort/q01,PASS,0.02,cc84c570
+2026-10-10T16:23:40,01_select_filter_sort/q02,PASS,0.01,8893d1c4
+2026-10-10T16:29:27,01_select_filter_sort/q03,FAIL,0.01,cb8d8ae0
+2026-10-10T16:31:34,01_select_filter_sort/q03,PASS,0.00,d18be2a4
+2026-10-10T16:32:47,01_select_filter_sort/q04,PASS,0.01,e56f301f
+2026-10-10T16:34:28,01_select_filter_sort/q05,FAIL,0.27,83b78065
+2026-10-10T16:35:03,01_select_filter_sort/q05,PASS,0.01,6b5af773
+2026-10-10T16:39:01,01_select_filter_sort/q06,FAIL,0.01,84f38f4c
+2026-10-10T16:40:42,01_select_filter_sort/q06,PASS,0.00,d9ca413c
+2026-10-10T16:47:16,01_select_filter_sort/q07,PASS,0.01,c3a8f12c
+2026-10-10T16:52:04,01_select_filter_sort/q08,PASS,0.01,76b25dd3
