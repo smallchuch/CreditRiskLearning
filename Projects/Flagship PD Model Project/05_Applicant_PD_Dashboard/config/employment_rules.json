@@ -1,0 +1,56 @@
+{
+  "description": "Employment field rules per income type, agreed 2026-10-07. Based on DAYS_EMPLOYED missingness in train_raw.parquet.",
+  "years_to_days": "DAYS_EMPLOYED = -1 * years * 365.25",
+  "income_types": {
+    "Working": {
+      "employment_years": "required"
+    },
+    "Commercial associate": {
+      "employment_years": "required"
+    },
+    "State servant": {
+      "employment_years": "required"
+    },
+    "Businessman": {
+      "employment_years": "required",
+      "note": "6 training rows"
+    },
+    "Maternity leave": {
+      "employment_years": "required",
+      "note": "3 training rows; years in current job"
+    },
+    "Pensioner": {
+      "employment_years": "disabled",
+      "pass_value": null,
+      "note": "sentinel in raw data, Missing bin"
+    },
+    "Unemployed": {
+      "employment_years": "disabled",
+      "pass_value": null,
+      "note": "sentinel in raw data, Missing bin"
+    }
+  },
+  "not_offered": {
+    "Student": "15 training rows, all with employment years; outside this model's scope"
+  },
+  "training_counts": {
+    "Working": 126884,
+    "Commercial associate": 57404,
+    "Pensioner": 44224,
+    "State servant": 17453,
+    "Unemployed": 16,
+    "Student": 15,
+    "Businessman": 6,
+    "Maternity leave": 3
+  },
+  "age_checks": {
+    "min_working_age_hard": 14,
+    "min_working_age_warning": 16,
+    "rule": "employment_years <= age - 14 is a hard error; implied start age under 16 is a warning",
+    "training_age_range": [
+      20.5,
+      69.1
+    ],
+    "earliest_start_age_in_training": 17.9
+  }
+}
