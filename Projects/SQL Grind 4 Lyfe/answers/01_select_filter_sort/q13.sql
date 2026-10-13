@@ -9,3 +9,6 @@
 -- ============================================================================
 
 
+SELECT broker_id, firm_name, status, status_change_date FROM dim_broker
+WHERE status NOT IN ('Active')
+ORDER BY status_change_date ASC;

@@ -10,3 +10,7 @@
 -- ============================================================================
 
 
+SELECT application_id, requested_amount, policy_exception_reason FROM loan_application
+WHERE requested_amount > 800000
+AND policy_exception_reason IS NOT NULL
+ORDER BY requested_amount DESC, application_id ASC;

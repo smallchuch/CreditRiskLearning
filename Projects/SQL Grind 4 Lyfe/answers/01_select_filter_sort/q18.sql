@@ -9,3 +9,5 @@
 -- ============================================================================
 
 
+SELECT DISTINCT rate_type, repayment_type, occupancy FROM dim_product
+ORDER BY rate_type ASC, repayment_type ASC, occupancy ASC;

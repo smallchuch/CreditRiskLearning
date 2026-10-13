@@ -10,4 +10,7 @@
 -- ============================================================================
 
 
-SELECT 
+SELECT  application_id, purpose, decline_reason_code FROM loan_application 
+WHERE purpose IN ('Construction', 'Equity Release / Top-up')
+AND decision == 'Declined'
+ORDER BY application_id;

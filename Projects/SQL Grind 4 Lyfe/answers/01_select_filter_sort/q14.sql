@@ -10,3 +10,7 @@
 -- ============================================================================
 
 
+SELECT loan_id, lvr_at_origination_pct FROM loan 
+WHERE lmi_flag == 'false'
+AND lvr_at_origination_pct > 90.00
+ORDER BY loan_id;

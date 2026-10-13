@@ -11,3 +11,7 @@
 -- ============================================================================
 
 
+SELECT application_id, application_date, current_status FROM loan_application
+WHERE current_status IN ('In Progress', 'Approved - Awaiting Settlement')
+AND application_date >= '2025-12-01'
+ORDER BY application_date ASC, application_id ASC;

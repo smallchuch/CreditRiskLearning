@@ -9,3 +9,8 @@
 -- ============================================================================
 
 
+SELECT loan_id, original_amount FROM loan 
+WHERE loan_status = 'Active'
+AND channel = 'Broker'
+ORDER BY original_amount DESC
+LIMIT 5;
