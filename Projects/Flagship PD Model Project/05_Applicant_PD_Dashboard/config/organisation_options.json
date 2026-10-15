@@ -138,14 +138,7 @@
       "note": "Base band fallback from the driver scan"
     }
   ],
-  "disabled_income_types": {
-    "types": [
-      "Pensioner",
-      "Unemployed"
-    ],
-    "org_band": "<6%",
-    "note": "These income types carry ORGANIZATION_TYPE = XNA in the data, which maps to <6%."
-  },
   "not_offered": "The 27 anonymised types (Business Entity, Industry, Trade, Transport) have no plain-language name and fall under 'Other'.",
-  "scope_note": "Raw parquets hold ORG_BAND, not ORGANIZATION_TYPE, so this lookup is tested separately from the parity test."
+  "scope_note": "Raw parquets hold ORG_BAND, not ORGANIZATION_TYPE, so this lookup is tested separately from the parity test.",
+  "out_of_policy_note": "Out-of-policy income types (employment_rules.json) never reach this lookup, so no special ORG_BAND rule is needed. Updated 2026-10-15 (written by AI)."
 }

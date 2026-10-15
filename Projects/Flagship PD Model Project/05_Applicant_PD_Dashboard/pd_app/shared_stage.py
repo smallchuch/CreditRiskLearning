@@ -70,13 +70,50 @@ def org_band(option_label):
     for org in org_bands['options']:
         if org['label'] == option_label:
             return org['org_band']
+
+    raise ValueError(f"Unknown organisation option '{option_label}'")
     
+
+def education_value(label):
+    """Plain-language education label -> NAME_EDUCATION_TYPE dataset value.
+    Table: education_options.json."""
+
+    edu = load_config('education_options')
+
+    for option in edu['options']:
+        if option['label'] == label:
+            return option['dataset_value']
+
+    raise ValueError(f"Unknown education type '{label}'")
 
 
 def engineer(form):
-    """form: dict of answers from the app.
-    Returns a one-row DataFrame holding the columns every scorecard needs:
-    EXT_SOURCE_1/2/3, DAYS_EMPLOYED, ANNUITY_CREDIT, AMT_GOODS_PRICE,
-    CREDIT_GOODS, ORG_BAND, plus the categorical fields passed straight through.
-    """
-    # TODO
+    """form: dict of answers from the app. Returns a one-row DataFrame
+    with the 12 model columns."""
+
+    # 1. Policy guard: out-of-policy applicants never get engineered
+    rules = load_config('employment_rules')
+    if form['income_type'] in rules['out_of_policy']['income_types']:
+        raise ValueError(f"'{form['income_type']}' is outside lending policy")
+
+    # 2. Loan maths (do this once, reuse below)
+    amount = form['loan_amount']
+    monthly = repayment(amount, form['term_months'])
+
+    # 3. Build the row: one key per model column
+    row = {
+        'EXT_SOURCE_1':  ext_value('EXT_SOURCE_1', form['ext_1_band']),
+        'EXT_SOURCE_2':  ext_value('EXT_SOURCE_2', form['ext_2_band']),
+        'EXT_SOURCE_3':  ext_value('EXT_SOURCE_3', form['ext_3_band']),
+        'DAYS_EMPLOYED': years_to_days(form['employment_years']),
+        'ANNUITY_CREDIT': safe_div(monthly, amount),
+        'AMT_GOODS_PRICE': form['goods_price'],
+        'CREDIT_GOODS':  safe_div(amount, form['goods_price']),
+        'ORG_BAND':      org_band(form['org_option']),
+        'OCCUPATION_TYPE': form['occupation'],
+        'NAME_INCOME_TYPE': form['income_type'],
+        'REGION_RATING_CLIENT_W_CITY': form['area_rating'],
+        'NAME_EDUCATION_TYPE': education_value(form['education']),
+    }
+
+    return pd.DataFrame([row])

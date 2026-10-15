@@ -8,4 +8,9 @@
 -- Expected 10 row(s). Sort the output as described.
 -- ============================================================================
 
-
+SELECT loan_id, lvr_at_origination_pct FROM loan 
+WHERE lvr_at_origination_pct > 85
+AND channel = 'Digital'
+AND loan_status = 'Active'
+ORDER BY lvr_at_origination_pct DESC, loan_id ASC
+LIMIT 10;

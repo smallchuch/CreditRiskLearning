@@ -10,3 +10,9 @@
 -- ============================================================================
 
 
+SELECT loan_id, original_amount FROM loan 
+WHERE purpose = 'Equity Release / Top-up'
+AND origination_date BETWEEN '2022-12-31' AND '2023-12-31'
+AND original_amount > 500000
+ORDER BY original_amount DESC, loan_id ASC
+LIMIT 10;

@@ -9,3 +9,9 @@
 -- ============================================================================
 
 
+SELECT loan_id, lvr_at_origination_pct FROM loan 
+WHERE loan_status = 'Active'
+AND lvr_at_origination_pct > 85
+AND channel = 'Branch'
+ORDER BY lvr_at_origination_pct DESC, loan_id ASC
+LIMIT 10;

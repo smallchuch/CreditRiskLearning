@@ -10,3 +10,8 @@
 -- ============================================================================
 
 
+SELECT loan_id, original_amount FROM loan 
+WHERE purpose = 'Purchase - Owner Occupied'
+AND origination_date BETWEEN '2022-12-31' AND '2024-01-01'
+ORDER BY original_amount DESC, loan_id ASC
+LIMIT 10;
