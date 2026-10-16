@@ -73,6 +73,8 @@ header[data-testid="stHeader"] { display: none; }
     font-family: var(--head) !important; font-weight: 600 !important;
     font-size: .84rem !important; color: var(--text) !important; letter-spacing: .005em; }
 [data-testid="stExpander"] { border-radius: 10px; }
+/* the only iframe on the page is the invisible scroll-to-top helper */
+[data-testid="stElementContainer"]:has(> iframe), .element-container:has(> iframe) { display: none; }
 [data-testid="stExpander"] summary p { font-size: .88rem; color: var(--text-2); }
 
 @media (max-width: 720px) {
@@ -86,13 +88,18 @@ header[data-testid="stHeader"] { display: none; }
 
 def scroll_to_top():
     """After scoring, bring the result panel into view (matters on a phone,
-    where the button sits below the fold)."""
-    import streamlit.components.v1 as components
-    components.html("""<script>
+    where the button sits below the fold). Uses st.iframe on new Streamlit
+    versions and falls back to components.html on older ones."""
+    js = """<script>
       const d = window.parent.document;
       (d.querySelector('[data-testid="stMain"]') || d.querySelector('section.main') || {}).scrollTo?.({top: 0, behavior: 'smooth'});
       window.parent.scrollTo({top: 0, behavior: 'smooth'});
-    </script>""", height=0)
+    </script>"""
+    if hasattr(st, "iframe"):
+        st.iframe(js, height=1)
+    else:
+        import streamlit.components.v1 as components
+        components.html(js, height=0)
 
 
 def inject():

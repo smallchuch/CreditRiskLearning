@@ -9,6 +9,7 @@
     "Trained on Home Credit applicants aged 20 to 69. Illustrative portfolio model, not a production lending model.",
     "Fix for both spikes: monotonic binning constraint, planned for notebook 03.",
     "Area rating uses the dataset's anonymised 1 to 3 region rating. A real lender would assign it from the postcode using an internal rating.",
-    "'Other business or industry (not listed)' uses the most common organisation band (8-10%). The anonymised industry, trade and transport types it covers actually range from under 6% to over 10% default, so their PDs are approximated."
+    "'Other business or industry (not listed)' uses the most common organisation band (8-10%). The anonymised industry, trade and transport types it covers actually range from under 6% to over 10% default, so their PDs are approximated.",
+    "The model uses three external credit scores; the form asks for one band and applies it to all three. Real applicants' three scores differ, so this shows how the model responds to a consistent credit profile."
   ]
 }

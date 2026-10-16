@@ -10,6 +10,8 @@ config/*.json, all maths in shared_stage.py and the model adapters.
 
     form -> validate -> engineer -> registry.score_all -> result panel
 """
+from datetime import date
+
 import streamlit as st
 
 import registry
@@ -67,45 +69,52 @@ theme.hero(
 result_slot = st.container()          # filled after the form is submitted
 
 # ------------------------------------------------------------------ form ---
+# Sliders for the numbers first, then dropdowns for the categories.
+today = date.today()
+
 with st.form("applicant"):
-    c1, c2, c3 = st.columns(3, gap="large")
+    theme.kicker("Loan and employment")
+    s1, s2 = st.columns(2, gap="medium")
+    loan_amount = s1.slider("Loan amount", min_value=50_000, max_value=2_000_000,
+                            value=500_000, step=5_000, format="$%,d")
+    goods_price = s2.slider("Purchase price", min_value=50_000, max_value=2_000_000,
+                            value=500_000, step=5_000, format="$%,d")
+    s3, s4 = st.columns(2, gap="medium")
+    term_months = s3.select_slider("Term (months)", options=terms, value=36)
+    employment_years = s4.slider("Years in current employment", min_value=0.0,
+                                 max_value=45.0, value=5.0, step=0.5, format="%.1f")
 
-    with c1:
-        theme.kicker("Applicant")
-        income_type = st.selectbox("Income type", income_types)
-        a1, a2 = st.columns(2)
-        age = a1.number_input("Age", min_value=18, max_value=75, value=35)
-        employment_years = a2.number_input("Years employed", min_value=0.0,
-                                           max_value=55.0, value=5.0, step=0.5,
-                                           format="%.1f")
-        occupation = st.selectbox("Occupation", occ_labels)
-        org_option = st.selectbox("Organisation type", org_labels)
-        education = st.selectbox("Highest education", edu_labels)
+    st.write("")
+    theme.kicker("Applicant")
+    r1, r2, r3 = st.columns(3, gap="medium")
+    dob = r1.date_input("Date of birth", value=date(today.year - 35, today.month, 1),
+                        min_value=date(today.year - 80, 1, 1),
+                        max_value=date(today.year - 18, today.month, 1),
+                        format="DD/MM/YYYY")
+    income_type = r2.selectbox("Income type", income_types)
+    credit_band = r3.selectbox("Credit score", ext_options, index=2, format_func=ext_display)
 
-    with c2:
-        theme.kicker("Credit history")
-        ext_1 = st.selectbox("Credit score 1", ext_options, index=2, format_func=ext_display)
-        ext_2 = st.selectbox("Credit score 2", ext_options, index=2, format_func=ext_display)
-        ext_3 = st.selectbox("Credit score 3", ext_options, index=2, format_func=ext_display)
-        area_rating = st.selectbox(area["form_label"], area_values,
-                                   index=area_values.index(area["default"]),
-                                   format_func=area_names.get)
+    r4, r5, r6 = st.columns(3, gap="medium")
+    occupation = r4.selectbox("Occupation", occ_labels)
+    org_option = r5.selectbox("Organisation type", org_labels)
+    education = r6.selectbox("Highest education", edu_labels)
 
-    with c3:
-        theme.kicker("Cash loan")
-        loan_amount = st.number_input("Loan amount ($)", min_value=10_000,
-                                      max_value=4_000_000, value=500_000, step=10_000)
-        goods_price = st.number_input("Goods price ($)", min_value=10_000,
-                                      max_value=4_000_000, value=500_000, step=10_000)
-        term_months = st.selectbox("Term (months)", terms, index=terms.index(36))
-        st.write("")
-        submitted = st.form_submit_button("Score applicant", type="primary")
+    r7, r8, r9 = st.columns(3, gap="medium")
+    area_rating = r7.selectbox(area["form_label"], area_values,
+                               index=area_values.index(area["default"]),
+                               format_func=area_names.get)
+    r9.write("")
+    submitted = r9.form_submit_button("Score applicant", type="primary")
+
+# Age in years from date of birth (validate uses it; the model does not)
+age = round((today - dob).days / 365.25, 1)
 
 form = {
     "income_type": income_type, "age": age, "employment_years": employment_years,
     "org_option": org_option, "occupation": occupation, "education": education,
     "area_rating": area_rating,
-    "ext_1_band": ext_1, "ext_2_band": ext_2, "ext_3_band": ext_3,
+    # One credit score answer feeds all three model scores (see model notes)
+    "ext_1_band": credit_band, "ext_2_band": credit_band, "ext_3_band": credit_band,
     "loan_amount": loan_amount, "term_months": term_months, "goods_price": goods_price,
 }
 
@@ -163,7 +172,7 @@ with result_slot:
     stats = [
         (money(monthly), "Monthly repayment"),
         (money(monthly * term_months), f"Total repaid over {term_months} months"),
-        (f"{loan_amount / goods_price:.0%}", "Loan as % of goods price"),
+        (f"{loan_amount / goods_price:.0%}", "Loan as % of purchase price"),
     ]
 
     # 5. How this PD compares with the in-policy training population
