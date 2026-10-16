@@ -18,7 +18,7 @@ import registry
 import shared_stage as ss
 import theme
 
-st.set_page_config(page_title="Applicant PD | Chuch", page_icon="📊", layout="wide")
+st.set_page_config(page_title="Probability of Payment Diffuculty Model", page_icon="📊", layout="wide")
 theme.inject()
 
 
@@ -60,10 +60,10 @@ def money(x):
 
 # ------------------------------------------------------------------ hero ---
 theme.hero(
-    "Flagship PD Model · Applicant scoring",
-    'Applicant <span class="accent">PD</span> dashboard',
+    # "PD Model · Applicant scoring",
+    'Applicant <span class="accent">Payment Difficulty</span> Scoring',
     "Enter an applicant and a cash loan to see the scorecard's estimated probability "
-    "of payment difficulty. Illustrative portfolio model trained on Home Credit data.",
+    "of payment difficulty. Illustrative portfolio model trained on Kaggle Home Credit data.",
 )
 
 result_slot = st.container()          # filled after the form is submitted
@@ -178,7 +178,7 @@ with result_slot:
     # 5. How this PD compares with the in-policy training population
     ratio = champ["pd"] / base_rate
     pill = "safe" if ratio < 1 else ("watch" if ratio < 1.5 else "bad")
-    pill_text = f"{ratio:.1f}× the in-policy average ({base_rate:.1%})"
+    pill_text = f"{ratio:.1f}× the portfolio average ({base_rate:.1%})"
 
     chal_html = ""
     if others:
@@ -189,9 +189,9 @@ with result_slot:
             + "</div>" for r in others)
         chal_html = f'<div class="challengers">{chips}</div>'
 
-    model_line = (f'<b>Champion</b> · {champ["model"]} v{champ["version"]} · '
-                  f'Test Gini {champ["test_gini"]:.2f} · {champ["calibration"]} · '
-                  f'{rate:.0%} p.a. illustrative rate · amounts in dataset currency units')
+    # model_line = (f'<b>Champion</b> · {champ["model"]} v{champ["version"]} · '
+    #               f'Test Gini {champ["test_gini"]:.2f} · {champ["calibration"]} · '
+    #               f'{rate:.0%} p.a. illustrative rate · amounts in dataset currency units')
 
     grade = ss.risk_grade(champ["pd"])
     theme.result_panel(f'{champ["pd"]:.1%}', pill, pill_text, stats, model_line, chal_html,
