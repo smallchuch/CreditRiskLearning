@@ -1,0 +1,10 @@
+# Theme for the Applicant PD dashboard (matches smallchuch.github.io). Written by AI.
+# Streamlit Community Cloud only reads config from the repo root, so this copies
+# Projects/Flagship PD Model Project/05_Applicant_PD_Dashboard/.streamlit/config.toml
+[theme]
+base = "light"
+primaryColor = "#7A5C9E"
+backgroundColor = "#F7F5F0"
+secondaryBackgroundColor = "#FAF9F5"
+textColor = "#2F2F2F"
+font = "sans serif"

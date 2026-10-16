@@ -117,3 +117,37 @@ def engineer(form):
     }
 
     return pd.DataFrame([row])
+
+
+def validate(form):
+    """Check form answers before engineer(). Written by AI.
+    Returns (errors, warnings), two lists of strings.
+    errors block scoring; warnings are shown but scoring still runs.
+    Rules: employment_rules.json 'age_checks', loan_terms.json 'term_months'."""
+    rules = load_config('employment_rules')['age_checks']
+    term = load_config('loan_terms')['term_months']
+    errors, warnings = [], []
+
+    age = form['age']
+    years = form['employment_years']
+    months = form['term_months']
+
+    # 1. Employment vs age (only if both were answered)
+    if not pd.isna(age) and not pd.isna(years):
+        start_age = age - years
+        if years > age - rules['min_working_age_hard']:
+            errors.append(
+                f"{years} years employed is not possible at age {age} "
+                f"(would mean starting work before {rules['min_working_age_hard']}).")
+        elif start_age < rules['min_working_age_warning']:
+            warnings.append(
+                f"Implies starting work at {start_age:g}, younger than "
+                f"{rules['min_working_age_warning']}. Check the employment years.")
+
+    # 2. Term must be one of the offered terms (12 to 60 in steps of 6)
+    if months < term['min'] or months > term['max'] or (months - term['min']) % term['step'] != 0:
+        errors.append(
+            f"Term of {months} months is not offered. Choose {term['min']} to "
+            f"{term['max']} months in steps of {term['step']}.")
+
+    return errors, warnings

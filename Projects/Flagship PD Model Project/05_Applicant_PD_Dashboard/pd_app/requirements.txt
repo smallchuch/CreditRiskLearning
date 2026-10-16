@@ -1,0 +1,8 @@
+# Packages for hosting the dashboard on Streamlit Community Cloud. Written by AI.
+# scikit-learn is pinned to the version the model was saved with (metadata.json).
+streamlit>=1.40
+scikit-learn==1.8.0
+optbinning
+pandas
+numpy
+joblib

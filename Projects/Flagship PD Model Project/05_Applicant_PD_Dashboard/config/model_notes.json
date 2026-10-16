@@ -8,6 +8,7 @@
     "Pensioner, Unemployed, Businessman and Maternity leave applicants are out of policy and not scored. The model was trained including them (pensioners were 18% of rows at 5.4% default), so average PDs for the in-policy population may be slightly understated. Ranking is unaffected.",
     "Trained on Home Credit applicants aged 20 to 69. Illustrative portfolio model, not a production lending model.",
     "Fix for both spikes: monotonic binning constraint, planned for notebook 03.",
-    "Area rating uses the dataset's anonymised 1 to 3 region rating. A real lender would assign it from the postcode using an internal rating."
+    "Area rating uses the dataset's anonymised 1 to 3 region rating. A real lender would assign it from the postcode using an internal rating.",
+    "'Other business or industry (not listed)' uses the most common organisation band (8-10%). The anonymised industry, trade and transport types it covers actually range from under 6% to over 10% default, so their PDs are approximated."
   ]
 }

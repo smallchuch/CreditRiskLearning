@@ -53,11 +53,29 @@ def to_woe(row, bp, features):
     Must pass metric_missing='empirical' (without it, Missing scores as 0).
     Returns a one-row DataFrame with columns in the same order as `features`."""
     
+    woe = {}
+    for name in features:
+        woe[name] = bp.get_binned_variable(name).transform(
+            row[name].values, metric='woe', metric_missing='empirical')
+    return pd.DataFrame(woe, columns=features)
+    
     
 
 
 def score(row, model_dir=MODEL_DIR):
     """The only function the app calls.
     Returns {model, version, pd, features_used, test_gini}."""
-    # TODO
-    pass
+    
+    metadata, bp, model = load_model(model_dir)
+    features = metadata['features']
+    check_columns(row, features)
+    woe = to_woe(row, bp, features)
+    prob = float(model.predict_proba(woe)[:, 1][0])
+    
+    return {
+        'model': metadata['name'],
+        'version': metadata['version'],
+        'pd': prob,
+        'features_used': metadata['features'],
+        'test_gini': metadata['gini_test'],
+    }
