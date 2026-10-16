@@ -1,0 +1,204 @@
+---
+# ═══════════════════════════════════════════════════════════════════════════
+# DECK TEMPLATE — reveal.js executive deck, brand-driven.
+#
+# Renders as-is into a demo so you can see every slide type. Replace the
+# EXAMPLE content, delete the patterns you don't need.
+#     quarto render deck.qmd
+#
+# BRAND: set in `_environment` (ER_BRAND=personal). Slides AND charts follow it.
+# STYLE STACK:
+#     default      reveal.js base
+#     _deck.scss   layout + slide types from the toolkit (generated)
+#     _brand.scss  colours + fonts from brand.yml        (generated)
+#     custom.scss  tweaks for THIS deck only             (yours — wins over the rest)
+# (Quarto reads the *variables* of later files first, which is why the brand
+#  tokens sit after the layout that uses them.)
+# ═══════════════════════════════════════════════════════════════════════════
+title: "REPORT TITLE HERE"
+subtitle: "Subtitle · team / source"
+author: "Chuch"
+date: today
+date-format: "MMMM YYYY"
+format:
+  revealjs:
+    theme: [default, _deck.scss, _brand.scss, custom.scss]
+    slide-number: c/t
+    transition: fade
+    transition-speed: fast
+    width: 1280
+    height: 720
+    center: false
+    margin: 0
+    menu: false
+    progress: false
+    auto-stretch: false
+    fig-align: center
+    echo: false
+    embed-resources: true
+    include-in-header: _fonts.html
+    footer: "Report name · source"
+jupyter: python3
+---
+
+```{python}
+#| label: setup
+#| include: false
+import numpy as np, pandas as pd
+import matplotlib.pyplot as plt
+from er_toolkit import brand
+from er_toolkit.viz.mpl import chart_title, graded, bar_labels, add_baseline
+
+b = brand.use(context="slide")     # reads ER_BRAND from _environment
+# Colour a chart with the brand, never a hex:
+#   b.primary.base / b.secondary.base     the brand colours
+#   b.primary[300]                        any shade 50–900
+#   graded(values)                        bars shaded light→dark by value
+#   b.palette("categorical", n=4)         multi-series colours
+
+# ── DEMO DATA — delete and load your own ──
+seg  = ["Segment A", "Segment B", "Segment C", "Segment D", "Segment E"]
+val  = [12.4, 9.1, 7.8, 6.2, 4.5]
+val2 = [3.0, 4.2, 6.1, 5.0, 7.3]
+BASE = 8.1
+```
+
+## Headline answer {.hero data-kick="Executive summary"}
+
+::: {.hero-wrap}
+::: {.hero-col}
+<div class="hero-num">$4.2M<small>the one number this report delivers</small></div>
+:::
+
+::: {.hero-col}
+The "so what", up top — one or two sentences a manager can repeat.
+
+- **Point one** — the most important thing
+- **Point two** — the next
+- **Point three** — and the next
+:::
+:::
+
+::: {.takeaway}
+EXAMPLE — the single line you want the room to remember.
+:::
+
+## Headline numbers {data-kick="Example · KPI cards"}
+
+::: {.kpis}
+[**8.1%** default rate]{.kpi} [**307k** applications]{.kpi} [**0.74** Gini]{.kpi .good} [**+1.9pp** vs last year]{.kpi .bad}
+:::
+
+Use KPI cards when the slide's job is "here are the numbers". Add `.good` / `.bad`
+to a card to colour its number with the brand's risk colours.
+
+::: {.takeaway}
+EXAMPLE — `::: {.kpis}` holding `[**number** label]{.kpi}` spans.
+:::
+
+## Part 2 — the drivers {.section-break data-kick="Part 2"}
+
+A full-bleed divider. Use one per major section of a longer deck.
+
+## Single chart {data-kick="Example · one chart"}
+
+```{python}
+fig, ax = plt.subplots(figsize=(11, 4.2))
+bars = ax.bar(seg, val, color=graded(val), edgecolor="white", linewidth=1)
+bar_labels(ax, bars)
+add_baseline(ax, BASE, label="Base {:.1f}")
+chart_title(ax, "One chart, centred on a card", "Bars graded light → dark by value")
+ax.set_ylabel("Demo metric"); ax.margins(y=0.16)
+plt.show()
+```
+
+::: {.takeaway}
+EXAMPLE — `graded()`, `bar_labels()`, `add_baseline()` and `chart_title()` all read the active brand.
+:::
+
+## Two figures side by side {data-kick="Example · two-up"}
+
+```{python}
+#| layout-ncol: 2
+fig, ax = plt.subplots(figsize=(6.2, 4.4))
+bars = ax.bar(seg, val, color=graded(val), edgecolor="white", linewidth=1)
+bar_labels(ax, bars, fontsize=9)
+chart_title(ax, "A bar chart")
+ax.tick_params(axis="x", rotation=45); ax.margins(y=0.18); plt.show()
+
+fig, ax = plt.subplots(figsize=(6.2, 4.4))
+ax.plot(seg, val2, marker="o", color=b.secondary.base, linewidth=2.5)
+chart_title(ax, "A trend line")
+ax.tick_params(axis="x", rotation=45); plt.show()
+```
+
+::: {.takeaway}
+EXAMPLE — `#| layout-ncol: 2` puts two independent figures on their own cards.
+:::
+
+## Chart beside commentary {data-kick="Example · chart + text"}
+
+:::: {.columns}
+::: {.column width="46%"}
+**What this shows**
+
+- Point one about the chart
+- Point two — [8.1%]{.stat} is a `.stat` span
+- Point three — [watch this]{.accent} is an `.accent` span
+:::
+
+::: {.column width="54%"}
+```{python}
+fig, ax = plt.subplots(figsize=(7, 4.1))
+bars = ax.bar(seg, val2, color=graded(val2), edgecolor="white", linewidth=1)
+bar_labels(ax, bars, fontsize=10)
+chart_title(ax, "Beside text")
+ax.tick_params(axis="x", rotation=45); ax.margins(y=0.18); plt.show()
+```
+:::
+::::
+
+::: {.caveat}
+EXAMPLE — column divs (four colons `::::` outside, three `:::` per column).
+:::
+
+## A text slide {data-kick="Example · text"}
+
+Text-only slides centre themselves — no layout work needed.
+
+- **Retained** — the drivers you're keeping
+- **Parked** — what you set aside, and why
+- **Next** — the one action you're asking for
+
+::: {.caveat}
+EXAMPLE — `.caveat` (secondary colour) for a watch-out; `.takeaway` (primary) for the key point.
+:::
+
+## {.closing}
+
+<div class="rule"></div>
+<div class="lead">Closing statement.</div>
+<div class="sub">What this established, and what comes <em>next</em>.</div>
+<div class="tag">Report name · source · programme</div>
+
+```{=html}
+<script>
+// Cover kicker + stat chips (edit or delete).
+window.addEventListener('load', () => {
+  const t = document.getElementById('title-slide');
+  if (t && !t.querySelector('.cover-meta')) {
+    const head = document.createElement('div');
+    head.className = 'cover-head';
+    head.innerHTML = '<div class="cover-kick">01 &nbsp;·&nbsp; Report Series</div><div class="cover-rule"></div>';
+    t.insertBefore(head, t.firstChild);
+    const d = document.createElement('div');
+    d.className = 'cover-meta';
+    d.innerHTML = `
+      <div class="cm"><span class="cm-n">0000</span><span class="cm-l">Metric one</span></div>
+      <div class="cm"><span class="cm-n">0.00</span><span class="cm-l">Metric two</span></div>
+      <div class="cm"><span class="cm-n">0.0%</span><span class="cm-l">Metric three</span></div>`;
+    t.appendChild(d);
+  }
+});
+</script>
+```

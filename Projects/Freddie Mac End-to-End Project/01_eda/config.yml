@@ -1,0 +1,19 @@
+# freddie-pd-build — read by every notebook (proj.config()), the SQL runner and the dashboards.
+project: freddie-pd-build
+type: analysis
+title: "Freddie Pd Build"
+owner: User
+created: 2026-10-16
+brand: personal                    # python -m er_toolkit.brand list
+snapshot_date: 2026-09-30         # observation / reporting date. Change this, re-run
+seed: 42
+
+data:
+  database: data/raw/freddie-pd-build.duckdb    # relative to the project root
+  source: ""                          # where the extract comes from (system, table, owner)
+  key: loan_id
+
+target:
+  definition: ""                      # e.g. "30+ dpd within 6 months of origination"
+
+parameters: {}

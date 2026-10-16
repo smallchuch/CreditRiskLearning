@@ -1,0 +1,84 @@
+---
+# ═══════════════════════════════════════════════════════════════════════════
+# REPORT TEMPLATE — single-file HTML analysis write-up, brand-driven.
+#     quarto render report.qmd
+# Brand: `_environment` (ER_BRAND=…). Same kit as the deck, so they match.
+# ═══════════════════════════════════════════════════════════════════════════
+title: "Analysis title"
+subtitle: "What question this answers, for whom"
+author: "Chuch"
+date: today
+date-format: "D MMMM YYYY"
+format:
+  html:
+    theme: [cosmo, _report.scss, _brand.scss, custom.scss]
+    toc: true
+    toc-location: left
+    toc-depth: 2
+    number-sections: false
+    code-fold: true
+    code-tools: true
+    embed-resources: true
+    include-in-header: _fonts.html
+    fig-width: 9
+    fig-height: 4.2
+    df-print: kable
+jupyter: python3
+---
+
+```{python}
+#| label: setup
+#| include: false
+import numpy as np, pandas as pd
+import matplotlib.pyplot as plt
+from er_toolkit import brand
+from er_toolkit.viz.mpl import chart_title, graded, bar_labels, add_baseline
+
+b = brand.use(context="report")
+seg = ["A", "B", "C", "D", "E"]; val = [12.4, 9.1, 7.8, 6.2, 4.5]
+```
+
+## Summary
+
+::: {.kpis}
+[**8.1%** default rate]{.kpi} [**307k** applications]{.kpi} [**0.74** Gini]{.kpi .good}
+:::
+
+::: {.takeaway}
+Lead with the answer. One paragraph a stakeholder could forward without the rest of the report.
+:::
+
+## Context & data
+
+- **Question** — what decision this informs
+- **Data** — source, snapshot date, population, exclusions
+- **Definitions** — e.g. default = 90+ DPD within 12 months
+
+## Findings
+
+### Finding one
+
+```{python}
+#| fig-cap: "Bars graded by value; dashed line = portfolio base rate."
+fig, ax = plt.subplots()
+bars = ax.bar(seg, val, color=graded(val), edgecolor="white")
+bar_labels(ax, bars); add_baseline(ax, 8.1, label="Base {:.1f}%")
+chart_title(ax, "Default rate by segment", "Demo data"); ax.margins(y=0.15)
+plt.show()
+```
+
+The [segment A]{.stat} rate is half again the base rate.
+
+::: {.caveat}
+Small sample in segment E (n = 412) — treat its rate as indicative.
+:::
+
+## Methodology
+
+Brief, reproducible description. Link the notebook(s) this came from.
+
+## Appendix
+
+```{python}
+pd.DataFrame({"segment": seg, "rate_pct": val})
+```

@@ -1,0 +1,24 @@
+# data never goes in git
+data/raw/*
+data/interim/*
+!data/**/.gitkeep
+outputs/tables/*.parquet
+*.duckdb
+*.duckdb.wal
+*.csv
+*.xlsx
+
+# generated
+__pycache__/
+.ipynb_checkpoints/
+.quarto/
+*_files/
+_brand.scss
+_deck.scss
+_report.scss
+_dashboard.scss
+_fonts.html
+_dashboard.html
+.streamlit/
+deliverables/*.html
+dashboard/*/dashboard.html
