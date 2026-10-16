@@ -60,7 +60,7 @@ def money(x):
 
 # ------------------------------------------------------------------ hero ---
 theme.hero(
-    # "PD Model · Applicant scoring",
+    "Logistic Reggression Model · PD Model",
     'Applicant <span class="accent">Payment Difficulty</span> Scoring',
     "Enter an applicant and a cash loan to see the scorecard's estimated probability "
     "of payment difficulty. Illustrative portfolio model trained on Kaggle Home Credit data.",
