@@ -151,3 +151,13 @@ def validate(form):
             f"{term['max']} months in steps of {term['step']}.")
 
     return errors, warnings
+
+
+def risk_grade(pd_value):
+    """PD -> grade dict from the master scale. Written by AI.
+    Bands include their lower bound: PD of exactly 3% is Grade 2.
+    Table: risk_grades.json."""
+    for g in load_config('risk_grades')['grades']:
+        if g['pd_min'] <= pd_value < g['pd_max']:
+            return g
+    raise ValueError(f"PD {pd_value} is outside the risk grade scale")

@@ -49,6 +49,19 @@ header[data-testid="stHeader"] { display: none; }
 .pill.safe  { background: var(--safe-bg);  color: var(--safe-text); }
 .pill.watch { background: var(--watch-bg); color: var(--watch-text); }
 .pill.bad   { background: var(--bad-bg);   color: var(--bad-text); }
+.grade-row { display: flex; align-items: center; gap: .8rem; margin: .1rem 0 .6rem; }
+.grade { display: inline-flex; align-items: baseline; gap: .45rem; border-radius: 10px;
+         padding: .35rem .8rem; font-family: var(--head); font-weight: 700; }
+.grade .g-num { font-size: 1.35rem; }
+.grade .g-lbl { font-family: var(--body); font-weight: 500; font-size: .9rem; }
+.grade.safe  { background: var(--safe-bg);  color: var(--safe-text); }
+.grade.watch { background: var(--watch-bg); color: var(--watch-text); }
+.grade.bad   { background: var(--bad-bg);   color: var(--bad-text); }
+.scale { display: flex; gap: 3px; margin-top: .7rem; max-width: 320px; }
+.scale span { flex: 1; height: 6px; border-radius: 3px; background: var(--subtle);
+              border: 1px solid #E4E1DA; }
+.scale span.on { background: var(--jac-300); border-color: var(--jac-300); }
+.scale-lbl { font-family: var(--mono); font-size: .66rem; color: var(--text-3); margin-top: .25rem; }
 .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
 .stat .num { font-family: var(--head); font-size: 1.45rem; font-weight: 700; color: var(--text); }
 .stat .lbl { font-size: .82rem; color: var(--text-2); }
@@ -120,8 +133,21 @@ def empty_result(text):
     st.markdown(f'<div class="result empty">{text}</div>', unsafe_allow_html=True)
 
 
-def result_panel(pd_value, pill_class, pill_text, stats, model_line, challengers_html=""):
-    """stats: list of (number, label). Everything is pre-formatted text."""
+def result_panel(pd_value, pill_class, pill_text, stats, model_line, challengers_html="",
+                 grade=None):
+    """stats: list of (number, label). grade: dict from risk_grades.json.
+    Everything is pre-formatted text."""
+    grade_html = ""
+    if grade:
+        bars = "".join(f'<span class="{"on" if i <= grade["grade"] else ""}"></span>'
+                       for i in range(1, 6))
+        grade_html = (f'<div class="grade-row"><div class="grade {grade["style"]}">'
+                      f'<span class="g-num">Grade {grade["grade"]}</span>'
+                      f'<span class="g-lbl">{grade["label"]}</span></div></div>')
+        pill_tail = (f'<div class="scale">{bars}</div>'
+                     f'<div class="scale-lbl">Grade 1 lowest risk · Grade 5 highest</div>')
+    else:
+        pill_tail = ""
     stat_html = "".join(f'<div class="stat"><div class="num">{n}</div>'
                         f'<div class="lbl">{l}</div></div>' for n, l in stats)
     st.markdown(f"""
@@ -130,7 +156,9 @@ def result_panel(pd_value, pill_class, pill_text, stats, model_line, challengers
     <div>
       <div class="pd-label">Estimated probability of payment difficulty</div>
       <div class="pd-num">{pd_value}</div>
+      {grade_html}
       <span class="pill {pill_class}">{pill_text}</span>
+      {pill_tail}
     </div>
     <div class="stats">{stat_html}</div>
   </div>

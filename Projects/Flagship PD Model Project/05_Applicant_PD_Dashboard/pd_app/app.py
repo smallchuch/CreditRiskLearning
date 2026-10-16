@@ -184,7 +184,8 @@ with result_slot:
     if others:
         chips = "".join(
             f'<div class="chal">{r["model"]} v{r["version"]}<br>'
-            + (f'<b>{r["pd"]:.1%}</b>' if "error" not in r else "could not score")
+            + (f'<b>{r["pd"]:.1%}</b> · Grade {ss.risk_grade(r["pd"])["grade"]}'
+               if "error" not in r else "could not score")
             + "</div>" for r in others)
         chal_html = f'<div class="challengers">{chips}</div>'
 
@@ -192,6 +193,8 @@ with result_slot:
                   f'Test Gini {champ["test_gini"]:.2f} · {champ["calibration"]} · '
                   f'{rate:.0%} p.a. illustrative rate · amounts in dataset currency units')
 
-    theme.result_panel(f'{champ["pd"]:.1%}', pill, pill_text, stats, model_line, chal_html)
+    grade = ss.risk_grade(champ["pd"])
+    theme.result_panel(f'{champ["pd"]:.1%}', pill, pill_text, stats, model_line, chal_html,
+                       grade=grade)
 
 show_notes(row)

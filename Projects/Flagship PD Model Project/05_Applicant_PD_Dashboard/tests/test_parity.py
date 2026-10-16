@@ -161,3 +161,19 @@ def test_out_of_policy_is_not_scored():
     form = sample_form() | {"income_type": "Pensioner"}
     with pytest.raises(ValueError):
         shared_stage.engineer(form)
+
+
+# 6. Risk grades: master scale boundaries ----------------------------------
+@pytest.mark.parametrize("pd_value, grade", [
+    (0.0, 1), (0.0299, 1), (0.03, 2), (0.0599, 2), (0.06, 3),
+    (0.0999, 3), (0.10, 4), (0.1799, 4), (0.18, 5), (0.99, 5),
+])
+def test_risk_grade_boundaries(pd_value, grade):
+    assert shared_stage.risk_grade(pd_value)["grade"] == grade
+
+
+def test_risk_grade_scale_has_no_gaps():
+    grades = shared_stage.load_config("risk_grades")["grades"]
+    assert grades[0]["pd_min"] == 0.0 and grades[-1]["pd_max"] == 1.0
+    for lower, upper in zip(grades, grades[1:]):
+        assert lower["pd_max"] == upper["pd_min"]
