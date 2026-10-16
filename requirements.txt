@@ -1,0 +1,10 @@
+# Packages for the Applicant PD dashboard on Streamlit Community Cloud. Written by AI.
+# Lives at the repo root because Community Cloud cannot handle spaces in the
+# path when the file sits next to app.py ("Flagship PD Model Project").
+# scikit-learn is pinned to the version the model was saved with (metadata.json).
+streamlit>=1.40
+scikit-learn==1.8.0
+optbinning
+pandas
+numpy
+joblib
