@@ -189,12 +189,8 @@ with result_slot:
             + "</div>" for r in others)
         chal_html = f'<div class="challengers">{chips}</div>'
 
-    # model_line = (f'<b>Champion</b> · {champ["model"]} v{champ["version"]} · '
-    #               f'Test Gini {champ["test_gini"]:.2f} · {champ["calibration"]} · '
-    #               f'{rate:.0%} p.a. illustrative rate · amounts in dataset currency units')
-
     grade = ss.risk_grade(champ["pd"])
-    theme.result_panel(f'{champ["pd"]:.1%}', pill, pill_text, stats, model_line, chal_html,
+    theme.result_panel(f'{champ["pd"]:.1%}', pill, pill_text, stats, chal_html,
                        grade=grade)
 
 show_notes(row)
