@@ -1,19 +1,18 @@
-# freddie-pd-build — read by every notebook (proj.config()), the SQL runner and the dashboards.
-project: freddie-pd-build
-type: analysis
-title: "Freddie Pd Build"
-owner: User
-created: 2026-10-16
-brand: personal                    # python -m er_toolkit.brand list
-snapshot_date: 2026-09-30         # observation / reporting date. Change this, re-run
-seed: 42
+project: freddie-vintage
+title: "Freddie Mac Vintage Analysis"
+snapshot_date: 2026-XX-XX            # last reporting month in the downloaded svcg file
 
 data:
-  database: data/raw/freddie-pd-build.duckdb    # relative to the project root
-  source: ""                          # where the extract comes from (system, table, owner)
-  key: loan_id
+  source: "Freddie Mac Single-Family Loan-Level Dataset, sample files"
+  years: [2007]                      # add 2006, 2010, 2016 once 2007 works
+  key_orig: loan_id
+  key_svcg: [loan_id, reporting_month]
 
-target:
-  definition: ""                      # e.g. "30+ dpd within 6 months of origination"
+events:
+  default: "first month at 90+ days delinquent (3+ payments behind)"
+  prepay: "Zero Balance Code 01 before any default"
+  censored: "still active at snapshot_date"
 
-parameters: {}
+vintage:
+  cohort: origination_quarter        # from loan ID, e.g. F07Q1
+  age_unit: months
