@@ -1,9 +1,0 @@
-# Dependencies for the Applicant PD dashboard (Streamlit Community Cloud reads this
-# file from the same folder as app.py). scikit-learn is pinned to the version the
-# registry model was saved with (see registry/logreg_baseline_v1/metadata.json).
-streamlit
-pandas
-numpy
-joblib
-scikit-learn==1.8.0
-optbinning
