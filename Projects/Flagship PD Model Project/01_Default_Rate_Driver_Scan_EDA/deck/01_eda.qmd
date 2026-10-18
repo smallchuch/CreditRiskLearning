@@ -1,9 +1,7 @@
 ---
-title: "What Predicts Repayment Difficulty?"
-subtitle: "Default-Rate Driver Scan · Home Credit application data"
-author: "Chuch"
-date: today
-date-format: "MMMM YYYY"
+title: "Default-Rate Driver Scan"
+subtitle: Dataset · [Home Credit Default Risk Competition](https://www.kaggle.com/competitions/home-credit-default-risk)
+author: "Autho: Evan Reynolds"
 format:
   revealjs:
     theme: [default, brand.scss]
@@ -19,7 +17,7 @@ format:
     fig-align: center
     echo: false
     embed-resources: true
-    footer: "Default-Rate Driver Scan · Home Credit Default Data"
+    # footer: "Default-Rate Driver Scan · Home Credit Default Data"
 title-slide-attributes:
     data-background-color: "#3D2E4F"
     data-background-gradient: "radial-gradient(120% 135% at 12% 4%, #5C4577 0%, #3D2E4F 52%, #2C2039 100%)"
@@ -106,6 +104,7 @@ This deck is the *scan* — which fields carry signal — before any model is bu
 ```{python}
 #| fig-width: 10
 #| fig-height: 3.0
+#| out-width: "90%"
 counts = df["TARGET"].value_counts(normalize=True).sort_index()
 labels = ["Repaid on time", "Repayment difficulty"]
 fig, ax = plt.subplots(figsize=(11, 3.4))
@@ -144,6 +143,7 @@ That's the whole method. The next slides are this one chart, one field at a time
 ```{python}
 #| fig-width: 11
 #| fig-height: 4.3
+#| out-width: "90%"
 fig, axes = default_rate_by_bin(
     df, ["EXT_SOURCE_2", "EXT_SOURCE_3", "EXT_SOURCE_1"],
     target="TARGET", ncols=3, bins=10, bin_label="rank",
@@ -163,6 +163,7 @@ A clean, steep slide from **~20% default in the lowest-score bin to ~2–3% in t
 ```{python}
 #| fig-width: 10.5
 #| fig-height: 4.2
+#| out-width: 90%
 fig, axes = default_rate_by_bin(
     df, ["AGE_YEARS", "EMP_YEARS"], target="TARGET",
     ncols=2, bins=8, method="quantile", bin_label="range",
@@ -182,6 +183,7 @@ Both slope the intuitive way: **younger applicants, and those with less time in 
 ```{python}
 #| fig-width: 10
 #| fig-height: 3.7
+#| out-width: 80%
 order = df.groupby("NAME_EDUCATION_TYPE")["TARGET"].mean().sort_values()
 from matplotlib import colors as _mc
 norm = _mc.Normalize(order.min(), order.max())
@@ -212,6 +214,7 @@ A steady gradient from **higher education (~2%) to lower secondary (~11%)** — 
 ```{python}
 #| fig-width: 11
 #| fig-height: 4.3
+#| out-width: 90%
 small_labels(9)   # denser bins -> smaller per-bar labels so they never touch
 fig, axes = default_rate_by_bin(
     df, ["AMT_CREDIT", "AMT_INCOME_TOTAL", "AMT_ANNUITY"],
@@ -232,6 +235,7 @@ As **raw amounts**, these are nearly flat — a big loan is not, by itself, a ri
 ```{python}
 #| fig-width: 11
 #| fig-height: 4.3
+#| out-width: 90%
 fig, axes = default_rate_by_bin(
     df, ["EMPLOYED_AGE", "CREDIT_GOODS", "DTI"], target="TARGET",
     ncols=3, bins=12, bin_label="rank", grade_scale=BRAND_RAMP, na_as_bin=True,
