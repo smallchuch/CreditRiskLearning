@@ -1,0 +1,6 @@
+# data stays local (re-download from Freddie Mac Clarity)
+data/**
+!data/**/
+!data/**/.gitkeep
+__pycache__/
+.ipynb_checkpoints/
