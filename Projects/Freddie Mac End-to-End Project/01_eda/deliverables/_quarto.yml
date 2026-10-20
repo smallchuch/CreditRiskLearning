@@ -1,0 +1,17 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Quarto deliverables project.  Copy this whole folder into a piece of work
+# (e.g. <project>/deliverables/) and render with `quarto render`.
+#
+# Before every render, _brand.py regenerates the style layers from the brand
+# named in `_environment` (ER_BRAND=…). Swap brands = change that one word.
+# ═══════════════════════════════════════════════════════════════════════════
+project:
+  type: default
+  pre-render: _brand.py
+  render:
+    - "*.qmd"
+
+execute:
+  warning: false
+  message: false
+  freeze: false   # re-run code every render, so charts pick up a brand swap

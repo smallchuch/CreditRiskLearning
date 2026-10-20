@@ -608,7 +608,9 @@ def chart_title(ax, title, subtitle=None):
         fontsize=sizes['title'],
         fontweight='bold',
         color=palette['charcoal'][500],
-        pad=16 if subtitle else 12,
+        # Title sits above the subtitle: gap + one subtitle line + gap, all in
+        # points, so it never collides however short the axes or big the fonts.
+        pad=(6 + sizes['small'] * 1.35 + 5) if subtitle else 12,
         loc='left'
     )
     if subtitle:
@@ -616,8 +618,8 @@ def chart_title(ax, title, subtitle=None):
             subtitle,
             xy=(0, 1),
             xycoords='axes fraction',
-            xytext=(0, 1.02),
-            textcoords='axes fraction',
+            xytext=(0, 6),            # fixed points above the axes (was 2% of axes height)
+            textcoords='offset points',
             fontfamily=fonts['body'],
             fontsize=sizes['small'],
             color=palette['charcoal'][200],

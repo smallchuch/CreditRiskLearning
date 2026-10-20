@@ -1,0 +1,18 @@
+project: freddie-vintage
+title: "Freddie Mac Vintage Analysis"
+snapshot_date: 2026-XX-XX            # last reporting month in the downloaded svcg file
+
+data:
+  source: "Freddie Mac Single-Family Loan-Level Dataset, sample files"
+  years: [2007]                      # add 2006, 2010, 2016 once 2007 works
+  key_orig: loan_id
+  key_svcg: [loan_id, reporting_month]
+
+events:
+  default: "first month at 90+ days delinquent (3+ payments behind)"
+  prepay: "Zero Balance Code 01 before any default"
+  censored: "still active at snapshot_date"
+
+vintage:
+  cohort: origination_quarter        # from loan ID, e.g. F07Q1
+  age_unit: months

@@ -60,7 +60,7 @@ def money(x):
 
 # ------------------------------------------------------------------ hero ---
 theme.hero(
-    "Logistic Reggression Model · PD Model",
+    "Logistic Reggression Model · LightGBM Challenger Model",
     'Applicant <span class="accent">Payment Difficulty</span> Scoring',
     "Enter an applicant and a cash loan to see the scorecard's estimated probability "
     "of payment difficulty. Illustrative portfolio model trained on Kaggle Home Credit data.",
@@ -189,12 +189,8 @@ with result_slot:
             + "</div>" for r in others)
         chal_html = f'<div class="challengers">{chips}</div>'
 
-    # model_line = (f'<b>Champion</b> · {champ["model"]} v{champ["version"]} · '
-    #               f'Test Gini {champ["test_gini"]:.2f} · {champ["calibration"]} · '
-    #               f'{rate:.0%} p.a. illustrative rate · amounts in dataset currency units')
-
     grade = ss.risk_grade(champ["pd"])
-    theme.result_panel(f'{champ["pd"]:.1%}', pill, pill_text, stats, model_line, chal_html,
+    theme.result_panel(f'{champ["pd"]:.1%}', pill, pill_text, stats, chal_html,
                        grade=grade)
 
 show_notes(row)
