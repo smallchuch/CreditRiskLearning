@@ -1,8 +1,13 @@
-"""Shared settings: project paths (via find_repo_root), RAW_DIR = <repo>/Datasets/Freddie Mac Vintage Data (sample_YYYY.zip -> sample_orig_YYYY.txt, sample_perf_YYYY.txt), YEARS = [2006, 2007, 2010, 2016], column names and dtypes, default/prepay code lists, segment band edges, fixed MOBs."""
+"""Shared settings for the Freddie Mac pipeline: data folder paths, column names and dtypes for the
+orig and perf files, and the zero balance code lists that define default, prepayment and censoring."""
 from pathlib import Path
+
+# PATHING
 
 RAW_DIR = Path(r"C:\Dev\CreditRiskLearning\Projects\Freddie Mac End-to-End Project\data\raw")
 INTERIM_DIR = Path(r"C:\Dev\CreditRiskLearning\Projects\Freddie Mac End-to-End Project\data\interim")
+PROCESSED_DIR = Path(r"C:\Dev\CreditRiskLearning\Projects\Freddie Mac End-to-End Project\data\processed")
+# COLUMNS HEADERS
 
 ORIG_COLS = [
         "credit_score",                  # 1  Classic FICO
@@ -157,3 +162,10 @@ PERF_KEEP = [
         "zero_balance_code",
         "zero_balance_date",
     ]
+
+
+# EVENT_CODES  - building loan table
+
+DEFAULT_ZBC = ['02', '03', '09', '15']
+PREPAY_ZBC  = ['01']
+CENSOR_ZBC  = ['16', '96']
