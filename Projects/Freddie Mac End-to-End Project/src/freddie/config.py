@@ -4,9 +4,14 @@ from pathlib import Path
 
 # PATHING
 
-RAW_DIR = Path(r"C:\Dev\CreditRiskLearning\Projects\Freddie Mac End-to-End Project\data\raw")
-INTERIM_DIR = Path(r"C:\Dev\CreditRiskLearning\Projects\Freddie Mac End-to-End Project\data\interim")
-PROCESSED_DIR = Path(r"C:\Dev\CreditRiskLearning\Projects\Freddie Mac End-to-End Project\data\processed")
+# Project root found from this file's location (src/freddie/config.py -> parents[2]),
+# so the same code runs on any machine or drive (PC E:, laptop C:).
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+RAW_DIR = PROJECT_ROOT / "data" / "raw"
+INTERIM_DIR = PROJECT_ROOT / "data" / "interim"
+PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
+
 # COLUMNS HEADERS
 
 ORIG_COLS = [

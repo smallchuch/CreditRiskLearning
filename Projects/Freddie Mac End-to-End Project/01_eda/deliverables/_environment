@@ -1,3 +1,0 @@
-# Which brand kit every deck/report in this folder uses (charts AND slides).
-# Options: python -m er_toolkit.brand list
-ER_BRAND=personal
