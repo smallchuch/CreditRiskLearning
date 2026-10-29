@@ -1,0 +1,337 @@
+---
+# Written by AI, 2026-10-27. Built from Core Resources/report-templates.
+# Render from this folder:   quarto render pd_recommendations.qmd --to revealjs
+# Numbers come from files, not typed in:
+#   grade results  -> 05_Applicant_PD_Dashboard/config/risk_grades.json (test_set_check)
+#   personas       -> ../personas.json, scored live with pd_app (needs the dashboard venv)
+title: "From Scores to Lending Decisions"
+subtitle: "Applicant PD scorecard · risk grades, cut-off options and operating rules"
+author: "Chuch"
+date: today
+date-format: "MMMM YYYY"
+format:
+  revealjs:
+    theme: [default, brand.scss]
+    slide-number: c/t
+    transition: fade
+    transition-speed: fast
+    width: 1280
+    height: 720
+    center: false
+    margin: 0
+    menu: false
+    progress: false
+    auto-stretch: false
+    fig-align: center
+    echo: false
+    embed-resources: true
+    footer: "Flagship PD Model · Home Credit data · illustrative portfolio model"
+title-slide-attributes:
+    data-background-color: "#3D2E4F"
+    data-background-gradient: "radial-gradient(120% 135% at 12% 4%, #5C4577 0%, #3D2E4F 52%, #2C2039 100%)"
+execute:
+  warning: false
+  message: false
+jupyter: python3
+---
+
+```{python}
+#| label: setup
+#| include: false
+import os, sys, json, warnings
+warnings.filterwarnings("ignore")
+import numpy as np, pandas as pd
+import matplotlib.pyplot as plt
+
+def find_repo_root(start, name="CreditRiskLearning"):
+    p_ = os.path.abspath(start)
+    while True:
+        if os.path.basename(p_) == name:
+            return p_
+        parent = os.path.dirname(p_)
+        if parent == p_:
+            raise FileNotFoundError(name)
+        p_ = parent
+
+REPO = find_repo_root(os.getcwd())
+sys.path.append(os.path.join(REPO, "Core Resources"))
+sys.path.append(os.path.join(REPO, "Core Resources", "Scripts"))
+
+from python_style_util import p, f, s, C, chart_title
+from deck_utils import deck_style, add_baseline
+PAL = deck_style()
+
+PROJECT = os.path.join(REPO, "Projects", "Flagship PD Model Project")
+DASH = os.path.join(PROJECT, "05_Applicant_PD_Dashboard")
+HERE_04 = os.path.join(PROJECT, "04_Final_Results_and_Reccomendations")
+
+# ---- Grade results on the in-policy test set ----
+rg = json.load(open(os.path.join(DASH, "config", "risk_grades.json")))
+chk = rg["test_set_check"]
+grades = pd.DataFrame({
+    "grade": [g["grade"] for g in rg["grades"]],
+    "label": [g["label"] for g in rg["grades"]],
+    "pd_min": [g["pd_min"] for g in rg["grades"]],
+    "pd_max": [g["pd_max"] for g in rg["grades"]],
+    "share": chk["share"],
+    "avg_pd": chk["avg_pd"],
+    "actual": chk["actual_rate"],
+})
+grades["defaults"] = grades["share"] * grades["actual"]          # defaults per applicant
+BASE = grades["defaults"].sum()                                  # in-policy test default rate
+grades["default_share"] = grades["defaults"] / BASE
+N_TEST = 50_349
+
+# ---- Cut-off options: approve Grade 1 up to Grade k ----
+rows = []
+for k in range(5, 0, -1):
+    kept = grades[grades["grade"] <= k]
+    appr = kept["share"].sum()
+    bad = kept["defaults"].sum() / appr
+    avoided = 1 - kept["defaults"].sum() / BASE
+    name = "Approve all" if k == 5 else (f"Decline Grade {k + 1}" if k == 4 else f"Decline Grades {k + 1} to 5")
+    rows.append(dict(policy=name, k=k, approval=appr, bad_rate=bad, avoided=avoided))
+cutoffs = pd.DataFrame(rows)
+
+# ---- Personas, scored live with the dashboard's own pipeline ----
+personas = json.load(open(os.path.join(HERE_04, "personas.json")))["personas"]
+sys.path.append(os.path.join(DASH, "pd_app"))
+try:
+    import shared_stage as ss
+    import scorecard
+    for per in personas:
+        row = ss.engineer(per["form"])
+        per["pd"] = scorecard.score(row)["pd"]
+        per["grade"] = ss.risk_grade(per["pd"])["grade"]
+    SCORED = True
+except Exception as e:                       # deck still renders without the model
+    SCORED, SCORE_ERR = False, repr(e)
+    for per in personas:
+        per["pd"], per["grade"] = np.nan, per["target_grade"]
+
+def pct(x, d=1):
+    return "n/a" if pd.isna(x) else f"{x:.{d}%}"
+
+g5 = cutoffs[cutoffs["k"] == 4].iloc[0]
+g45 = cutoffs[cutoffs["k"] == 3].iloc[0]
+```
+
+## The short version {.hero data-kick="Executive summary"}
+
+::: {.hero-wrap}
+::: {.hero-col}
+<div class="hero-num">`{python} pct(grades.loc[4, "default_share"], 0)`<small>of all defaults sit in the riskiest 11% of applicants</small></div>
+:::
+
+::: {.hero-col}
+The scorecard sorts applicants into **five risk grades** that hold up on unseen data.
+
+- **Decline Grade 5:** approve `{python} pct(g5.approval, 0)` of applicants, default rate falls from `{python} pct(BASE)` to `{python} pct(g5.bad_rate)`
+- **Refer Grade 4** to a senior assessor with tighter conditions
+- **Fast-track Grades 1 and 2**, almost half of all applicants
+:::
+:::
+
+::: {.takeaway}
+Recommendation: decline Grade 5, refer Grade 4, and set a profit-based cut-off once loss and margin data are available.
+:::
+
+## What the model does {data-kick="The model"}
+
+:::: {.columns}
+::: {.column width="55%"}
+**The question:** how likely is this applicant to have difficulty repaying?
+
+- Logistic regression scorecard, **12 application-time fields** (credit scores, job tenure, loan-to-price, repayment size, occupation, education, area)
+- Trained on **246,000** Home Credit loans, tested on **61,500** it never saw
+- Output: an *estimated probability of payment difficulty* (PD), mapped to Grades 1 to 5
+:::
+
+::: {.column width="45%"}
+**How good is it?**
+
+- Test **Gini 0.49** (0 = coin toss, 1 = perfect)
+- Train and test Gini within 0.003: **no overfitting**
+- Default rate rises in every PD decile: **ranking holds**
+:::
+::::
+
+::: {.caveat}
+Gender is excluded by design (responsible lending). The target is a payment-difficulty flag, not a Basel 90+ days default.
+:::
+
+## The grades separate risk cleanly {data-kick="Evidence · grades"}
+
+```{python}
+#| fig-width: 11
+#| fig-height: 4.4
+fig, ax = plt.subplots(figsize=(11, 4.4))
+x = np.arange(5)
+cols = [PAL.ramp(v) for v in np.linspace(0.15, 0.95, 5)]
+bars = ax.bar(x, grades["actual"], color=cols, edgecolor="white", linewidth=1, width=0.62,
+              label="Actual default rate")
+ax.scatter(x, grades["avg_pd"], color=C.text, zorder=3, s=40, marker="D", label="Average predicted PD")
+ax.bar_label(bars, labels=[pct(v) for v in grades["actual"]], padding=4,
+             fontfamily=f("mono"), fontsize=12, color=C.text)
+ax.set_xticks(x, [f"Grade {g}\n{l}" for g, l in zip(grades["grade"], grades["label"])])
+ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda v, _: f"{v:.0%}"))
+add_baseline([ax], BASE)
+chart_title(ax, f"Actual default rate by grade, {N_TEST:,} in-policy test applicants")
+ax.legend(loc="upper left", frameon=False); ax.margins(y=0.15)
+plt.show()
+```
+
+::: {.takeaway}
+Each grade defaults more than the one before, from about 2% to about 27%, and predicted PD tracks the actual rate within 0.5 pp in every grade.
+:::
+
+## Where the defaults sit {data-kick="Evidence · concentration"}
+
+```{python}
+#| fig-width: 11
+#| fig-height: 4.4
+fig, ax = plt.subplots(figsize=(11, 4.4))
+w = 0.38
+b1 = ax.bar(x - w/2, grades["share"], w, color=PAL.primary_lt, label="Share of applicants")
+b2 = ax.bar(x + w/2, grades["default_share"], w, color=PAL.primary, label="Share of defaults")
+for b in (b1, b2):
+    ax.bar_label(b, labels=[pct(v, 0) for v in b.datavalues], padding=3,
+                 fontfamily=f("mono"), fontsize=11, color=C.text)
+ax.set_xticks(x, [f"Grade {g}" for g in grades["grade"]])
+ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda v, _: f"{v:.0%}"))
+chart_title(ax, "Applicants versus defaults, by grade")
+ax.legend(loc="upper left", frameon=False); ax.margins(y=0.15)
+plt.show()
+```
+
+::: {.takeaway}
+Grades 4 and 5 are `{python} pct(grades.loc[3:4, "share"].sum(), 0)` of applicants but `{python} pct(grades.loc[3:4, "default_share"].sum(), 0)` of defaults. That concentration is what makes a cut-off worthwhile.
+:::
+
+## Cut-off options {data-kick="Decision · cut-off"}
+
+:::: {.columns}
+::: {.column width="52%"}
+```{python}
+#| output: asis
+t = cutoffs.copy()
+print("| Policy | Approval rate | Defaults avoided | Default rate of approved |")
+print("|---|---|---|---|")
+for _, r in t.iterrows():
+    print(f"| {r.policy} | {pct(r.approval, 0)} | {pct(r.avoided, 0)} | {pct(r.bad_rate)} |")
+```
+:::
+
+::: {.column width="48%"}
+```{python}
+#| fig-width: 6
+#| fig-height: 4.6
+fig, ax = plt.subplots(figsize=(6, 4.6))
+ax.plot(cutoffs["approval"], cutoffs["bad_rate"], marker="o", color=PAL.primary, lw=2.5)
+for _, r in cutoffs.iterrows():
+    ax.annotate(r.policy.replace("Decline ", "Decl. "), (r.approval, r.bad_rate),
+                textcoords="offset points", xytext=(6, 6), fontsize=10, color=C.text)
+ax.xaxis.set_major_formatter(plt.FuncFormatter(lambda v, _: f"{v:.0%}"))
+ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda v, _: f"{v:.0%}"))
+ax.set_xlabel("Approval rate"); ax.set_ylabel("Default rate of approved")
+chart_title(ax, "The trade-off curve")
+ax.margins(x=0.12, y=0.15)
+plt.show()
+```
+:::
+::::
+
+::: {.caveat}
+This shows the trade-off, not the optimum. Choosing the cut-off properly needs loss given default and margin by grade, which this dataset does not have.
+:::
+
+## Five applicants, one per grade {data-kick="Personas"}
+
+```{python}
+#| output: asis
+print("| | Applicant | Profile | Credit score | Loan / price | PD | Grade |")
+print("|---|---|---|---|---|---|---|")
+for per in personas:
+    fm = per["form"]
+    prof = (f"{fm['age']}, {fm['occupation'].lower()}, {fm['employment_years']:g} yrs in job, "
+            f"{fm['education'].lower()}, area {fm['area_rating']}")
+    flag = "" if per["grade"] == per["target_grade"] else " (target " + str(per["target_grade"]) + ")"
+    print(f"| G{per['target_grade']} | **{per['name']}** | {prof} | {fm['ext_1_band']} | "
+          f"{fm['loan_amount'] / fm['goods_price']:.2f} | {pct(per['pd'])} | {per['grade']}{flag} |")
+if not SCORED:
+    print("\n*Personas not scored at render time: run from the dashboard venv. Grades shown are targets.*")
+```
+
+::: {.takeaway}
+Same loan for all five (500,000 over 36 months). Only the applicant changes, and the credit score does most of the work.
+:::
+
+## How each grade is handled {data-kick="Decision · operating rules"}
+
+| Grade | Example | Decision path | Approval authority | Checks | Pricing | After funding |
+|---|---|---|---|---|---|---|
+| 1 | Steady Professional | Auto-approve, same day | Lowest level | Light | Best rate | Standard |
+| 2 | Established Worker | Approve | Standard | Standard | Standard | Standard |
+| 3 | Thin-Margin Earner | Approve with conditions | Standard | Full income verification | Small loading | Standard |
+| 4 | Early-Career Stretch | Refer to senior assessor | Senior | Full, lower loan-to-price cap | Risk-based loading | Early contact on a missed payment |
+| 5 | Fragile Applicant | Decline, or refer with deposit | Credit manager | Full | n/a | n/a |
+
+::: {.takeaway}
+Effort follows risk: almost half the book moves faster, and assessor time goes to the grades where defaults sit.
+:::
+
+## Recommendations {data-kick="Recommendations"}
+
+1. **Adopt the five-grade scale** for application decisions. It ranks risk on unseen data and is simple to explain to assessors.
+2. **Decline Grade 5** (or require a deposit and senior approval). This removes about a third of defaults for an 11% fall in approvals.
+3. **Refer Grade 4** with a lower loan-to-price cap and risk-based pricing rather than declining it outright.
+4. **Fast-track Grades 1 and 2** to cut turnaround for about half of applicants.
+5. **Monitor monthly**: grade mix, actual default rate per grade, and population stability. Re-check the cut-off if Grade 5 moves away from 11% of applicants.
+
+## Limits of this analysis {data-kick="Caveats"}
+
+- **Approved applicants only.** The model never saw declined applicants (no reject inference), so true risk in Grades 4 and 5 may be higher.
+- **Payment-difficulty target**, not a Basel default, so PDs are not regulatory PDs.
+- **No loss or margin data**, so the cut-off is a trade-off, not a profit optimum.
+- **Not calibrated**: grade averages line up on test, but PDs have not been formally calibrated.
+- **Anonymised inputs**: credit scores, area rating and amounts are Home Credit values, translated for the dashboard.
+
+::: {.caveat}
+Illustrative portfolio model on public Kaggle data. Not a production lending model.
+:::
+
+## Next steps {data-kick="Next steps"}
+
+- **Challenger:** LightGBM on the same 12 fields to measure how much signal the scorecard leaves on the table
+- **Calibration** by grade and a population stability check
+- **Monotonic binning** to remove the two known risk spikes (450,000 purchase price, 24-month term)
+- **Profit-based cut-off** once loss given default and margin are available
+- **Live dashboard:** every persona above can be scored in the app
+
+## {.closing}
+
+<div class="rule"></div>
+<div class="lead">Decline Grade 5, refer Grade 4, fast-track Grades 1 and 2.</div>
+<div class="sub">A five-grade scale that ranks risk on unseen data, and a cut-off the business can <em>choose</em>.</div>
+<div class="tag">Flagship PD Model · Home Credit data · CreditRiskLearning</div>
+
+```{=html}
+<script>
+window.addEventListener('load', () => {
+  const t = document.getElementById('title-slide');
+  if (t && !t.querySelector('.cover-meta')) {
+    const head = document.createElement('div');
+    head.className = 'cover-head';
+    head.innerHTML = '<div class="cover-kick">04 &nbsp;·&nbsp; Results and Recommendations</div><div class="cover-rule"></div>';
+    t.insertBefore(head, t.firstChild);
+    const d = document.createElement('div');
+    d.className = 'cover-meta';
+    d.innerHTML = `
+      <div class="cm"><span class="cm-n">0.49</span><span class="cm-l">Test Gini</span></div>
+      <div class="cm"><span class="cm-n">5</span><span class="cm-l">Risk grades</span></div>
+      <div class="cm"><span class="cm-n">50,349</span><span class="cm-l">Test applicants</span></div>`;
+    t.appendChild(d);
+  }
+});
+</script>
+```

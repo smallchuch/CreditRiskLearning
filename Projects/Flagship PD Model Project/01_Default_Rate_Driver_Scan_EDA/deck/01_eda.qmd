@@ -1,7 +1,7 @@
 ---
 title: "Default-Rate Driver Scan"
 subtitle: Dataset · [Home Credit Default Risk Competition](https://www.kaggle.com/competitions/home-credit-default-risk)
-author: "Autho: Evan Reynolds"
+author: "Author: Evan Reynolds"
 format:
   revealjs:
     theme: [default, brand.scss]
