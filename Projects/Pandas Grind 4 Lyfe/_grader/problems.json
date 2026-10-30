@@ -1,0 +1,2240 @@
+{
+ "built": "2026-10-30 16:34",
+ "problems": [
+  {
+   "qid": "01_python_basics/q01",
+   "concept": "01_python_basics",
+   "level": 1,
+   "order": false,
+   "tol": 0.011,
+   "text": "Total original lending across all loans, as a **string** formatted like `$12,345,678` (dollar sign, thousands\ncommas, no decimals). Return the string.",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "01_python_basics/q02",
+   "concept": "01_python_basics",
+   "level": 1,
+   "order": true,
+   "tol": 0.011,
+   "text": "The distinct `channel` values on `loan`, in alphabetical order, as a plain Python **list**.",
+   "rows": 4,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "01_python_basics/q03",
+   "concept": "01_python_basics",
+   "level": 1,
+   "order": false,
+   "tol": 0.011,
+   "text": "A **dict** mapping `product_id` to `product_name` for every product. Return the dict (it is graded as key, value pairs).",
+   "rows": 15,
+   "cols": [
+    "key",
+    "value"
+   ],
+   "tables": [
+    "dim_product"
+   ]
+  },
+  {
+   "qid": "01_python_basics/q04",
+   "concept": "01_python_basics",
+   "level": 1,
+   "order": false,
+   "tol": 0.011,
+   "text": "The number of loans originated in each calendar year, as a dict `{year: loans}` built **with a loop**\n(no groupby). Years are ints.",
+   "rows": 8,
+   "cols": [
+    "key",
+    "value"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "01_python_basics/q05",
+   "concept": "01_python_basics",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Rank the channels by number of loans (most first) and return a **list of strings** like `'1. Broker (35,570)'`.",
+   "rows": 4,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "01_python_basics/q06",
+   "concept": "01_python_basics",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Each rule below is `name: (column, threshold)`. Loop over the dict and count the loans where the column is\n**strictly above** the threshold. Return `rule`, `loans`; sorted by `rule`.\n\n```python\nrules = {\n    'big_loan':  ('original_amount', 1_000_000),\n    'high_lvr':  ('lvr_at_origination_pct', 90),\n    'high_rate': ('interest_rate_at_origination_pct', 7),\n}\n```",
+   "rows": 3,
+   "cols": [
+    "rule",
+    "loans"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "01_python_basics/q07",
+   "concept": "01_python_basics",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Write a function `pct_above(series, cut)` that returns the **percentage** of values strictly above `cut`\n(ignore missing values in the denominator). Use it for `lvr_at_origination_pct` at cuts 60, 70, 80, 90 and 95.\nReturn `cut`, `pct` (rounded to 2 dp); sorted by `cut`.",
+   "rows": 5,
+   "cols": [
+    "cut",
+    "pct"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "01_python_basics/q08",
+   "concept": "01_python_basics",
+   "level": 3,
+   "order": true,
+   "tol": 0.011,
+   "text": "Build a nested dict `{purpose: {'loans': n, 'avg_amount': mean}}` with a loop over the purposes, then turn it\ninto a table. Return `purpose`, `loans`, `avg_amount` (rounded to 0 dp); sorted by `purpose`.",
+   "rows": 6,
+   "cols": [
+    "purpose",
+    "loans",
+    "avg_amount"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "02_numpy/q01",
+   "concept": "02_numpy",
+   "level": 1,
+   "order": false,
+   "tol": 0.011,
+   "text": "Mean `original_amount` across all loans, computed with **NumPy** on the underlying array (`.to_numpy()`), rounded to 0 dp.",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "02_numpy/q02",
+   "concept": "02_numpy",
+   "level": 1,
+   "order": false,
+   "tol": 0.011,
+   "text": "How many loans have `lvr_at_origination_pct` strictly above 80? Use a boolean mask and `.sum()`.",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "02_numpy/q03",
+   "concept": "02_numpy",
+   "level": 1,
+   "order": true,
+   "tol": 0.011,
+   "text": "Label each loan `'High LVR'` if `lvr_at_origination_pct` > 80, else `'Standard'` (use `np.where`).\nReturn `label`, `loans`; sorted by `label`.",
+   "rows": 2,
+   "cols": [
+    "label",
+    "loans"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "02_numpy/q04",
+   "concept": "02_numpy",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "The 10th, 50th and 90th percentiles of `original_amount` (`np.percentile`), as a list of three numbers\nrounded to 0 dp, in that order.",
+   "rows": 3,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "02_numpy/q05",
+   "concept": "02_numpy",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "On `bureau`, compare the average `bureau_score` of reports **with** at least one default listing\n(`default_listings > 0`) against those **without**. Thin files (missing score) are excluded.\nReturn `group` (`'listed'` / `'clean'`) and `avg_score` rounded to 1 dp; sorted by `group`.",
+   "rows": 2,
+   "cols": [
+    "group",
+    "avg_score"
+   ],
+   "tables": [
+    "credit_bureau_report"
+   ]
+  },
+  {
+   "qid": "02_numpy/q06",
+   "concept": "02_numpy",
+   "level": 2,
+   "order": false,
+   "tol": 0.011,
+   "text": "For `loan_id` 1664 (a variable-rate loan from 2019), take its `interest_rate_pct` month by month (`snap`, ordered by `snapshot_date`).\nHow many month-to-month steps were **rate rises**? Use `np.diff` and `np.sign`.",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan_monthly_snapshot"
+   ]
+  },
+  {
+   "qid": "02_numpy/q07",
+   "concept": "02_numpy",
+   "level": 2,
+   "order": false,
+   "tol": 0.0011,
+   "text": "Balance-weighted average `interest_rate_pct` of the **live book** at 2025-12-31 (`snapshot_date` = 2025-12-31\nand `loan_status` not `'Closed'`), weights = `closing_balance`. Use `np.average`. Round to 3 dp.",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan_monthly_snapshot"
+   ]
+  },
+  {
+   "qid": "02_numpy/q08",
+   "concept": "02_numpy",
+   "level": 3,
+   "order": true,
+   "tol": 0.011,
+   "text": "Put every live loan at 2025-12-31 into a tier with `np.select` on `days_past_due`:\n0 = `'Current'`, 1-29 = `'Early'`, 30-89 = `'Late'`, 90+ = `'Default'`.\nReturn `tier`, `loans`; sorted by `tier`.",
+   "rows": 4,
+   "cols": [
+    "tier",
+    "loans"
+   ],
+   "tables": [
+    "loan_monthly_snapshot"
+   ]
+  },
+  {
+   "qid": "03_selection/q01",
+   "concept": "03_selection",
+   "level": 1,
+   "order": true,
+   "tol": 0.011,
+   "text": "The 5 largest loans by `original_amount`: return `loan_id`, `original_amount`; sorted by amount (largest\nfirst), then `loan_id`.",
+   "rows": 5,
+   "cols": [
+    "loan_id",
+    "original_amount"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "03_selection/q02",
+   "concept": "03_selection",
+   "level": 1,
+   "order": false,
+   "tol": 0.011,
+   "text": "How many loans came through the `'Digital'` or `'Mobile Lender'` channels? (`isin`)",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "03_selection/q03",
+   "concept": "03_selection",
+   "level": 1,
+   "order": true,
+   "tol": 0.011,
+   "text": "Share of loans by `rate_type`, as a percentage rounded to 2 dp. Return `rate_type`, `pct`; sorted by `rate_type`.",
+   "rows": 2,
+   "cols": [
+    "rate_type",
+    "pct"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "03_selection/q04",
+   "concept": "03_selection",
+   "level": 1,
+   "order": false,
+   "tol": 0.011,
+   "text": "How many loans have `lvr_at_origination_pct` between 80 and 90 **inclusive**? (`between`)",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "03_selection/q05",
+   "concept": "03_selection",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Active loans (`loan_status == 'Active'`) with `lvr_at_origination_pct` above 98. Return `loan_id`,\n`lvr_at_origination_pct`; sorted by `loan_id`.",
+   "rows": 209,
+   "cols": [
+    "loan_id",
+    "lvr_at_origination_pct"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "03_selection/q06",
+   "concept": "03_selection",
+   "level": 2,
+   "order": false,
+   "tol": 0.011,
+   "text": "Sort `loan` by `original_amount` (largest first), then `loan_id`. What is the `loan_id` of the **100th** row (position 99)?",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "03_selection/q07",
+   "concept": "03_selection",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Products whose `product_name` contains the word `'Fixed'`. Return `product_id`, `product_name`, `fixed_term_months`;\nsorted by `product_id`.",
+   "rows": 5,
+   "cols": [
+    "product_id",
+    "product_name",
+    "fixed_term_months"
+   ],
+   "tables": [
+    "dim_product"
+   ]
+  },
+  {
+   "qid": "03_selection/q08",
+   "concept": "03_selection",
+   "level": 3,
+   "order": true,
+   "tol": 0.011,
+   "text": "Among **Variable**-rate loans originated in **2025**, the 10 with the highest `interest_rate_at_origination_pct`.\nReturn `loan_id`, `interest_rate_at_origination_pct`; sorted by rate (highest first), then `loan_id`.",
+   "rows": 10,
+   "cols": [
+    "loan_id",
+    "interest_rate_at_origination_pct"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "04_index_alignment/q01",
+   "concept": "04_index_alignment",
+   "level": 1,
+   "order": false,
+   "tol": 0.011,
+   "text": "Using `set_index('loan_id')` and `.loc`, return the `original_amount` of loan 12345.",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "04_index_alignment/q02",
+   "concept": "04_index_alignment",
+   "level": 1,
+   "order": true,
+   "tol": 0.011,
+   "text": "Loans per channel as a DataFrame with **columns** `channel`, `loans` (not an index). Sorted by `channel`.",
+   "rows": 4,
+   "cols": [
+    "channel",
+    "loans"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "04_index_alignment/q03",
+   "concept": "04_index_alignment",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Let `a` = loans per `purpose` originated in 2024 and `b` = the same for 2025. Return `b - a` by purpose,\ntreating a purpose missing from one year as 0. Return `purpose`, `change`; sorted by `purpose`.",
+   "rows": 6,
+   "cols": [
+    "purpose",
+    "change"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "04_index_alignment/q04",
+   "concept": "04_index_alignment",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Share of loans that are `'Closed'`, by channel, computed by **dividing two Series** (closed count / all\ncount) and letting pandas align them. Percentage rounded to 2 dp. Return `channel`, `pct_closed`; sorted by `channel`.",
+   "rows": 4,
+   "cols": [
+    "channel",
+    "pct_closed"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "04_index_alignment/q05",
+   "concept": "04_index_alignment",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Put loans per `purpose` for 2024 and 2025 **side by side** with `pd.concat(..., axis=1)`: columns\n`purpose`, `n_2024`, `n_2025`, missing counts as 0. Sorted by `purpose`.",
+   "rows": 6,
+   "cols": [
+    "purpose",
+    "n_2024",
+    "n_2025"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "04_index_alignment/q06",
+   "concept": "04_index_alignment",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Add each loan's `product_name` with `.map` (a Series from `dim_product` used as a lookup), then count loans per\nproduct name. Return `product_name`, `loans`; sorted by `loans` (most first), then `product_name`.",
+   "rows": 15,
+   "cols": [
+    "product_name",
+    "loans"
+   ],
+   "tables": [
+    "loan",
+    "dim_product"
+   ]
+  },
+  {
+   "qid": "04_index_alignment/q07",
+   "concept": "04_index_alignment",
+   "level": 3,
+   "order": true,
+   "tol": 0.011,
+   "text": "Count loans by `rate_type` and `channel` (a two-level index), then select just the `'Fixed'` part with `.loc`.\nReturn `channel`, `loans`; sorted by `channel`.",
+   "rows": 4,
+   "cols": [
+    "channel",
+    "loans"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "04_index_alignment/q08",
+   "concept": "04_index_alignment",
+   "level": 3,
+   "order": true,
+   "tol": 0.011,
+   "text": "New loans per calendar month of **2023** for the `'Construction'` purpose. Every month 1 to 12 must appear,\nwith 0 where there were none (`reindex`). Return `month`, `loans`; sorted by `month`.",
+   "rows": 12,
+   "cols": [
+    "month",
+    "loans"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "05_missing_strings/q01",
+   "concept": "05_missing_strings",
+   "level": 1,
+   "order": true,
+   "tol": 0.011,
+   "text": "Which columns of `loan` have missing values, and how many? Return `column`, `n_missing` for columns with at\nleast one missing value; sorted by `column`.",
+   "rows": 9,
+   "cols": [
+    "column",
+    "n_missing"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "05_missing_strings/q02",
+   "concept": "05_missing_strings",
+   "level": 1,
+   "order": false,
+   "tol": 0.011,
+   "text": "How many bureau reports are thin files (missing `bureau_score`)?",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "credit_bureau_report"
+   ]
+  },
+  {
+   "qid": "05_missing_strings/q03",
+   "concept": "05_missing_strings",
+   "level": 1,
+   "order": false,
+   "tol": 0.011,
+   "text": "The thin-file trap. Return two numbers in one row: the mean `bureau_score` **ignoring** thin files, and the\nmean if thin files were (wrongly) filled with 0. Both rounded to 1 dp; columns `mean_skip`, `mean_zero`.",
+   "rows": 1,
+   "cols": [
+    "mean_skip",
+    "mean_zero"
+   ],
+   "tables": [
+    "credit_bureau_report"
+   ]
+  },
+  {
+   "qid": "05_missing_strings/q04",
+   "concept": "05_missing_strings",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "`customer['state']` is written many ways (`'S.A.'`, `'sa'`, `'South Australia'`, `'ACT '` ...). Clean it to the\neight codes `ACT NSW NT QLD SA TAS VIC WA` and count customers per state. Return `state`, `customers`; sorted by `state`.",
+   "rows": 8,
+   "cols": [
+    "state",
+    "customers"
+   ],
+   "tables": [
+    "customer"
+   ]
+  },
+  {
+   "qid": "05_missing_strings/q05",
+   "concept": "05_missing_strings",
+   "level": 2,
+   "order": false,
+   "tol": 0.011,
+   "text": "Each customer's age in **whole years** (rounded down) at 2025-12-31, from `date_of_birth`. Customers without a\ndate of birth are left out. Return the average age, rounded to 1 dp.",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "customer"
+   ]
+  },
+  {
+   "qid": "05_missing_strings/q06",
+   "concept": "05_missing_strings",
+   "level": 2,
+   "order": false,
+   "tol": 0.011,
+   "text": "On `applicant_income`, use the verified amount where there is one and the declared amount otherwise\n(`fillna` from another column). Return the total annual income across all lines, rounded to 0 dp.",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "applicant_income"
+   ]
+  },
+  {
+   "qid": "05_missing_strings/q07",
+   "concept": "05_missing_strings",
+   "level": 2,
+   "order": false,
+   "tol": 0.011,
+   "text": "Duplicate customers: the same person (first name, last name and date of birth, ignoring case and spaces)\nunder more than one `customer_id`. Customers with no date of birth are left out. How many **extra** records\nare there (rows minus distinct people)?",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "customer"
+   ]
+  },
+  {
+   "qid": "05_missing_strings/q08",
+   "concept": "05_missing_strings",
+   "level": 2,
+   "order": false,
+   "tol": 0.011,
+   "text": "Mobile numbers come in mixed formats (`'0412345678'`, `'+61 412 345 678'`, `'0412 345 678'` ...). Normalise each\nto 10 digits starting `04` (remove spaces, turn a leading `+61` into `0`). How many customers' numbers were\n**not** already in that clean form?",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "customer"
+   ]
+  },
+  {
+   "qid": "05_missing_strings/q09",
+   "concept": "05_missing_strings",
+   "level": 3,
+   "order": false,
+   "tol": 0.00011,
+   "text": "A few `loan_rate_history` rates were keyed as fractions (`0.0629` instead of `6.29`). Find them (rate below 1),\nfix them by multiplying by 100, and return one row: `n_fixed`, `mean_before`, `mean_after` (means rounded to 4 dp).",
+   "rows": 1,
+   "cols": [
+    "n_fixed",
+    "mean_before",
+    "mean_after"
+   ],
+   "tables": [
+    "loan_rate_history"
+   ]
+  },
+  {
+   "qid": "06_groupby/q01",
+   "concept": "06_groupby",
+   "level": 1,
+   "order": true,
+   "tol": 0.011,
+   "text": "Number of loans per `purpose`. Return `purpose`, `loans`; sorted by `loans` (most first), then `purpose`.",
+   "rows": 6,
+   "cols": [
+    "purpose",
+    "loans"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "06_groupby/q02",
+   "concept": "06_groupby",
+   "level": 1,
+   "order": true,
+   "tol": 0.011,
+   "text": "Average `original_amount` per `channel`, rounded to 0 dp. Return `channel`, `avg_amount`; sorted by `channel`.",
+   "rows": 4,
+   "cols": [
+    "channel",
+    "avg_amount"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "06_groupby/q03",
+   "concept": "06_groupby",
+   "level": 1,
+   "order": true,
+   "tol": 0.011,
+   "text": "Per `rate_type`, with named aggregation: `loans` (count), `total_amount` (sum of `original_amount`, rounded to 0 dp)\nand `avg_lvr` (mean `lvr_at_origination_pct`, rounded to 2 dp). Return `rate_type`, `loans`, `total_amount`, `avg_lvr`;\nsorted by `rate_type`.",
+   "rows": 2,
+   "cols": [
+    "rate_type",
+    "loans",
+    "total_amount",
+    "avg_lvr"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "06_groupby/q04",
+   "concept": "06_groupby",
+   "level": 2,
+   "order": true,
+   "tol": 0.0011,
+   "text": "Live book at 2025-12-31 (`snapshot_date` = 2025-12-31, `loan_status` not `'Closed'`): the **balance-weighted**\naverage `interest_rate_pct` per `repayment_type`, rounded to 3 dp. Return `repayment_type`, `wavg_rate`; sorted by `repayment_type`.",
+   "rows": 2,
+   "cols": [
+    "repayment_type",
+    "wavg_rate"
+   ],
+   "tables": [
+    "loan_monthly_snapshot"
+   ]
+  },
+  {
+   "qid": "06_groupby/q05",
+   "concept": "06_groupby",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Loans per origination year and `rate_type`. Return `year`, `rate_type`, `loans`; sorted by `year`, `rate_type`.",
+   "rows": 16,
+   "cols": [
+    "year",
+    "rate_type",
+    "loans"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "06_groupby/q06",
+   "concept": "06_groupby",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "For each loan, compare `original_amount` with the **average for its channel** (`transform`). Per channel, how many\nloans are above their channel average? Return `channel`, `above_avg`; sorted by `channel`.",
+   "rows": 4,
+   "cols": [
+    "channel",
+    "above_avg"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "06_groupby/q07",
+   "concept": "06_groupby",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Brokers (`broker_id`, broker-channel loans) that wrote **more than 250** loans. Return `broker_id` (as an int),\n`loans`; sorted by `loans` (most first), then `broker_id`.",
+   "rows": 23,
+   "cols": [
+    "broker_id",
+    "loans"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "06_groupby/q08",
+   "concept": "06_groupby",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "`size()` vs `count()`: per channel, the number of rows and the number with a `branch_id`. Return `channel`, `rows`,\n`with_branch`; sorted by `channel`.",
+   "rows": 4,
+   "cols": [
+    "channel",
+    "rows",
+    "with_branch"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "06_groupby/q09",
+   "concept": "06_groupby",
+   "level": 3,
+   "order": true,
+   "tol": 0.011,
+   "text": "The single largest loan in each `purpose` (ties: smaller `loan_id` wins). Return `purpose`, `loan_id`,\n`original_amount`; sorted by `purpose`.",
+   "rows": 6,
+   "cols": [
+    "purpose",
+    "loan_id",
+    "original_amount"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "06_groupby/q10",
+   "concept": "06_groupby",
+   "level": 3,
+   "order": true,
+   "tol": 0.011,
+   "text": "On `app`, among applications that have a `decision`, the approval rate per `channel` as a percentage\nrounded to 2 dp. Return `channel`, `approval_pct`; sorted by `channel`.",
+   "rows": 4,
+   "cols": [
+    "channel",
+    "approval_pct"
+   ],
+   "tables": [
+    "loan_application"
+   ]
+  },
+  {
+   "qid": "07_merge/q01",
+   "concept": "07_merge",
+   "level": 1,
+   "order": true,
+   "tol": 0.011,
+   "text": "Bring `occupancy` from `dim_product` onto `loan` and count loans per occupancy. Return `occupancy`, `loans`;\nsorted by `occupancy`.",
+   "rows": 2,
+   "cols": [
+    "occupancy",
+    "loans"
+   ],
+   "tables": [
+    "loan",
+    "dim_product"
+   ]
+  },
+  {
+   "qid": "07_merge/q02",
+   "concept": "07_merge",
+   "level": 1,
+   "order": true,
+   "tol": 0.0011,
+   "text": "Join `app` to `assess` on `application_id` and return the median `nsr` for `'Approved'` and `'Declined'`\ndecisions, rounded to 3 dp. Return `decision`, `median_nsr`; sorted by `decision`.",
+   "rows": 2,
+   "cols": [
+    "decision",
+    "median_nsr"
+   ],
+   "tables": [
+    "loan_application",
+    "application_assessment"
+   ]
+  },
+  {
+   "qid": "07_merge/q03",
+   "concept": "07_merge",
+   "level": 2,
+   "order": false,
+   "tol": 0.011,
+   "text": "Anti-join: how many customers are **never** the `primary_customer_id` on a loan? (`indicator=True`)",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "customer",
+    "loan"
+   ]
+  },
+  {
+   "qid": "07_merge/q04",
+   "concept": "07_merge",
+   "level": 2,
+   "order": false,
+   "tol": 0.011,
+   "text": "Fan-out check. Join `loan` to `loan_security` on `loan_id` (inner). Return one row: `rows_before` (loans),\n`rows_after` (rows after the join) and `amount_double_counted` = the sum of `original_amount` after the join\nminus the true total, rounded to 0 dp.",
+   "rows": 1,
+   "cols": [
+    "rows_before",
+    "rows_after",
+    "amount_double_counted"
+   ],
+   "tables": [
+    "loan",
+    "loan_security"
+   ]
+  },
+  {
+   "qid": "07_merge/q05",
+   "concept": "07_merge",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Loans per **branch state** (join `dim_branch` on `branch_id` with `validate='many_to_one'`; loans with no branch\nare left out). Return `state`, `loans`; sorted by `loans` (most first), then `state`.",
+   "rows": 8,
+   "cols": [
+    "state",
+    "loans"
+   ],
+   "tables": [
+    "loan",
+    "dim_branch"
+   ]
+  },
+  {
+   "qid": "07_merge/q06",
+   "concept": "07_merge",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "The **primary** applicant's bureau score per application: join `applicant` (role `'Primary'`) to `bureau` on\n**both** `application_id` and `customer_id`, then join `app` for the decision. Average `bureau_score` (thin files\nexcluded) per `decision`, rounded to 1 dp. Return `decision`, `avg_score`; sorted by `decision`.",
+   "rows": 2,
+   "cols": [
+    "decision",
+    "avg_score"
+   ],
+   "tables": [
+    "application_applicant",
+    "credit_bureau_report",
+    "loan_application"
+   ]
+  },
+  {
+   "qid": "07_merge/q07",
+   "concept": "07_merge",
+   "level": 3,
+   "order": true,
+   "tol": 0.0011,
+   "text": "For each loan, find the **RBA cash rate in force** at its `origination_date` (latest `bank_effective_date` on or\nbefore it, `merge_asof`). Average spread = `interest_rate_at_origination_pct` minus `cash_rate_pct`, per origination\nyear, rounded to 3 dp. Return `year`, `avg_spread`; sorted by `year`.",
+   "rows": 8,
+   "cols": [
+    "year",
+    "avg_spread"
+   ],
+   "tables": [
+    "loan",
+    "ref_rba_cash_rate"
+   ]
+  },
+  {
+   "qid": "07_merge/q08",
+   "concept": "07_merge",
+   "level": 3,
+   "order": true,
+   "tol": 0.011,
+   "text": "Arrears bucket for each live loan at 2025-12-31 using `ref_arrears_bucket` (`merge_asof` on `days_past_due`\nagainst `dpd_from`). Return `bucket_name`, `loans` for every bucket that has loans; sorted by `bucket_id`\n(so in bucket order, not alphabetical).",
+   "rows": 7,
+   "cols": [
+    "bucket_name",
+    "loans"
+   ],
+   "tables": [
+    "loan_monthly_snapshot",
+    "ref_arrears_bucket"
+   ]
+  },
+  {
+   "qid": "07_merge/q09",
+   "concept": "07_merge",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Stack two small tables with `pd.concat`: loans per channel originated in 2024 and in 2025, in **long** form.\nReturn `year`, `channel`, `loans`; sorted by `year`, `channel`.",
+   "rows": 8,
+   "cols": [
+    "year",
+    "channel",
+    "loans"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "08_reshape/q01",
+   "concept": "08_reshape",
+   "level": 1,
+   "order": true,
+   "tol": 0.011,
+   "text": "Loans by origination year (rows) and `rate_type` (columns) with `pivot_table`. Return `year`, `Fixed`, `Variable`;\nsorted by `year`.",
+   "rows": 8,
+   "cols": [
+    "year",
+    "Fixed",
+    "Variable"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "08_reshape/q02",
+   "concept": "08_reshape",
+   "level": 1,
+   "order": true,
+   "tol": 0.011,
+   "text": "`pd.crosstab` of `channel` (rows) by `rate_type` (columns) as **row percentages** rounded to 2 dp.\nReturn `channel`, `Fixed`, `Variable`; sorted by `channel`.",
+   "rows": 4,
+   "cols": [
+    "channel",
+    "Fixed",
+    "Variable"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "08_reshape/q03",
+   "concept": "08_reshape",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Group by origination year and `channel`, count, then `unstack` the channel (missing = 0). Return `year`, then one\ncolumn per channel in alphabetical order (`Branch`, `Broker`, `Digital`, `Mobile Lender`); sorted by `year`.",
+   "rows": 8,
+   "cols": [
+    "year",
+    "Branch",
+    "Broker",
+    "Digital",
+    "Mobile Lender"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "08_reshape/q04",
+   "concept": "08_reshape",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Melt `dim_product[['product_id', 'max_lvr_pct', 'annual_fee']]` into long form. Return `product_id`, `variable`,\n`value`; sorted by `product_id`, then `variable`.",
+   "rows": 30,
+   "cols": [
+    "product_id",
+    "variable",
+    "value"
+   ],
+   "tables": [
+    "dim_product"
+   ]
+  },
+  {
+   "qid": "08_reshape/q05",
+   "concept": "08_reshape",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Total `original_amount` in **$ millions** (rounded to 1 dp) by origination year (rows) and `rate_type` (columns),\nwith `margins=True`. Return `year`, `Fixed`, `Variable`, `All`, with the years in order and the `All` row last.",
+   "rows": 9,
+   "cols": [
+    "year",
+    "Fixed",
+    "Variable",
+    "All"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "08_reshape/q06",
+   "concept": "08_reshape",
+   "level": 3,
+   "order": true,
+   "tol": 0.011,
+   "text": "Start from the year x `rate_type` count table (Q01), `stack` it back to long form and keep only cells with **more\nthan 2,000** loans. Return `year`, `rate_type`, `loans`; sorted by `year`, `rate_type`.",
+   "rows": 9,
+   "cols": [
+    "year",
+    "rate_type",
+    "loans"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "08_reshape/q07",
+   "concept": "08_reshape",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "`ref_property_price_index` for 2025 month-ends: `pivot` so each row is a `month_end_date` and the columns are\n`NSW` and `SA` (just those two states). Return `month_end_date`, `NSW`, `SA`; sorted by `month_end_date`.",
+   "rows": 12,
+   "cols": [
+    "month_end_date",
+    "NSW",
+    "SA"
+   ],
+   "tables": [
+    "ref_property_price_index"
+   ]
+  },
+  {
+   "qid": "08_reshape/q08",
+   "concept": "08_reshape",
+   "level": 3,
+   "order": true,
+   "tol": 0.011,
+   "text": "For **closed** loans: counts by `closure_reason` (rows) and `rate_type` (columns), missing = 0. Return\n`closure_reason`, `Fixed`, `Variable`; sorted by `closure_reason`.",
+   "rows": 5,
+   "cols": [
+    "closure_reason",
+    "Fixed",
+    "Variable"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "09_binning/q01",
+   "concept": "09_binning",
+   "level": 1,
+   "order": true,
+   "tol": 0.011,
+   "text": "Band every loan's `lvr_at_origination_pct` with `pd.cut` using the `ref_lvr_band` edges 0, 60, 70, 80, 90, 95, inf\n(left-closed) and labels `'<= 60%'`, `'60-70%'`, `'70-80%'`, `'80-90%'`, `'90-95%'`, `'> 95%'`.\nReturn `band`, `loans` in band order (lowest first).",
+   "rows": 6,
+   "cols": [
+    "band",
+    "loans"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "09_binning/q02",
+   "concept": "09_binning",
+   "level": 1,
+   "order": true,
+   "tol": 0.011,
+   "text": "Deciles of `original_amount` with `pd.qcut(q=10, labels=False)`, numbered **1 to 10**. Return `decile`, `min_amount`,\n`max_amount`; sorted by `decile`.",
+   "rows": 10,
+   "cols": [
+    "decile",
+    "min_amount",
+    "max_amount"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "09_binning/q03",
+   "concept": "09_binning",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Bureau-score deciles that never fail on ties: rank the non-missing `bureau_score` values with `method='first'`, then\n`qcut` the rank into 10 groups numbered 1 (lowest scores) to 10. Return `decile`, `n`, `avg_score` (1 dp); sorted by `decile`.",
+   "rows": 10,
+   "cols": [
+    "decile",
+    "n",
+    "avg_score"
+   ],
+   "tables": [
+    "credit_bureau_report"
+   ]
+  },
+  {
+   "qid": "09_binning/q04",
+   "concept": "09_binning",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "For each channel, the loan with the **second-largest** `original_amount` (ties: smaller `loan_id` ranks higher).\nReturn `channel`, `loan_id`, `original_amount`; sorted by `channel`.",
+   "rows": 4,
+   "cols": [
+    "channel",
+    "loan_id",
+    "original_amount"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "09_binning/q05",
+   "concept": "09_binning",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Live loans at 2025-12-31 split into 5 equal-count groups on `days_past_due`. Plain `qcut` fails (most values are 0),\nso `qcut` the `rank(method='first')` instead. Groups numbered 1 to 5. Return `group`, `n`, `max_dpd`; sorted by `group`.",
+   "rows": 5,
+   "cols": [
+    "group",
+    "n",
+    "max_dpd"
+   ],
+   "tables": [
+    "loan_monthly_snapshot"
+   ]
+  },
+  {
+   "qid": "09_binning/q06",
+   "concept": "09_binning",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Band applications by `nsr` (from `assess`) into `'< 1.0'`, `'1.0-1.25'`, `'1.25-1.5'`, `'1.5-2.0'`, `'2.0+'`\n(left-closed), join the decision from `app`, and report the decline rate among decided applications.\nReturn `nsr_band`, `apps`, `decline_pct` (2 dp) in band order. Leave out empty bands.",
+   "rows": 5,
+   "cols": [
+    "nsr_band",
+    "apps",
+    "decline_pct"
+   ],
+   "tables": [
+    "application_assessment",
+    "loan_application"
+   ]
+  },
+  {
+   "qid": "09_binning/q07",
+   "concept": "09_binning",
+   "level": 3,
+   "order": false,
+   "tol": 0.011,
+   "text": "Percentile rank of each live loan's `closing_balance` at 2025-12-31 (`rank(pct=True)`). How many loans sit in the\ntop 1% (percentile rank of 0.99 or more)?",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan_monthly_snapshot"
+   ]
+  },
+  {
+   "qid": "09_binning/q08",
+   "concept": "09_binning",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Histogram as a table: live loans at 2025-12-31 binned by `interest_rate_pct` into 0.5-point bins from 4.0 to 9.0\n(left-closed; anything outside is dropped). Return `bin_start`, `loans` for bins with loans, where `bin_start` is the\nlower edge as a number (e.g. 4.0); sorted by `bin_start`.",
+   "rows": 7,
+   "cols": [
+    "bin_start",
+    "loans"
+   ],
+   "tables": [
+    "loan_monthly_snapshot"
+   ]
+  },
+  {
+   "qid": "10_dates/q01",
+   "concept": "10_dates",
+   "level": 1,
+   "order": true,
+   "tol": 0.011,
+   "text": "Loans originated per calendar year. Return `year`, `loans`; sorted by `year`.",
+   "rows": 8,
+   "cols": [
+    "year",
+    "loans"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "10_dates/q02",
+   "concept": "10_dates",
+   "level": 1,
+   "order": true,
+   "tol": 0.011,
+   "text": "Loans originated per month of 2025, with the month as a string like `'2025-03'`. Return `month`, `loans`; sorted by `month`.",
+   "rows": 12,
+   "cols": [
+    "month",
+    "loans"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "10_dates/q03",
+   "concept": "10_dates",
+   "level": 1,
+   "order": false,
+   "tol": 0.011,
+   "text": "Median number of days from `application_date` to `decision_date` for **approved** applications. Return a number.",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan_application"
+   ]
+  },
+  {
+   "qid": "10_dates/q04",
+   "concept": "10_dates",
+   "level": 2,
+   "order": false,
+   "tol": 0.011,
+   "text": "For live loans at 2025-12-31, the remaining term in **whole months** from 2025-12 to the `maturity_date` month\n(join `maturity_date` from `loan`). Return the average, rounded to 1 dp.",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan_monthly_snapshot",
+    "loan"
+   ]
+  },
+  {
+   "qid": "10_dates/q05",
+   "concept": "10_dates",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Loans originated per **Australian financial year** (FY ends 30 June; FY2025 = Jul 2024 - Jun 2025).\nReturn `fy`, `loans`; sorted by `fy`.",
+   "rows": 8,
+   "cols": [
+    "fy",
+    "loans"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "10_dates/q06",
+   "concept": "10_dates",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "New hardship arrangements per month in **2020** (`start_date`), every month of 2020 present (0 if none), month as a\nstring like `'2020-04'`. Return `month`, `arrangements`; sorted by `month`.",
+   "rows": 12,
+   "cols": [
+    "month",
+    "arrangements"
+   ],
+   "tables": [
+    "hardship_arrangement"
+   ]
+  },
+  {
+   "qid": "10_dates/q07",
+   "concept": "10_dates",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Total book balance (`closing_balance` of all rows, $ millions, 2 dp) at each **2025 quarter-end** snapshot\n(31 Mar, 30 Jun, 30 Sep, 31 Dec). Return `quarter_end` (as `'2025-03-31'` etc.), `balance_m`; sorted by `quarter_end`.",
+   "rows": 4,
+   "cols": [
+    "quarter_end",
+    "closing_balance"
+   ],
+   "tables": [
+    "loan_monthly_snapshot"
+   ]
+  },
+  {
+   "qid": "10_dates/q08",
+   "concept": "10_dates",
+   "level": 3,
+   "order": false,
+   "tol": 0.011,
+   "text": "Snapshot gaps: a loan should have one row for every month from MOB 0 to its last MOB. Count the loans whose number of\nsnapshot rows is **not** equal to `max(months_on_book) + 1`.",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan_monthly_snapshot"
+   ]
+  },
+  {
+   "qid": "10_dates/q09",
+   "concept": "10_dates",
+   "level": 3,
+   "order": true,
+   "tol": 0.011,
+   "text": "Payment-shock watch: **active** fixed-rate loans whose `fixed_rate_expiry_date` falls in 2026, by quarter\n(string like `'2026Q1'`). Return `quarter`, `loans`; sorted by `quarter`.",
+   "rows": 4,
+   "cols": [
+    "quarter",
+    "loans"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "11_shift_cumulative/q01",
+   "concept": "11_shift_cumulative",
+   "level": 1,
+   "order": true,
+   "tol": 0.011,
+   "text": "For `loan_id` 1664, the month-to-month change in `closing_balance` (sorted by `snapshot_date`, `diff`).\nWhat was the **largest single monthly reduction**, as a positive number rounded to 2 dp?",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan_monthly_snapshot"
+   ]
+  },
+  {
+   "qid": "11_shift_cumulative/q02",
+   "concept": "11_shift_cumulative",
+   "level": 1,
+   "order": true,
+   "tol": 0.011,
+   "text": "Cumulative number of loans originated, by year. Return `year`, `cum_loans`; sorted by `year`.",
+   "rows": 8,
+   "cols": [
+    "year",
+    "cum_loans"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "11_shift_cumulative/q03",
+   "concept": "11_shift_cumulative",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Year-on-year growth in the number of loans originated, as a percentage rounded to 1 dp (`pct_change`).\nReturn `year`, `growth_pct`; sorted by `year` (the first year is missing).",
+   "rows": 8,
+   "cols": [
+    "year",
+    "growth_pct"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "11_shift_cumulative/q04",
+   "concept": "11_shift_cumulative",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "New loans per month in 2025 and their **3-month rolling average** (rounded to 1 dp; the first two months are missing).\nMonth as `'2025-01'` etc. Return `month`, `loans`, `rolling_3m`; sorted by `month`.",
+   "rows": 12,
+   "cols": [
+    "month",
+    "loans",
+    "rolling_3m"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "11_shift_cumulative/q05",
+   "concept": "11_shift_cumulative",
+   "level": 2,
+   "order": false,
+   "tol": 0.011,
+   "text": "New arrears: count the loan-months in **2025** where `days_past_due` was 0 the month before and above 0 this month.\nUse a **grouped** `shift` so one loan never borrows another loan's history.",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan_monthly_snapshot"
+   ]
+  },
+  {
+   "qid": "11_shift_cumulative/q06",
+   "concept": "11_shift_cumulative",
+   "level": 2,
+   "order": false,
+   "tol": 0.011,
+   "text": "Roll forward: how many loans were 30-59 days past due at 2025-11-30 **and** 60-89 days past due at 2025-12-31?",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan_monthly_snapshot"
+   ]
+  },
+  {
+   "qid": "11_shift_cumulative/q07",
+   "concept": "11_shift_cumulative",
+   "level": 3,
+   "order": true,
+   "tol": 0.011,
+   "text": "Ever-90 by vintage: flag each loan that **ever** reached 90+ days past due, then per origination year return `year`,\n`loans`, `ever90`, `ever90_pct` (2 dp); sorted by `year`.",
+   "rows": 8,
+   "cols": [
+    "year",
+    "loans",
+    "ever90",
+    "ever90_pct"
+   ],
+   "tables": [
+    "loan_monthly_snapshot",
+    "loan"
+   ]
+  },
+  {
+   "qid": "11_shift_cumulative/q08",
+   "concept": "11_shift_cumulative",
+   "level": 3,
+   "order": false,
+   "tol": 0.011,
+   "text": "For loans that ever reached 30+ days past due, the `months_on_book` at which they **first** did. Return the average,\nrounded to 1 dp.",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan_monthly_snapshot"
+   ]
+  },
+  {
+   "qid": "12_loops_functions/q01",
+   "concept": "12_loops_functions",
+   "level": 1,
+   "order": true,
+   "tol": 0.011,
+   "text": "Loop over the four channels and compute the percentage of each channel's loans that are `'Closed'`, storing results\nin a dict. Return `channel`, `pct_closed` (2 dp); sorted by `channel`.",
+   "rows": 4,
+   "cols": [
+    "channel",
+    "pct_closed"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "12_loops_functions/q02",
+   "concept": "12_loops_functions",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Segments as a dict of masks:\n\n```python\nsegments = {\n    'All':        all loans,\n    'FHB':        first_home_buyer_flag is True,\n    'Fixed':      rate_type == 'Fixed',\n    'High LVR':   lvr_at_origination_pct > 80,\n}\n```\nFor each, `loans` and `avg_amount` (mean `original_amount`, 0 dp). Return `segment`, `loans`, `avg_amount`; sorted by `segment`.",
+   "rows": 4,
+   "cols": [
+    "segment",
+    "loans",
+    "avg_amount"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "12_loops_functions/q03",
+   "concept": "12_loops_functions",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Build a **list of dicts** in a loop over origination years 2019 to 2025 (one dict per year), then make a DataFrame.\nEach row: `year`, `loans`, `avg_lvr` (2 dp), `pct_fixed` (2 dp). Sorted by `year`.",
+   "rows": 7,
+   "cols": [
+    "year",
+    "loans",
+    "avg_lvr",
+    "pct_fixed"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "12_loops_functions/q04",
+   "concept": "12_loops_functions",
+   "level": 2,
+   "order": false,
+   "tol": 1.01,
+   "text": "Vectorised maths, no row loop: the P&I monthly repayment for each loan is\n`P * r / (1 - (1 + r) ** -n)` with `P = original_amount`, `r = interest_rate_at_origination_pct / 1200`,\n`n = term_months`. Return the **total** of these repayments for loans originated in 2025, rounded to 0 dp.",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "12_loops_functions/q05",
+   "concept": "12_loops_functions",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Write `summarise(df, by, col='original_amount')` returning, per group of `by`, `n` (rows) and `mean` (mean of `col`,\nrounded to 0 dp). Call it with `by='purpose'`, leaving `col` at its default. Return `purpose`, `n`, `mean`; sorted by `purpose`.",
+   "rows": 6,
+   "cols": [
+    "purpose",
+    "n",
+    "mean"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "12_loops_functions/q06",
+   "concept": "12_loops_functions",
+   "level": 3,
+   "order": true,
+   "tol": 0.00011,
+   "text": "Compare \"models\" the notebook-03 way. Population: loans with an application, the primary applicant's bureau score\n(thin files dropped) and the application's `assess` row. Outcome `bad` = the loan ever reached 90+ days past due.\nThree single-variable \"models\", each a risk score where **higher = riskier**:\n\n```python\nmodels = {'bureau_score': -df['bureau_score'], 'nsr': -df['nsr'], 'dti_ratio': df['dti_ratio']}\n```\nLoop over the dict and compute each Gini (`2 * roc_auc_score(bad, score) - 1`). Return `model`, `gini` (4 dp);\nsorted by `gini` (highest first).",
+   "rows": 3,
+   "cols": [
+    "model",
+    "gini"
+   ],
+   "tables": [
+    "loan_monthly_snapshot",
+    "application_applicant",
+    "credit_bureau_report",
+    "loan",
+    "application_assessment"
+   ]
+  },
+  {
+   "qid": "12_loops_functions/q07",
+   "concept": "12_loops_functions",
+   "level": 3,
+   "order": true,
+   "tol": 0.0011,
+   "text": "A comprehension instead of a loop: for live loans at 2025-12-31, the percentage with `days_past_due` at or above\neach threshold in `[1, 30, 60, 90]`, rounded to 3 dp. Return `threshold`, `pct`; sorted by `threshold`.",
+   "rows": 4,
+   "cols": [
+    "threshold",
+    "pct"
+   ],
+   "tables": [
+    "loan_monthly_snapshot"
+   ]
+  },
+  {
+   "qid": "12_loops_functions/q08",
+   "concept": "12_loops_functions",
+   "level": 3,
+   "order": true,
+   "tol": 0.011,
+   "text": "Nested loop to a wide table: approval rate (% of decided applications approved, 2 dp) for each `channel` (rows) and\napplication year 2023, 2024, 2025 (columns). Build it with two loops into a dict of dicts. Return `channel`, `2023`,\n`2024`, `2025`; sorted by `channel`.",
+   "rows": 4,
+   "cols": [
+    "channel",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "tables": [
+    "loan_application"
+   ]
+  },
+  {
+   "qid": "cr01_portfolio/q01",
+   "concept": "cr01_portfolio",
+   "level": 1,
+   "order": false,
+   "tol": 0.011,
+   "text": "Live book at 2025-12-31: number of loans and total balance in **$ millions** (2 dp). Return one row:\n`loans`, `balance_m`.",
+   "rows": 1,
+   "cols": [
+    "loans",
+    "balance_m"
+   ],
+   "tables": [
+    "loan_monthly_snapshot"
+   ]
+  },
+  {
+   "qid": "cr01_portfolio/q02",
+   "concept": "cr01_portfolio",
+   "level": 1,
+   "order": true,
+   "tol": 0.011,
+   "text": "Live balance share by `purpose` (join from `loan`), as a percentage rounded to 2 dp. Return `purpose`, `balance_pct`;\nsorted by `balance_pct` (largest first).",
+   "rows": 6,
+   "cols": [
+    "purpose",
+    "balance_pct"
+   ],
+   "tables": [
+    "loan_monthly_snapshot",
+    "loan"
+   ]
+  },
+  {
+   "qid": "cr01_portfolio/q03",
+   "concept": "cr01_portfolio",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Balance-weighted average **origination** LVR of the live book, by `channel` (weights = current `closing_balance`),\nrounded to 2 dp. Return `channel`, `wavg_lvr`; sorted by `channel`.",
+   "rows": 4,
+   "cols": [
+    "channel",
+    "wavg_lvr"
+   ],
+   "tables": [
+    "loan_monthly_snapshot",
+    "loan"
+   ]
+  },
+  {
+   "qid": "cr01_portfolio/q04",
+   "concept": "cr01_portfolio",
+   "level": 2,
+   "order": false,
+   "tol": 0.011,
+   "text": "Top-1% concentration: what percentage of live balance sits in the largest 1% of live loans by balance\n(the top `ceil(1% of loan count)` loans)? Round to 2 dp.",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan_monthly_snapshot"
+   ]
+  },
+  {
+   "qid": "cr01_portfolio/q05",
+   "concept": "cr01_portfolio",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Live balance by **origination LVR band** (`ref_lvr_band` edges, left-closed: `<= 60%`, `60-70%`, `70-80%`, `80-90%`,\n`90-95%`, `> 95%`). Return `band`, `balance_m` (2 dp), `balance_pct` (2 dp) in band order.",
+   "rows": 6,
+   "cols": [
+    "band",
+    "balance_m",
+    "balance_pct"
+   ],
+   "tables": [
+    "loan_monthly_snapshot",
+    "loan"
+   ]
+  },
+  {
+   "qid": "cr01_portfolio/q06",
+   "concept": "cr01_portfolio",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Live balance in $ millions (1 dp) by `occupancy` (rows, from `dim_product` via `loan`) and the snapshot's\n`repayment_type` (columns). Return `occupancy`, `Interest Only`, `P&I`; sorted by `occupancy`.",
+   "rows": 2,
+   "cols": [
+    "occupancy",
+    "Interest Only",
+    "P&I"
+   ],
+   "tables": [
+    "loan_monthly_snapshot",
+    "loan",
+    "dim_product"
+   ]
+  },
+  {
+   "qid": "cr01_portfolio/q07",
+   "concept": "cr01_portfolio",
+   "level": 3,
+   "order": false,
+   "tol": 0.011,
+   "text": "Broker concentration: among live loans written by a broker (`broker_id` not missing), the **HHI** of balance across\nbrokers = sum over brokers of (balance share in %)^2. Round to 1 dp.",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan_monthly_snapshot",
+    "loan"
+   ]
+  },
+  {
+   "qid": "cr02_arrears/q01",
+   "concept": "cr02_arrears",
+   "level": 1,
+   "order": true,
+   "tol": 0.0011,
+   "text": "The **30+ arrears rate by count** of the live book at each month-end of 2025 (live = not `'Closed'` that month),\nas a percentage rounded to 3 dp. Month as `'2025-01'` etc. Return `month`, `pct_30plus`; sorted by `month`.",
+   "rows": 12,
+   "cols": [
+    "month",
+    "pct_30plus"
+   ],
+   "tables": [
+    "loan_monthly_snapshot"
+   ]
+  },
+  {
+   "qid": "cr02_arrears/q02",
+   "concept": "cr02_arrears",
+   "level": 2,
+   "order": false,
+   "tol": 0.0011,
+   "text": "The **90+ arrears rate by balance** of the live book at 2025-12-31, as a percentage rounded to 3 dp.",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan_monthly_snapshot"
+   ]
+  },
+  {
+   "qid": "cr02_arrears/q03",
+   "concept": "cr02_arrears",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Live loans and balance by arrears bucket at 2025-12-31 with buckets `'Current'` (0), `'1-29'`, `'30-59'`, `'60-89'`,\n`'90+'`. Return `bucket`, `loans`, `balance_m` (2 dp) in bucket order.",
+   "rows": 5,
+   "cols": [
+    "bucket",
+    "loans",
+    "balance_m"
+   ],
+   "tables": [
+    "loan_monthly_snapshot"
+   ]
+  },
+  {
+   "qid": "cr02_arrears/q04",
+   "concept": "cr02_arrears",
+   "level": 3,
+   "order": true,
+   "tol": 0.011,
+   "text": "Roll-rate matrix November -> December 2025 for loans that are live (not `'Closed'`) in **both** month-end snapshots.\nBuckets `Current`, `1-29`, `30-59`, `60-89`, `90+`; **row percentages** rounded to 2 dp,\n0 where nothing rolled. Return `from_bucket` then one column per December bucket in bucket order; rows in bucket order.",
+   "rows": 5,
+   "cols": [
+    "from_bucket",
+    "Current",
+    "1-29",
+    "30-59",
+    "60-89",
+    "90+"
+   ],
+   "tables": [
+    "loan_monthly_snapshot"
+   ]
+  },
+  {
+   "qid": "cr02_arrears/q05",
+   "concept": "cr02_arrears",
+   "level": 2,
+   "order": false,
+   "tol": 0.011,
+   "text": "Cure rate: of the loans 30+ days past due at 2025-06-30, what percentage were back to 0 days past due at 2025-12-31?\nDenominator = those 30+ at June that still have a December snapshot. Round to 2 dp.",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan_monthly_snapshot"
+   ]
+  },
+  {
+   "qid": "cr02_arrears/q06",
+   "concept": "cr02_arrears",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Share of live loans on a hardship flag at each **quarter-end of 2020** (the COVID deferral wave), as a percentage\nrounded to 2 dp. Return `quarter_end` (`'2020-03-31'` etc.), `hardship_pct`; sorted by `quarter_end`.",
+   "rows": 4,
+   "cols": [
+    "quarter_end",
+    "hardship_flag"
+   ],
+   "tables": [
+    "loan_monthly_snapshot"
+   ]
+  },
+  {
+   "qid": "cr02_arrears/q07",
+   "concept": "cr02_arrears",
+   "level": 3,
+   "order": false,
+   "tol": 0.0011,
+   "text": "A 12-month cohort default rate. Cohort = live loans at 2024-12-31 that were **current** (0 days past due) then.\nBad = reached 90+ days past due at **any** 2025 month-end. Return one row: `cohort`, `bads`, `default_rate_pct` (3 dp).",
+   "rows": 1,
+   "cols": [
+    "cohort",
+    "bads",
+    "default_rate_pct"
+   ],
+   "tables": [
+    "loan_monthly_snapshot"
+   ]
+  },
+  {
+   "qid": "cr03_vintage/q01",
+   "concept": "cr03_vintage",
+   "level": 1,
+   "order": true,
+   "tol": 0.011,
+   "text": "Loans per **origination quarter** for 2023 vintages, as strings like `'2023Q1'`. Return `vintage`, `loans`; sorted by `vintage`.",
+   "rows": 4,
+   "cols": [
+    "vintage",
+    "loans"
+   ],
+   "tables": [
+    "loan"
+   ]
+  },
+  {
+   "qid": "cr03_vintage/q02",
+   "concept": "cr03_vintage",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Cumulative ever-90 rate **by MOB 12** for vintages 2019 to 2024: the percentage of each vintage's loans whose first\n90+ month-end came at `months_on_book <= 12`. Denominator = all loans in the vintage. Return `vintage`, `pct` (2 dp);\nsorted by `vintage`.",
+   "rows": 6,
+   "cols": [
+    "vintage",
+    "pct"
+   ],
+   "tables": [
+    "loan_monthly_snapshot",
+    "loan"
+   ]
+  },
+  {
+   "qid": "cr03_vintage/q03",
+   "concept": "cr03_vintage",
+   "level": 3,
+   "order": true,
+   "tol": 0.011,
+   "text": "The full vintage table: rows = vintages 2019 to 2023, columns = MOB 6, 12, 18, 24, values = cumulative ever-90 % by\nthat MOB (2 dp). Return `vintage`, `6`, `12`, `18`, `24`; sorted by `vintage`.",
+   "rows": 5,
+   "cols": [
+    "vintage",
+    "6",
+    "12",
+    "18",
+    "24"
+   ],
+   "tables": [
+    "loan_monthly_snapshot",
+    "loan"
+   ]
+  },
+  {
+   "qid": "cr03_vintage/q04",
+   "concept": "cr03_vintage",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "**Point-in-time** 30+ rate at MOB 12 by vintage 2019 to 2024: among loans that have a snapshot at `months_on_book == 12`\n(and are not `'Closed'` in it), the percentage with `days_past_due >= 30` in that snapshot. Return `vintage`, `pct` (2 dp);\nsorted by `vintage`.",
+   "rows": 6,
+   "cols": [
+    "vintage",
+    "pct"
+   ],
+   "tables": [
+    "loan_monthly_snapshot",
+    "loan"
+   ]
+  },
+  {
+   "qid": "cr03_vintage/q05",
+   "concept": "cr03_vintage",
+   "level": 3,
+   "order": true,
+   "tol": 0.011,
+   "text": "**Balance-weighted** cumulative ever-90 by MOB 24 for vintages 2019 to 2023: original amount of loans that went 90+ by\nMOB 24 / original amount of the whole vintage, as % (2 dp). Return `vintage`, `pct_by_amount`; sorted by `vintage`.",
+   "rows": 5,
+   "cols": [
+    "vintage",
+    "pct_by_amount"
+   ],
+   "tables": [
+    "loan_monthly_snapshot",
+    "loan"
+   ]
+  },
+  {
+   "qid": "cr03_vintage/q06",
+   "concept": "cr03_vintage",
+   "level": 3,
+   "order": true,
+   "tol": 0.011,
+   "text": "Survival: for vintages 2019 to 2023, the percentage of each vintage's loans that still had a non-`'Closed'` snapshot at\nMOB 24. Return `vintage`, `pct_open_mob24` (2 dp); sorted by `vintage`.",
+   "rows": 5,
+   "cols": [
+    "vintage",
+    "pct_open_mob24"
+   ],
+   "tables": [
+    "loan_monthly_snapshot",
+    "loan"
+   ]
+  },
+  {
+   "qid": "cr04_model_eval/q01",
+   "concept": "cr04_model_eval",
+   "level": 1,
+   "order": false,
+   "tol": 0.0011,
+   "text": "Build the population (see the primer; thin files dropped). Return one row: `loans`, `bads`, `bad_rate_pct` (3 dp).",
+   "rows": 1,
+   "cols": [
+    "loans",
+    "bads",
+    "bad_rate_pct"
+   ],
+   "tables": [
+    "loan_monthly_snapshot",
+    "application_applicant",
+    "credit_bureau_report",
+    "loan"
+   ]
+  },
+  {
+   "qid": "cr04_model_eval/q02",
+   "concept": "cr04_model_eval",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Score deciles: `rank(method='first')` on `bureau_score`, `qcut` into 10, numbered 1 (lowest scores) to 10.\nReturn `decile`, `loans`, `bads`, `bad_rate_pct` (2 dp); sorted by `decile`.",
+   "rows": 10,
+   "cols": [
+    "decile",
+    "loans",
+    "bads",
+    "bad_rate_pct"
+   ],
+   "tables": [
+    "loan_monthly_snapshot",
+    "application_applicant",
+    "credit_bureau_report",
+    "loan"
+   ]
+  },
+  {
+   "qid": "cr04_model_eval/q03",
+   "concept": "cr04_model_eval",
+   "level": 2,
+   "order": false,
+   "tol": 0.00011,
+   "text": "AUC and Gini of the bureau score (remember the direction). Return one row: `auc`, `gini`, both rounded to 4 dp.",
+   "rows": 1,
+   "cols": [
+    "auc",
+    "gini"
+   ],
+   "tables": [
+    "loan_monthly_snapshot",
+    "application_applicant",
+    "credit_bureau_report",
+    "loan"
+   ]
+  },
+  {
+   "qid": "cr04_model_eval/q04",
+   "concept": "cr04_model_eval",
+   "level": 2,
+   "order": false,
+   "tol": 0.00011,
+   "text": "KS statistic of the bureau score between bads and goods (`scipy.stats.ks_2samp`), rounded to 4 dp.",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan_monthly_snapshot",
+    "application_applicant",
+    "credit_bureau_report",
+    "loan"
+   ]
+  },
+  {
+   "qid": "cr04_model_eval/q05",
+   "concept": "cr04_model_eval",
+   "level": 3,
+   "order": true,
+   "tol": 0.00011,
+   "text": "Stability: the Gini of the bureau score for each origination year 2019 to 2024, rounded to 4 dp, computed in a loop.\nReturn `year`, `gini`; sorted by `year`.",
+   "rows": 6,
+   "cols": [
+    "year",
+    "gini"
+   ],
+   "tables": [
+    "loan_monthly_snapshot",
+    "application_applicant",
+    "credit_bureau_report",
+    "loan"
+   ]
+  },
+  {
+   "qid": "cr04_model_eval/q06",
+   "concept": "cr04_model_eval",
+   "level": 3,
+   "order": false,
+   "tol": 0.011,
+   "text": "Capture rate: what percentage of all bads fall in the **worst 20%** of loans by bureau score (lowest scores; use\n`rank(method='first')` so exactly 20% of loans are picked)? Round to 2 dp.",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "loan_monthly_snapshot",
+    "application_applicant",
+    "credit_bureau_report",
+    "loan"
+   ]
+  },
+  {
+   "qid": "cr04_model_eval/q07",
+   "concept": "cr04_model_eval",
+   "level": 2,
+   "order": true,
+   "tol": 0.0011,
+   "text": "Is a thin file risky? Keep thin files this time. Return `group` (`'scored'` / `'thin file'`), `loans`,\n`bad_rate_pct` (3 dp); sorted by `group`.",
+   "rows": 2,
+   "cols": [
+    "group",
+    "loans",
+    "bad_rate_pct"
+   ],
+   "tables": [
+    "loan_monthly_snapshot",
+    "application_applicant",
+    "credit_bureau_report",
+    "loan"
+   ]
+  },
+  {
+   "qid": "cr05_origination/q01",
+   "concept": "cr05_origination",
+   "level": 1,
+   "order": true,
+   "tol": 0.011,
+   "text": "Decline rate (% of decided applications that were declined, 2 dp) by **application month** of 2025, month as `'2025-01'`.\nReturn `month`, `decline_pct`; sorted by `month`.",
+   "rows": 12,
+   "cols": [
+    "month",
+    "decline_pct"
+   ],
+   "tables": [
+    "loan_application"
+   ]
+  },
+  {
+   "qid": "cr05_origination/q02",
+   "concept": "cr05_origination",
+   "level": 1,
+   "order": true,
+   "tol": 0.011,
+   "text": "Decline reasons: share of declined applications by `reason_description` (join `ref_decline_reason`), % to 2 dp.\nReturn `reason_description`, `pct`; sorted by `pct` (largest first).",
+   "rows": 8,
+   "cols": [
+    "reason_description",
+    "pct"
+   ],
+   "tables": [
+    "loan_application",
+    "ref_decline_reason"
+   ]
+  },
+  {
+   "qid": "cr05_origination/q03",
+   "concept": "cr05_origination",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Declines by **reason category** (the credit 'C': Capacity, Character, ...) and application year 2023 to 2025, as counts.\nReturn `reason_category`, `2023`, `2024`, `2025`; sorted by `reason_category`.",
+   "rows": 6,
+   "cols": [
+    "reason_category",
+    "2023",
+    "2024",
+    "2025"
+   ],
+   "tables": [
+    "loan_application",
+    "ref_decline_reason"
+   ]
+  },
+  {
+   "qid": "cr05_origination/q04",
+   "concept": "cr05_origination",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "How often does HEM bind? Percentage of applications with `hem_applied_flag` True, by application year 2019 to 2025\n(2 dp). Return `year`, `hem_pct`; sorted by `year`.",
+   "rows": 7,
+   "cols": [
+    "year",
+    "hem_pct"
+   ],
+   "tables": [
+    "loan_application",
+    "application_assessment"
+   ]
+  },
+  {
+   "qid": "cr05_origination/q05",
+   "concept": "cr05_origination",
+   "level": 2,
+   "order": false,
+   "tol": 0.011,
+   "text": "Recompute the surplus: `assessed_net_monthly_income - assessed_living_expenses - assessed_commitments_monthly\n- new_loan_assessed_repayment`. How many applications differ from the stored `monthly_surplus` by more than $1?",
+   "rows": 1,
+   "cols": [
+    "value"
+   ],
+   "tables": [
+    "application_assessment"
+   ]
+  },
+  {
+   "qid": "cr05_origination/q06",
+   "concept": "cr05_origination",
+   "level": 2,
+   "order": true,
+   "tol": 0.011,
+   "text": "Settled loans with a DTI above 6 (`assess.dti_ratio > 6`), as a % of settled applications per application year 2019\nto 2025 (2 dp). Return `year`, `dti6_pct`; sorted by `year`.",
+   "rows": 7,
+   "cols": [
+    "year",
+    "dti6_pct"
+   ],
+   "tables": [
+    "loan_application",
+    "application_assessment"
+   ]
+  },
+  {
+   "qid": "cr05_origination/q07",
+   "concept": "cr05_origination",
+   "level": 3,
+   "order": true,
+   "tol": 0.011,
+   "text": "Policy in force: attach the `ref_serviceability_policy` row in force at each application's `application_date`\n(`merge_asof` on `effective_from`). For **approved** applications, how many have `nsr` below that policy's `min_nsr`\n(policy exceptions, by the numbers)? Return `policy_id`, `approved`, `below_min_nsr`; sorted by `policy_id`.",
+   "rows": 4,
+   "cols": [
+    "policy_id",
+    "approved",
+    "below_min_nsr"
+   ],
+   "tables": [
+    "loan_application",
+    "application_assessment",
+    "ref_serviceability_policy"
+   ]
+  }
+ ]
+}

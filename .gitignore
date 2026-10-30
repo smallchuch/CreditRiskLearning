@@ -11,3 +11,4 @@ Datasets/
 *.pbix.tmp
 .pbi/
 TempState/
+venv_old/

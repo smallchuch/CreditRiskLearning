@@ -1,0 +1,26 @@
+# ============================================================================================
+# 06_groupby  |  Q04  |  ★★ core
+#
+# Live book at 2025-12-31 (`snapshot_date` = 2025-12-31, `loan_status` not `'Closed'`): the
+# **balance-weighted** average `interest_rate_pct` per `repayment_type`, rounded to 3 dp.
+# Return `repayment_type`, `wavg_rate`; sorted by `repayment_type`.
+#
+# Return 2 column(s), in the order the question gives them. Expected 2 row(s).
+# Sort the output as described.
+# Put your final answer in `result` (DataFrame, Series, list, dict or a single value).
+# ============================================================================================
+
+# %% setup (runs every time - each file must stand on its own)
+import os, sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__) if '__file__' in globals() else os.getcwd(), '..', '..')))
+import numpy as np
+import pandas as pd
+from grind import load
+
+snap = load('loan_monthly_snapshot')
+
+# %% your answer
+live = snap[(snap['snapshot_date'] == '2025-12-31') & (snap['loan_status'] != 'Closed')].copy()
+live['rate_x_bal'] = live['interest_rate_pct'] * live['closing_balance']
+g = live.groupby('repayment_type')[['rate_x_bal', 'closing_balance']].sum()
+result = (g['rate_x_bal'] / g['closing_balance']).round(3)

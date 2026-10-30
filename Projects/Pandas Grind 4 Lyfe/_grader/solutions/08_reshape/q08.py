@@ -1,0 +1,23 @@
+# ============================================================================================
+# 08_reshape  |  Q08  |  ★★★ challenge
+#
+# For **closed** loans: counts by `closure_reason` (rows) and `rate_type` (columns), missing
+# = 0. Return `closure_reason`, `Fixed`, `Variable`; sorted by `closure_reason`.
+#
+# Return 3 column(s), in the order the question gives them. Expected 5 row(s).
+# Sort the output as described.
+# Put your final answer in `result` (DataFrame, Series, list, dict or a single value).
+# ============================================================================================
+
+# %% setup (runs every time - each file must stand on its own)
+import os, sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__) if '__file__' in globals() else os.getcwd(), '..', '..')))
+import numpy as np
+import pandas as pd
+from grind import load
+
+loan = load('loan')
+
+# %% your answer
+c = loan[loan['loan_status'] == 'Closed']
+result = pd.crosstab(c['closure_reason'], c['rate_type'])
