@@ -9,3 +9,10 @@
 -- ============================================================================
 
 
+SELECT 
+        loan_id,
+        ROUND(original_amount, -4) as rounded_amount
+
+FROM loan 
+ORDER BY loan_id
+LIMIT 10;

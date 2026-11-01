@@ -18,6 +18,50 @@ Write each answer in its own `.sql` file; a checker tells you PASS / FAIL in a s
 One-time setup (Anaconda prompt or any terminal): `pip install duckdb` - that is the only requirement.
 In the folder, `grade` runs `grade.bat` which runs `grade.py`.
 
+## Opening the database to explore it
+
+The database lives at `..\..\Datasets\Synthetic Bank\bank.duckdb` (relative to this folder; the path is also in `config.json`). Always open it **read-only**: DuckDB lets many read-only connections share a file, but one read-write connection locks everyone else out (including `grade`).
+
+**Option 1 - DuckDB CLI (quickest for poking around)**
+
+One-time install: `winget install DuckDB.cli` (then open a new terminal), or download `duckdb.exe` from duckdb.org.
+
+```
+cd "E:\Dev\CreditRiskLearning\Projects\SQL Grind 4 Lyfe"
+duckdb -readonly "..\..\Datasets\Synthetic Bank\bank.duckdb"
+```
+
+Useful once inside:
+
+| Type | Does |
+|---|---|
+| `SHOW TABLES;` | list the tables |
+| `DESCRIBE dim_product;` | columns and types of one table |
+| `SELECT * FROM dim_product LIMIT 5;` | look at some rows |
+| `.read answers\01_select_filter_sort\q01.sql` | run one of your answer files |
+| `.mode box` / `.mode line` | prettier output / one column per line for wide rows |
+| `.quit` | exit |
+
+**Option 2 - Python (Anaconda prompt, Jupyter or a VS Code notebook)**
+
+Uses the same `duckdb` package you installed for `grade`, and sets things up the same way the grader does:
+
+```python
+import duckdb
+
+con = duckdb.connect()
+con.execute(r"ATTACH '..\..\Datasets\Synthetic Bank\bank.duckdb' AS bank (READ_ONLY)")
+con.execute("USE bank")
+con.execute("ATTACH ':memory:' AS scratch")   # sandbox for CREATE TABLE scratch.t ...
+
+con.sql("SHOW TABLES").show()
+con.sql("SELECT * FROM dim_product LIMIT 5").df()   # as a pandas DataFrame
+```
+
+The relative path assumes Python is running from this folder; otherwise use the full path (`E:\Dev\CreditRiskLearning\Datasets\Synthetic Bank\bank.duckdb`).
+
+**If you see "Could not set lock on file"**, something else (a notebook, a CLI window, a DB browser) has the file open read-write. Close it, or reopen that one with `-readonly` / `READ_ONLY`.
+
 ## Commands
 
 | Command | Does |

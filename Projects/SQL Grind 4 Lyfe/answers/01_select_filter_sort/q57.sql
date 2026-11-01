@@ -10,3 +10,9 @@
 -- ============================================================================
 
 
+SELECT loan_id, origination_date
+FROM loan 
+WHERE EXTRACT(DAY FROM origination_date) IN (28, 29, 30, 31)
+AND EXTRACT(YEAR FROM origination_date) = 2025
+  AND (lvr_at_origination_pct > 95 OR original_amount > 700000)
+ORDER BY loan_id ASC;

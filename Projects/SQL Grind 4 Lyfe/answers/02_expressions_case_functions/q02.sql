@@ -9,3 +9,7 @@
 -- ============================================================================
 
 
+SELECT customer_id, CONCAT(first_name, ' ', last_name) AS full_name
+FROM customer
+ORDER BY customer_id ASC
+LIMIT 8;

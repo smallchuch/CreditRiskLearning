@@ -9,3 +9,11 @@
 -- ============================================================================
 
 
+SELECT 
+        product_id,
+        CASE 
+            WHEN rate_type = 'Fixed' THEN CONCAT(rate_type, ' ', fixed_term_months, 'm')
+            WHEN rate_type = 'Variable' THEN rate_type
+            ELSE 'Other'
+        END AS fixed_variable
+FROM dim_product;

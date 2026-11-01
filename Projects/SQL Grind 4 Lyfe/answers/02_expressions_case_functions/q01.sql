@@ -8,4 +8,7 @@
 -- Expected 10 row(s). Sort the output as described.
 -- ============================================================================
 
-
+SELECT loan_id, ROUND(original_amount / term_months, 2) AS simple_principal
+FROM loan 
+ORDER BY loan_id ASC
+LIMIT 10;

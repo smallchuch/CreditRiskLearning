@@ -9,3 +9,5 @@
 -- ============================================================================
 
 
+SELECT product_id, (max_lvr_pct / 100) AS max_lvr_fraction
+FROM dim_product;

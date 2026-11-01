@@ -1,0 +1,188 @@
+---
+title: "Baseline PD Scorecard"
+subtitle: "Logistic regression on Weight of Evidence · Flagship PD Model · Stage 2"
+author: "Author: Chuch · Written with AI assistance"
+format:
+  revealjs:
+    theme: [default, brand.scss]
+    slide-number: c/t
+    transition: fade
+    transition-speed: fast
+    width: 1280
+    height: 720
+    center: false
+    menu: false
+    progress: false
+    auto-stretch: false
+    fig-align: center
+    echo: false
+    embed-resources: true
+title-slide-attributes:
+    data-background-color: "#3D2E4F"
+    data-background-gradient: "radial-gradient(120% 135% at 12% 4%, #5C4577 0%, #3D2E4F 52%, #2C2039 100%)"
+execute:
+  warning: false
+  message: false
+  freeze: auto
+jupyter: python3
+---
+
+```{python}
+#| label: setup
+#| include: false
+import os, sys, json, warnings
+warnings.filterwarnings("ignore")
+import numpy as np, pandas as pd, joblib
+import matplotlib.pyplot as plt
+from sklearn.metrics import roc_auc_score
+from scipy.stats import ks_2samp
+
+def find_repo_root(start, name="CreditRiskLearning"):
+    p_ = os.path.abspath(start)
+    while True:
+        if os.path.basename(p_) == name:
+            return p_
+        parent = os.path.dirname(p_)
+        if parent == p_:
+            raise FileNotFoundError(name)
+        p_ = parent
+
+REPO = find_repo_root(os.getcwd())
+sys.path.append(os.path.join(REPO, "Core Resources"))
+sys.path.append(os.path.join(REPO, "Core Resources", "Scripts"))
+from python_style_util import p, f, s, C
+from deck_utils import deck_style
+deck_style()
+
+PROJ = os.path.join(REPO, "Projects", "Flagship PD Model Project")
+INPUT = os.path.join(PROJ, "02_PD_Model_Development", "inputs")
+REG = os.path.join(PROJ, "05_Applicant_PD_Dashboard", "registry", "logreg_baseline_v1")
+
+champ = joblib.load(os.path.join(REG, "model.joblib"))
+with open(os.path.join(REG, "metadata.json")) as fh:
+    meta = json.load(fh)
+FEATS = meta["features"]
+
+train = pd.read_parquet(os.path.join(INPUT, "train_woe.parquet"))
+test = pd.read_parquet(os.path.join(INPUT, "test_woe.parquet"))
+y_tr, y_te = train["TARGET"], test["TARGET"]
+
+pd_tr = champ.predict_proba(train[FEATS])[:, 1]
+pd_te = champ.predict_proba(test[FEATS])[:, 1]
+gini_tr = 2 * roc_auc_score(y_tr, pd_tr) - 1
+gini_te = 2 * roc_auc_score(y_te, pd_te) - 1
+ks_te = ks_2samp(pd_te[y_te.values == 1], pd_te[y_te.values == 0]).statistic
+BASE = y_te.mean()
+
+rank = pd.Series(pd_te).rank(method="first")
+decile = pd.qcut(rank, 10, labels=False) + 1
+dec = pd.DataFrame({"pd": pd_te, "y": y_te.values, "decile": decile.values}).groupby("decile").agg(
+    n=("y", "size"), rate=("y", "mean"), avg_pd=("pd", "mean"))
+
+coef = pd.Series(champ.coef_[0], index=FEATS)
+```
+
+## The short version {.hero data-kick="Executive summary"}
+
+::: {.hero-wrap}
+::: {.hero-col}
+<div class="hero-num">`{python} f"{gini_te:.3f}"`<small>test Gini, the scorecard's discrimination</small></div>
+:::
+
+::: {.hero-col}
+A transparent scorecard built on **12 applicant fields**, passing all four success criteria set before fitting:
+
+- **Discrimination**: test Gini `{python} f"{gini_te:.3f}"`, above the 0.45 floor
+- **Stability**: train/test gap `{python} f"{gini_tr - gini_te:+.3f}"`, almost none
+- **Ranking**: risk rises with every decile, with no reversals
+:::
+:::
+
+::: {.takeaway}
+The scorecard is the **champion**. The next deck tests whether a more flexible model finds signal it misses.
+:::
+
+## What the model predicts {data-kick="The question"}
+
+The model estimates the **probability of payment difficulty** (PD) for each applicant. The target is a payment-difficulty proxy, not a Basel default definition, so the figures describe this dataset's outcome, not a regulatory default rate.
+
+- Every numeric field is binned, and each bin is replaced by its **Weight of Evidence** (WOE): how much more or less often that bin repays, on a log scale.
+- A **logistic regression** combines the WOE values into one score, which converts to a PD.
+- Because each field has a fixed, readable table of bins, a decision can be traced back to a specific bin of a specific field.
+
+## Success criteria, set before fitting {data-kick="The bar"}
+
+| Criterion | Rule |
+|---|---|
+| 1.1a Test Gini | At least 0.45 (floor: EXT_SOURCE_3 alone, 0.36) |
+| 1.1b Train/test gap | At most 0.02 |
+| 1.1c Coefficients | Signs as credit logic predicts; a significantly wrong sign fails |
+| 1.1d Rank ordering | Strictly rising across test deciles, zero reversals |
+
+## Results against the bar {data-kick="The result"}
+
+```{python}
+#| fig-width: 10
+#| fig-height: 3.6
+#| out-width: "90%"
+labels = ["Test Gini", "Train Gini", "Train minus test"]
+vals = [gini_te, gini_tr, gini_tr - gini_te]
+colours = [p("jacaranda", 300), p("gold", 300), p("olive", 300)]
+fig, ax = plt.subplots(figsize=(11, 3.4))
+bars = ax.bar(labels, vals, color=colours, width=0.55)
+for b, v in zip(bars, vals):
+    ax.text(b.get_x() + b.get_width()/2, v + 0.01, f"{v:.3f}", ha="center",
+            fontweight="bold", fontfamily=f("mono"), fontsize=12)
+ax.axhline(0.45, color="grey", linestyle="--", linewidth=1)
+ax.text(2.45, 0.455, "1.1a floor 0.45", color="grey", fontsize=10, ha="right")
+ax.set_ylim(-0.05, 0.65)
+ax.set_ylabel("Score")
+ax.grid(axis="x", visible=False)
+```
+
+Test KS is `{python} f"{ks_te:.3f}"`. The base rate is `{python} f"{BASE:.2%}"` in both splits, so the test set is a fair comparison with training.
+
+## Rank ordering: does risk rise with each band? {data-kick="Ranking"}
+
+```{python}
+#| fig-width: 10
+#| fig-height: 3.8
+#| out-width: "90%"
+fig, ax = plt.subplots(figsize=(11, 4.2))
+x = dec.index.values
+ax.plot(x, dec["rate"].values * 100, marker="o", color=p("jacaranda", 300), linewidth=2.5, label="Actual default rate")
+ax.plot(x, dec["avg_pd"].values * 100, marker="s", color=p("gold", 300), linewidth=2, linestyle="--", label="Predicted PD")
+ax.set_xticks(x)
+ax.set_xlabel("Risk decile (1 = lowest risk, 10 = highest)")
+ax.set_ylabel("Default rate (%)")
+ax.legend(frameon=False)
+ax.grid(axis="x", visible=False)
+```
+
+Every decile is riskier than the one before, with **zero reversals** (criterion 1.1d). The two lines show how closely predicted risk tracks the actual rate in each band.
+
+## What drives the score {data-kick="Coefficients"}
+
+Each field's contribution is its WOE multiplied by its coefficient. The table shows the coefficients as fitted.
+
+```{python}
+#| tbl-cap: "Logistic regression coefficients, champion scorecard"
+coef_tbl = coef.sort_values(key=lambda s_: s_.abs(), ascending=False).to_frame("coefficient")
+coef_tbl["coefficient"] = coef_tbl["coefficient"].map(lambda v: f"{v:+.3f}")
+coef_tbl
+```
+
+The external credit scores carry the most weight, followed by affordability fields. Coefficient signs are checked against credit logic in notebook 02, section 3.3.
+
+## Caveats the committee should hear {data-kick="Limits"}
+
+- **Target proxy.** The outcome is payment difficulty as recorded in this dataset, not a regulatory default. Results are for comparing approaches, not for pricing.
+- **Gender excluded.** CODE_GENDER is a protected attribute and is not a model input. Proxy checks on the retained fields are a next step.
+- **Data quality.** Missing external scores are treated as their own bin, because missingness itself carries risk.
+- **Illustrative, not production.** This is a portfolio model, not a validated production scorecard.
+
+## Recommendation {data-kick="The call"}
+
+::: {.takeaway}
+**Keep this scorecard as the champion.** It clears all four criteria, is easy to explain field by field, and sets the benchmark the LightGBM challenger has to beat. The challenger's result is in the next deck.
+:::

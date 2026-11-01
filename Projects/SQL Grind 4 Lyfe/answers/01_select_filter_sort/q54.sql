@@ -10,3 +10,9 @@
 -- ============================================================================
 
 
+SELECT application_id, requested_amount FROM loan_application
+WHERE current_status = 'Lapsed'
+AND requested_amount > 400000
+AND application_date BETWEEN '2024-12-31' AND '2025-12-31'
+ORDER BY requested_amount DESC, application_id ASC
+LIMIT 10;

@@ -9,3 +9,14 @@
 -- ============================================================================
 
 
+SELECT
+        CASE
+                WHEN dti_ratio <= 4 THEN '<=4'
+                WHEN dti_ratio BETWEEN 4 AND 6 THEN '4-6'
+                WHEN dti_ratio > 6 THEN '>6'
+                ELSE 'No DTI'
+        END AS dti_band,
+        COUNT(*) as applications
+FROM application_assessment
+GROUP BY dti_band
+ORDER BY dti_band ASC;

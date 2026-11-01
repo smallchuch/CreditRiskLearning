@@ -10,3 +10,13 @@
 -- ============================================================================
 
 
+SELECT 
+    CASE 
+        WHEN current_status = 'Settled' THEN 'Won'
+        WHEN current_status = 'Declined' THEN 'Declined'
+        ELSE 'Other'
+    END AS outcome_group,
+    COUNT(*) n
+FROM loan_application
+GROUP BY outcome_group
+ORDER BY outcome_group;

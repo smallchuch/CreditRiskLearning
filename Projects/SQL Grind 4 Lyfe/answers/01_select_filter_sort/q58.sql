@@ -9,3 +9,7 @@
 -- ============================================================================
 
 
+SELECT DISTINCT channel, purpose 
+FROM loan 
+WHERE EXTRACT(YEAR FROM origination_date) = 2025
+ORDER BY channel ASC, purpose ASC;

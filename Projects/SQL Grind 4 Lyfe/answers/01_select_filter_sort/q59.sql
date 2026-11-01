@@ -8,4 +8,8 @@
 -- Expected 10 row(s). Sort the output as described.
 -- ============================================================================
 
-
+SELECT loan_id, original_amount
+FROM loan
+ORDER BY original_amount DESC, loan_id ASC 
+LIMIT 10
+OFFSET 20;

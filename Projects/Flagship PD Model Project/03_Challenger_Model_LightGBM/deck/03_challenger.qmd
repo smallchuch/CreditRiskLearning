@@ -1,0 +1,234 @@
+---
+title: "LightGBM Challenger"
+subtitle: "Does a flexible model find signal the scorecard misses? · Flagship PD Model · Stage 3"
+author: "Author: Chuch · Written with AI assistance"
+format:
+  revealjs:
+    theme: [default, brand.scss]
+    slide-number: c/t
+    transition: fade
+    transition-speed: fast
+    width: 1280
+    height: 720
+    center: false
+    menu: false
+    progress: false
+    auto-stretch: false
+    fig-align: center
+    echo: false
+    embed-resources: true
+title-slide-attributes:
+    data-background-color: "#3D2E4F"
+    data-background-gradient: "radial-gradient(120% 135% at 12% 4%, #5C4577 0%, #3D2E4F 52%, #2C2039 100%)"
+execute:
+  warning: false
+  message: false
+  freeze: auto
+jupyter: python3
+---
+
+```{python}
+#| label: setup
+#| include: false
+import os, sys, json, warnings
+warnings.filterwarnings("ignore")
+import numpy as np, pandas as pd, joblib
+import matplotlib.pyplot as plt
+from sklearn.metrics import roc_auc_score
+from scipy.stats import ks_2samp
+
+def find_repo_root(start, name="CreditRiskLearning"):
+    p_ = os.path.abspath(start)
+    while True:
+        if os.path.basename(p_) == name:
+            return p_
+        parent = os.path.dirname(p_)
+        if parent == p_:
+            raise FileNotFoundError(name)
+        p_ = parent
+
+REPO = find_repo_root(os.getcwd())
+sys.path.append(os.path.join(REPO, "Core Resources"))
+sys.path.append(os.path.join(REPO, "Core Resources", "Scripts"))
+from python_style_util import p, f, s, C
+from deck_utils import deck_style
+deck_style()
+
+PROJ = os.path.join(REPO, "Projects", "Flagship PD Model Project")
+INPUT = os.path.join(PROJ, "02_PD_Model_Development", "inputs")
+REG_CH = os.path.join(PROJ, "05_Applicant_PD_Dashboard", "registry", "lgbm_challenger_v1")
+REG_CP = os.path.join(PROJ, "05_Applicant_PD_Dashboard", "registry", "logreg_baseline_v1")
+
+# Challenger (refit) and champion, scored on the same test rows
+lgbm = joblib.load(os.path.join(REG_CH, "model.joblib"))
+with open(os.path.join(REG_CH, "metadata.json")) as fh:
+    ch_meta = json.load(fh)
+with open(os.path.join(REG_CH, "category_levels.json")) as fh:
+    cat_levels = json.load(fh)
+champ = joblib.load(os.path.join(REG_CP, "model.joblib"))
+with open(os.path.join(REG_CP, "metadata.json")) as fh:
+    cp_meta = json.load(fh)
+FEATS = ch_meta["features"]
+CAT = ch_meta["categorical"]
+
+test_raw = pd.read_parquet(os.path.join(INPUT, "test_raw.parquet"))
+test_woe = pd.read_parquet(os.path.join(INPUT, "test_woe.parquet"))
+y_te = test_raw["TARGET"]
+
+X_te = test_raw[FEATS].copy()
+for col in CAT:
+    X_te[col] = pd.Categorical(X_te[col], categories=cat_levels[col])
+
+pd_ch = lgbm.predict_proba(X_te)[:, 1]
+pd_cp = champ.predict_proba(test_woe[cp_meta["features"]])[:, 1]
+
+gini_ch = 2 * roc_auc_score(y_te, pd_ch) - 1
+gini_cp = 2 * roc_auc_score(y_te, pd_cp) - 1
+uplift = gini_ch - gini_cp
+ks_ch = ks_2samp(pd_ch[y_te.values == 1], pd_ch[y_te.values == 0]).statistic
+BASE = y_te.mean()
+
+# Rank ordering on test deciles, same method as 1.1c
+rank = pd.Series(pd_ch).rank(method="first")
+decile = pd.qcut(rank, 10, labels=False) + 1
+dec = pd.DataFrame({"pd": pd_ch, "y": y_te.values, "decile": decile.values}).groupby("decile").agg(
+    n=("y", "size"), rate=("y", "mean"), avg_pd=("pd", "mean"))
+
+# Gain importance, share of total (from the saved refit)
+imp = pd.Series(lgbm.booster_.feature_importance(importance_type="gain"), index=FEATS)
+imp = (imp / imp.sum()).sort_values(ascending=False)
+
+# Fit-row figures from notebook 03 section 4.2b (not recomputed here)
+GAP_FIRST, GAP_REFIT = 0.065, 0.054
+```
+
+## The short version {.hero data-kick="Executive summary"}
+
+::: {.hero-wrap}
+::: {.hero-col}
+<div class="hero-num">`{python} f"{uplift:+.3f}"`<small>Gini uplift over the scorecard</small></div>
+:::
+
+::: {.hero-col}
+A gradient-boosted tree model on the **same 12 fields and the same applicants** finds only a modest gain over the scorecard:
+
+- **Test Gini** `{python} f"{gini_ch:.3f}"` against the scorecard's `{python} f"{gini_cp:.3f}"`
+- **Uplift** of `{python} f"{uplift:+.3f}"`, inside the "review" band, just below the "rebuild" line
+- **Train/test gap** `{python} f"{GAP_REFIT:.3f}"` after one regularised refit, passing the 0.06 limit
+:::
+:::
+
+::: {.takeaway}
+**The scorecard stays champion.** The challenger finds a little more signal, but not enough to justify losing field-by-field explainability.
+:::
+
+## The question {data-kick="The question"}
+
+The scorecard is easy to explain, but it only looks at each field's bins and how they add up. A tree model can find **interactions**: patterns where two fields matter more together than apart.
+
+The test is fair. Both models score the same test applicants with the same 12 fields, so any difference is the model, not the data.
+
+## Success criteria, set before fitting {data-kick="The bar"}
+
+| Criterion | Rule |
+|---|---|
+| 1.1a Gini uplift | Under 0.008: retain (noise). 0.008 to 0.03: retain and review interactions. Over 0.03: rebuild the scorecard. |
+| 1.1b Train/test gap | At most 0.06 |
+| 1.1c Rank ordering | Strictly rising across test deciles, zero reversals |
+| 1.1d Calibration | Mean predicted risk within 0.44 pp of the actual rate |
+
+## Did the first model overfit? {data-kick="The gap"}
+
+The first LightGBM fit memorised its training rows. Its train/test gap was **`{python} f"{GAP_FIRST:.3f}"`**, above the 0.06 limit, so its uplift could not be used.
+
+One refit with shallower trees and bigger leaves brought the gap to **`{python} f"{GAP_REFIT:.3f}"`** with no loss of test Gini. Only the refit is carried forward.
+
+```{python}
+#| fig-width: 10
+#| fig-height: 3.4
+#| out-width: "90%"
+labels = ["First fit", "Refit"]
+gaps = [GAP_FIRST, GAP_REFIT]
+colours = [p("gold", 300) if g > 0.06 else p("olive", 300) for g in gaps]
+fig, ax = plt.subplots(figsize=(11, 3.2))
+bars = ax.bar(labels, gaps, color=colours, width=0.45)
+for b, v in zip(bars, gaps):
+    ax.text(b.get_x() + b.get_width()/2, v + 0.002, f"{v:.3f}", ha="center",
+            fontweight="bold", fontfamily=f("mono"), fontsize=12)
+ax.axhline(0.06, color="grey", linestyle="--", linewidth=1)
+ax.text(1.3, 0.063, "1.1b limit 0.06", color="grey", fontsize=10, ha="right")
+ax.set_ylim(0, 0.08)
+ax.set_ylabel("Train minus test Gini")
+ax.grid(axis="x", visible=False)
+```
+
+## Test results: challenger against scorecard {data-kick="Results"}
+
+```{python}
+#| fig-width: 10
+#| fig-height: 3.8
+#| out-width: "90%"
+labels = ["Scorecard", "LightGBM refit"]
+gini_vals = [gini_cp, gini_ch]
+ks_vals = [ks_2samp(pd_cp[y_te.values == 1], pd_cp[y_te.values == 0]).statistic, ks_ch]
+x = np.arange(2)
+fig, ax = plt.subplots(figsize=(11, 4))
+w = 0.34
+b1 = ax.bar(x - w/2, gini_vals, w, color=p("jacaranda", 300), label="Test Gini")
+b2 = ax.bar(x + w/2, ks_vals, w, color=p("gold", 300), label="Test KS")
+for bars in (b1, b2):
+    for b in bars:
+        ax.text(b.get_x() + b.get_width()/2, b.get_height() + 0.01, f"{b.get_height():.3f}",
+                ha="center", fontsize=10, fontfamily=f("mono"))
+ax.set_xticks(x, labels)
+ax.set_ylim(0, 0.65)
+ax.legend(frameon=False, loc="upper left")
+ax.grid(axis="x", visible=False)
+```
+
+The refit's test Gini is `{python} f"{gini_ch:.3f}"`, an uplift of `{python} f"{uplift:+.3f}"`. That sits **0.0006 below the rebuild line**. The test Gini's standard error is about 0.008, so the honest reading is "retain, and treat as borderline."
+
+## Rank ordering and calibration {data-kick="Checks"}
+
+```{python}
+#| fig-width: 10
+#| fig-height: 3.8
+#| out-width: "90%"
+fig, ax = plt.subplots(figsize=(11, 4.2))
+x = dec.index.values
+ax.plot(x, dec["rate"].values * 100, marker="o", color=p("jacaranda", 300), linewidth=2.5, label="Actual default rate")
+ax.plot(x, dec["avg_pd"].values * 100, marker="s", color=p("gold", 300), linewidth=2, linestyle="--", label="Predicted PD")
+ax.set_xticks(x)
+ax.set_xlabel("Risk decile (1 = lowest risk, 10 = highest)")
+ax.set_ylabel("Default rate (%)")
+ax.legend(frameon=False)
+ax.grid(axis="x", visible=False)
+```
+
+Risk rises with every decile, so the ranking passes (1.1c). The overall mean predicted risk is within a fraction of a percentage point of the actual rate, which passes 1.1d. Individual deciles differ by up to about 0.3 pp, with no consistent direction. That is a calibration detail to watch, not a failure.
+
+## What the model relies on {data-kick="Drivers"}
+
+Gain importance shows how much each field improves the trees. It is the tree equivalent of the scorecard's coefficients, but it doesn't show direction.
+
+```{python}
+#| tbl-cap: "Share of total gain, LightGBM refit"
+imp_tbl = imp.to_frame("share of gain")
+imp_tbl["share of gain"] = imp_tbl["share of gain"].map(lambda v: f"{v:.1%}")
+imp_tbl
+```
+
+The external credit scores dominate, which matches the scorecard. The model is not telling a different story about which fields matter.
+
+## Caveats {data-kick="Limits"}
+
+- **Explainability.** A tree ensemble can't be read field by field the way the scorecard can. Explaining an individual decision needs an extra tool, such as SHAP, which hasn't been run yet.
+- **Single model and seed.** One refit, one random seed. Seed sensitivity is not tested.
+- **Target proxy.** Same payment-difficulty outcome as the scorecard, not a regulatory default.
+- **Tuning.** No hyperparameter search. The refit was chosen by the train/test gap rule. The test Gini was shown before the refit, so the result is not a fully blind test.
+
+## The call {data-kick="Recommendation"}
+
+::: {.takeaway}
+**Keep the scorecard as champion.** The LightGBM refit passes every check, but its uplift is small and borderline. The next step is to examine the tree's strongest interactions as candidate terms for a v2 scorecard, which keeps the explainability.
+:::

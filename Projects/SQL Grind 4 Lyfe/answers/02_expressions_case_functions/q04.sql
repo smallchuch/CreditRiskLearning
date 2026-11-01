@@ -9,3 +9,12 @@
 -- ============================================================================
 
 
+SELECT 
+        loan_id,
+        (term_months // 12) AS years, 
+        (term_months % 12) AS months
+        
+
+FROM loan 
+ORDER BY loan_id
+LIMIT 10;

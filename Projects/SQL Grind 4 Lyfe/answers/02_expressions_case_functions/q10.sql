@@ -9,3 +9,12 @@
 -- ============================================================================
 
 
+SELECT 
+    customer_id,
+    CASE
+        WHEN last_name <> TRIM(last_name) THEN last_name
+    END AS last_name_dq
+FROM customer
+WHERE last_name_dq <> 'OK'
+ORDER BY customer_id ASC;
+    
